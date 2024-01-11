@@ -57,13 +57,6 @@ th {
   color: white;
 }
 
-.logo {
-  float: left;
-  margin-right: 10px;
-  width: 100px;
-  height: 100px;
-  animation: rotate 2s infinite linear;
-}
 
 .title {
   color: blue;
