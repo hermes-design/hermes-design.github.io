@@ -2,11 +2,12 @@
 <html>
 <head>
   <title>IEA/AIE 2024</title>
-      <style type="text/css">
+  <style type="text/css">
     body {
       height: 100%;
       margin: 0;
       padding: 0;
+      font-family: Arial, sans-serif;
     }
 
     .content {
@@ -25,129 +26,124 @@
       padding: 10px;
       text-align: center;
     }
-        
-.container {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
 
-/* Actual card with shadow */
-.card {
-  height: 200px;
-  width: 200px;
-  border-radius: 5px;
-  box-shadow: 1px 2px 3px 4px rgba(12,12,12,0.2);
-}
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
+    .container {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
 
-th, td {
-  text-align: left;
-  padding: 8px;
-}
+    /* Actual card with shadow */
+    .card {
+      height: 200px;
+      width: 200px;
+      border-radius: 5px;
+      box-shadow: 1px 2px 3px 4px rgba(12,12,12,0.2);
+    }
 
-tr:nth-child(even){background-color: #f2f2f2}
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-th {
-  background-color: #4CAF50;
-  color: white;
-}
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
 
+    tr:nth-child(even){
+      background-color: #f2f2f2;
+    }
 
-    </style>
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    h1 {
+      color: green;
+      font-size: 18px;
+    }
+
+    h2 {
+      color: green;
+      font-size: 14px;
+    }
+
+    li {
+      align: justify;
+    }
+
+    .citebox {
+      margin: 20px;
+    }
+
+    .citeboxheader {
+      margin-bottom: 10px;
+    }
+
+    .citeboxheader h1 {
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-  <div class="content">  
-<div class="prism-citebox">
-<div class="prism-citeboxheader">
-
-<h1 style="color:green;font-size:18px;">IEA/AIE 2024 2024:</h1>
-</div>
-<ul><li align="justify">
-Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem. 
-<font color= red>The Influence of Human Interaction on Stochastic Systems via Concurrent Stochastic Games and Decision Trees</font>.
-In <em> The 37th International Conference on Industrial, Engineering & Other Applications of Applied Intelligent Systems </em>, 2024 (Submitted).</li></ul>
-
-  
-
-<h1 style="color:green;font-size:14px;">Developed Artefacts</h1>
-
-  <table>
-  <tr>
-    <th>ID</th>
-    <th>PRISM Model Description</th>
-    <th>Model</th>
-    <th>Properties</th>
-  </tr>
-  <tr>
-    <td>P1</td>
-    <td>Modeling Sensor Communication with FOG using RabbitMQ.</td>
-    <td> <a href="iceccs/prism/attacks/model.nm">[Download]</a> </td>
-    <td><a href="iceccs/prism/attacks/properties.pctl">[Download]</a>  </td>
-  </tr>
-
-    <tr>
-    <td>P2</td>
-    <td>Learned PRISM Model from OMNeT++ generated data set.</td>
-    <td> <a href="iceccs/prism/learned/model.nm">[Download]</a> </td>
-    <td><a href="iceccs/prism/learned/properties.pctl">[Download]</a>  </td>
-  </tr>  
-  
-    <tr>
-    <td>P3</td>
-    <td>PRISM Model for attacks mitigation according to RabbitMQ</td>
-    <td> <a href="iceccs/prism/mitigation/model.nm">[Download]</a> </td>
-    <td><a href="iceccs/prism/mitigation/properties.pctl">[Download]</a>  </td>
-  </tr> 
-  
-  <tr>
-    <th>ID</th>
-    <th>OMNET++ Code Description </th>
-    <th>Model </th>
-    <th> </th>
-  </tr>
-      <tr>
-    <td>C1</th>
-    <td>OMNeT++ Source Code for Sensor Communication with FOG using RabbitMQ</td>
-    <td> <a href="iceccs/OMNeT/noattacks.zip">[Download]</a> </td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td>C2</th>
-    <td>OMNeT++ Source Code for Sensor Communication with FOG using RabbitMQ under attacks</td>
-    <td> <a href="iceccs/OMNeT/withattacks.zip">[Download]</a> </td>
-    <td> </td>
-  </tr>
-  
-
-  <tr>
-    <th>ID</th>
-    <th>Python Code Description </th>
-    <th>Source code </th>
-    <th> </th>
-  </tr>
-      <tr>
-    <td>R1</th>
-    <td>Learning PRISM using Decision Tree Classifier varing attacks</td>
-    <td> <a href="iceccs/python/main.py">[Download]</a> </td>
-    <td> </td>
-  </tr>
-    
-</table>
-
+  <div class="content">
+    <div class="citebox">
+      <div class="citeboxheader">
+        <h1>IEA/AIE 2024:</h1>
+      </div>
+      <ul>
+        <li>Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.
+          <span style="color: red;">The Influence of Human Interaction on Stochastic Systems via Concurrent Stochastic Games and Decision Trees</span>.
+          In <em>The 37th International Conference on Industrial, Engineering &amp; Other Applications of Applied Intelligent Systems</em>, 2024 (Submitted).
+        </li>
+      </ul>
     </div>
 
-
+    <div class="citebox">
+      <h2>Developed Artefacts</h2>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>PRISM Model Description</th>
+          <th>Model</th>
+          <th>Properties</th>
+        </tr>
+        <tr>
+          <td>P1</td>
+          <td>Modeling Simple CSG Model.</td>
+          <td><a href="iceccs/prism/attacks/model.nm">[Download]</a></td>
+          <td><a href="iceccs/prism/attacks/properties.pctl">[Download]</a></td>
+        </tr>
+        <tr>
+          <td>P2</td>
+          <td>Learned PRISM Model from OMNeT++ generated data set.</td>
+          <td><a href="iceccs/prism/learned/model.nm">[Download]</a></td>
+          <td><a href="iceccs/prism/learned/properties.pctl">[Download]</a></td>
+        </tr>
+        <tr>
+          <th>ID</th>
+          <th>Python Code Description</th>
+          <th>Source code</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>R1</td>
+          <td>Learning Probabilistic model using Decision Tree Classifier varying attacks</td>
+          <td><a href="iceccs/python/main.py">[Download]</a></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
   <footer>
-    <p><em>This page was developed for for the ICO HERMES-Design project.</em></p>
-    <p><em>contact:abaouya@acm.org</em></p>
+    <p><em>This page was developed for the ICO HERMES-Design project.</em></p>
+    <p><em>Contact: abaouya@acm.org</em></p>
   </footer>
-
 </body>
+</html>
