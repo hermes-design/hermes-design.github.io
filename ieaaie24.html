@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ICECCS2024</title>
+      <style type="text/css">
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content {
+      min-height: 100%;
+      margin-left: 40px;
+      margin-right: 30px;
+      padding-bottom: 40px; /* Adjust this value to leave space for the footer */
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f5f5f5;
+      padding: 10px;
+      text-align: center;
+    }
+        
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Actual card with shadow */
+.card {
+  height: 200px;
+  width: 200px;
+  border-radius: 5px;
+  box-shadow: 1px 2px 3px 4px rgba(12,12,12,0.2);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+    </style>
+</head>
+<body>
+  <div class="content">  
+<div class="prism-citebox">
+<div class="prism-citeboxheader">
+
+<h1 style="color:green;font-size:18px;">ICECCS 2024:</h1>
+</div>
+<ul><li align="justify">
+Abdelhakim Baouya, Brahim Hamid and Saddek Bensalem. 
+<font color= red>Modeling and Learning for Security Analysis of RabbitMQ Protocol.</font>.
+In <em> International Conference on Engineering of Complex Computer Systems (ICECCS)  </em>, 2024 (Submitted).</li></ul>
+
+  
+
+<h1 style="color:green;font-size:14px;">Developed Artefacts</h1>
+
+  <table>
+  <tr>
+    <th>ID</th>
+    <th>PRISM Model Description</th>
+    <th>Model</th>
+    <th>Properties</th>
+  </tr>
+  <tr>
+    <td>P1</td>
+    <td>Modeling Sensor Communication with FOG using RabbitMQ.</td>
+    <td> <a href="iceccs/prism/attacks/model.nm">[Download]</a> </td>
+    <td><a href="iceccs/prism/attacks/properties.pctl">[Download]</a>  </td>
+  </tr>
+
+    <tr>
+    <td>P2</td>
+    <td>Learned PRISM Model from OMNeT++ generated data set.</td>
+    <td> <a href="iceccs/prism/learned/model.nm">[Download]</a> </td>
+    <td><a href="iceccs/prism/learned/properties.pctl">[Download]</a>  </td>
+  </tr>  
+  
+    <tr>
+    <td>P3</td>
+    <td>PRISM Model for attacks mitigation according to RabbitMQ</td>
+    <td> <a href="iceccs/prism/mitigation/model.nm">[Download]</a> </td>
+    <td><a href="iceccs/prism/mitigation/properties.pctl">[Download]</a>  </td>
+  </tr> 
+  
+  <tr>
+    <th>ID</th>
+    <th>OMNET++ Code Description </th>
+    <th>Model </th>
+    <th> </th>
+  </tr>
+      <tr>
+    <td>C1</th>
+    <td>OMNeT++ Source Code for Sensor Communication with FOG using RabbitMQ</td>
+    <td> <a href="iceccs/OMNeT/noattacks.zip">[Download]</a> </td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td>C2</th>
+    <td>OMNeT++ Source Code for Sensor Communication with FOG using RabbitMQ under attacks</td>
+    <td> <a href="iceccs/OMNeT/withattacks.zip">[Download]</a> </td>
+    <td> </td>
+  </tr>
+  
+
+  <tr>
+    <th>ID</th>
+    <th>Python Code Description </th>
+    <th>Source code </th>
+    <th> </th>
+  </tr>
+      <tr>
+    <td>R1</th>
+    <td>Learning PRISM using Decision Tree Classifier varing attacks</td>
+    <td> <a href="iceccs/python/main.py">[Download]</a> </td>
+    <td> </td>
+  </tr>
+    
+</table>
+
+    </div>
+
+
+
+  <footer>
+    <p><em>This page was developed  for the CNRS ACIS-IoT project.</em></p>
+    <p><em>contact:abaouya@acm.org</em></p>
+  </footer>
+
+</body>
