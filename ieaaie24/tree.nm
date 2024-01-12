@@ -1,0 +1,10 @@
+mdp 
+ 
+const int type;
+module GeneratedDecisiontree
+success : [-1..1] init -1 ;
+done : [0..1] init 1 ;
+[rule1] type=0 & (done=1)-> 0.49854227405247814:(success'=0)  & (done'=0) + 0.5014577259475219:(success'=1)  & (done'=0);
+[rule3] type=1 & (done=1)-> 0.49117647058823527:(success'=0)  & (done'=0) + 0.5088235294117647:(success'=1)  & (done'=0);
+[rule4] type=2 & (done=1)-> 0.4921135646687697:(success'=0)  & (done'=0) + 0.5078864353312302:(success'=1)  & (done'=0);
+endmodule
