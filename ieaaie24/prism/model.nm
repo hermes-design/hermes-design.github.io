@@ -1,0 +1,101 @@
+csg
+//IEA AIE 2024
+//author: Abdelhakim Baouya
+
+player p1  HumanDecision endplayer  //Human decision 
+player p2  PDT endplayer //PDT
+
+
+const double cost; //The cost of winning
+
+
+const int type; //Attacks type
+
+const k; // number of rounds
+
+// module to count the rounds
+module rounds
+
+	rounds : [0..k+1];
+	
+	[] rounds<=k -> (rounds'=rounds+1);
+	[] rounds=k+1 -> true;
+
+endmodule
+
+//Kent Model
+module HumanDecision
+ Certainty : [0..7] init 0; // Level of Certainty
+ s : [0..14] init 0 ;
+
+[d1] s =0 -> 0.93:( s'=0) + 0.07 :(s'=2) ;
+[r1] s =2 -> (s'=0) & ( Certainty'=1) ; // Almost Certainly Not
+
+[d2] s =0 -> 0.70:( s'=0) + 0.30 :(s'=2) ;
+[r2] s =2 -> (s'=0) & ( Certainty'=2) ; // Probably Not
+
+[d3] s =0 -> 0.50:( s'=0) + 0.50 :(s'=2) ;
+[r3] s =2 -> (s'=0) & ( Certainty'=3) ; // Chances About Even
+
+[d4] s =0 -> 0.25:( s'=0) + 0.75 :(s'=2) ;
+[r4] s =2 -> (s'=0) & ( Certainty'=4) ; // Probable
+
+[d5] s =0 -> 0.07:( s'=0) + 0.93 :(s'=2) ;
+[r5] s =2 -> (s'=0) & ( Certainty'=5) ; // Almost certain
+
+[d6] s =0 -> (s'=2) ;
+[r6] s =2 -> (s'=0) & ( Certainty'=6) ; // Certain
+ 
+endmodule
+
+
+//PDT Model 
+module PDT
+	success : [-1..1] init -1 ;
+	//done : [0..1] init 1 ;
+	[rule1] type=1 -> 0.49854227405247814:(success'=0)   + 0.5014577259475219:(success'=1)  ;
+	[rule2] type=2 -> 0.49117647058823527:(success'=0)   + 0.5088235294117647:(success'=1)  ;
+	[rule3] type=3 -> 0.4921135646687697:(success'=0)  + 0.5078864353312302:(success'=1)  ;
+endmodule
+
+
+
+//register
+module Register
+        win : [-1..1] init -1 ;
+	//1 for successful interventions
+	//0 for non successful interventions
+	[rule1, r1]   true -> 0.95:(win'=1)+ 0.05:(win'=0) ; //efficiency 0.95 non efficiency =0.05
+	[rule1, r2]   true -> 0.90:(win'=1)+ 0.10:(win'=0) ;
+	[rule1, r3]   true -> 0.90:(win'=1)+ 0.10:(win'=0) ;
+        [rule1, r4]   true -> 0.88:(win'=1)+ 0.12:(win'=0) ;
+	[rule1, r5]   true -> 0.94:(win'=1)+ 0.06:(win'=0) ;
+        [rule1, r6]   true -> (win'=1) ;
+
+	[rule2, r1]   true -> 0.95:(win'=1)+ 0.05:(win'=0) ;
+	[rule2, r2]   true -> 0.90:(win'=1)+ 0.10:(win'=0) ;
+	[rule2, r3]   true -> 0.90:(win'=1)+ 0.10:(win'=0) ;
+        [rule2, r4]   true -> 0.88:(win'=1)+ 0.12:(win'=0) ;
+	[rule2, r5]   true -> 0.94:(win'=1)+ 0.06:(win'=0) ;
+        [rule2, r6]   true -> (win'=1) ;
+
+	[rule3, r1]   true -> 0.95:(win'=1)+ 0.05:(win'=0) ;
+	[rule3, r2]   true -> 0.90:(win'=1)+ 0.10:(win'=0) ;
+	[rule3, r3]   true -> 0.90:(win'=1)+ 0.10:(win'=0) ;
+        [rule3, r4]   true -> 0.88:(win'=1)+ 0.12:(win'=0) ;
+	[rule3, r5]   true -> 0.94:(win'=1)+ 0.06:(win'=0) ;
+        [rule3, r6]   true -> (win'=1) ;
+endmodule
+
+// reward structure for player Human
+rewards "utility1"
+	win=1 & success=1 :  cost;// Attacks and successful interventions
+	win=0 & success=1 : -cost;// Attacks and non successful interventions
+endrewards
+
+
+// reward structure for player PDT
+rewards "utility2"
+	win=0 & success=1 :  cost; //Attacks and non successful interventions
+	win=1 & success=1 : -cost;// Attacks and successful interventions
+endrewards

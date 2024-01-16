@@ -1,0 +1,16 @@
+const int T;
+const int Z;
+const int CRT;
+
+<<p1>>Pmax=? [ F (win=1 & rounds<=k ) ]
+
+<<p1>>Pmin=? [ F (win=1 & rounds<=k) ]
+
+<<p2>>Pmin=? [ F (win=0 & rounds<=k) ]
+
+<<p2>>Pmax=? [ F (win=0 & rounds<=k) ]
+
+<<p1>> R{"utility1"}max=?[F rounds=k ]
+
+<<p2>> R{"utility2"}max=?[F rounds=k ]
+
