@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SAFECOMP 2024</title>
+  <style type="text/css">
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .content {
+      min-height: 100%;
+      margin: 0 40px;
+      padding-bottom: 40px; /* Adjust this value to leave space for the footer */
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f5f5f5;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .container {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Actual card with shadow */
+    .card {
+      height: 200px;
+      width: 200px;
+      border-radius: 5px;
+      box-shadow: 1px 2px 3px 4px rgba(12,12,12,0.2);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even){
+      background-color: #f2f2f2;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    h1 {
+      color: green;
+      font-size: 18px;
+    }
+
+    h2 {
+      color: green;
+      font-size: 14px;
+    }
+
+    li {
+      text-align: justify;
+    }
+
+    .citebox {
+      margin: 20px;
+    }
+
+    .citeboxheader {
+      margin-bottom: 10px;
+    }
+
+    .citeboxheader h1 {
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="citebox">
+      <div class="citeboxheader">
+        <h1>SAFECOMP 2024:</h1>
+      </div>
+      <ul>
+        <li>Abdelhakim Baouya, Brahim Hamid and Saddek Bensalem.
+          <span style="color: red;">Estimation of the Influence of Human Intervention on Cyber Attacks using Concurrent Stochastic Games and Decision Trees</span>.
+          In <em>The 43nd International Conference on Computer Safety, Reliability and Security</em>, 2024 (Submitted).
+        </li>
+      </ul>
+    </div>
+
+    <div class="citebox">
+      <table>
+	     <tr>
+		<th style="background-color: #00aaff; color: white;" colspan="4">Developed Artefacts</th>
+		</tr>
+	  
+	  
+        <tr>
+          <th>ID</th>
+          <th>PRISM Model Description</th>
+          <th>Model</th>
+          <th>Properties</th>
+        </tr>
+        <tr>
+          <td>P1</td>
+          <td>Modeling Simple CSG Model.</td>
+          <td><a href="safecomp24/prism/test/model.nm">[Download]</a></td>
+          <td><a href="safecomp24/prism/test/properties.pctl">[Download]</a></td>
+        </tr>
+        <tr>
+          <td>P2</td>
+          <td>CSG Model for Implementing Attacks and Incorporating Human Intervention.</td>
+          <td><a href="safecomp24/prism/model.nm">[Download]</a></td>
+          <td><a href="safecomp24/prism/propeties.pctl">[Download]</a></td>
+        </tr>
+		<tr>
+          <th>ID</th>
+          <th>OMNeT++ Code Description</th>
+          <th>Source code</th>
+		   <th>Generated Dataset </th>
+        </tr>
+        <tr>
+          <td>R1</td>
+          <td>OMNeT++ Code and Architecture</td>
+          <td><a href="safecomp24/omnet/safecomp.zip">[Download]</a></td>
+		  <td> </td>
+        </tr>
+		        <tr>
+          <td>R2</td>
+          <td>OMNeT++ Code and Architecture with dataset generator</td>
+          <td><a href="safecomp24/omnet/main.py">[Download]</a></td>
+		  <td><a href="safecomp24/omnet/dataset.csv">[Download]</a></td>
+        </tr>
+        <tr>
+          <th>ID</th>
+          <th>Python Code Description</th>
+          <th>Source code</th>
+		   <th>Dataset</th>
+        </tr>
+        <tr>
+          <td>R1</td>
+          <td>Learning Probabilistic model using Decision Tree Classifier varying attacks</td>
+          <td><a href="safecomp24/python/main.py">[Download]</a></td>
+		  <td><a href="safecomp24/python/attack_dataset.csv">[Download]</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+<footer>
+  <div style="display: flex; align-items: center;">
+     <a href="https://www.ico-occitanie.fr/">
+    	<img src="logo2.png" alt="Logo 1" style="margin-right: 10px;" width="180" height="100">
+  </a>
+
+     <a href="https://www.irit.fr/">	
+    <img src="logo1.png" alt="Logo 2" style="margin-right: 10px;" width="180" height="100">
+	 </a>
+    <div style="text-align: center; margin: auto;">
+      <p><em>This page was developed for the ICO HERMES-Design project.</em></p>
+      <p><em>Contact: abaouya@acm.org</em></p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
