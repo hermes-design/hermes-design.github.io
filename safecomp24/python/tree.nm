@@ -1,0 +1,16 @@
+mdp 
+ 
+const double UP =1;
+const double DOWN =-1;
+const double PH;
+const double TM;
+const double WL;
+module GeneratedDecisiontree
+PP : [-1..1] init 0 ;
+[rule1] PH<=2.5 & PH<=1.5 -> 1.0:(PP'=UP) ;
+[rule2] PH<=2.5 & PH>1.5 & WL<=2.5 -> 1.0:(PP'=UP) ;
+[rule3] PH<=2.5 & PH>1.5 & WL>2.5 & TM<=1.5 -> 0.2:(PP'=DOWN)  + 0.8:(PP'=UP) ;
+[rule4] PH<=2.5 & PH>1.5 & WL>2.5 & TM>1.5 & TM<=2.5 -> 0.6666666666666666:(PP'=DOWN)  + 0.3333333333333333:(PP'=UP) ;
+[rule5] PH<=2.5 & PH>1.5 & WL>2.5 & TM>1.5 & TM>2.5 -> 0.4:(PP'=DOWN)  + 0.6:(PP'=UP) ;
+[rule6] PH>2.5 -> 1.0:(PP'=DOWN) ;
+endmodule
