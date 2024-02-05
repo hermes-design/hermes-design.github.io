@@ -2,13 +2,53 @@ const int T;
 const int Z;
 const int CRT;
 
+// Certainty of fail =0.93
 <<p1>>Pmax=? [ F (win=1&rounds<=k) ]
 
+// Certainty of fail =0.93
 <<p1>>Pmin=? [ F (win=1&rounds<=k) ]
 
+// Certainty of fail =0.93
 <<p2>>Pmin=? [ F (win=0&rounds<=k) ]
 
+// Certainty of fail =0.93
 <<p2>>Pmax=? [ F (win=0&rounds<=k) ]
+
+// Certainty of fail =0.5
+<<p1>>Pmax=? [ F (winChancesAboutEven=1&rounds<=k) ]
+
+// Certainty of fail =0.5
+<<p1>>Pmin=? [ F (winChancesAboutEven=1&rounds<=k) ]
+
+// Certainty of fail =0.5
+<<p2>>Pmin=? [ F (winChancesAboutEven=0&rounds<=k) ]
+
+// Certainty of fail =0.5
+<<p2>>Pmax=? [ F (winChancesAboutEven=0&rounds<=k) ]
+
+// Certainty of fail =0
+<<p1>>Pmax=? [ F (winAlmostCertain=1&rounds<=k) ]
+
+// Certainty of fail =0
+<<p1>>Pmin=? [ F (winAlmostCertain=1&rounds<=k) ]
+
+// Certainty of fail =0
+<<p2>>Pmin=? [ F (winAlmostCertain=0&rounds<=k) ]
+
+// Certainty of fail =0
+<<p2>>Pmax=? [ F (winAlmostCertain=0&rounds<=k) ]
+
+// player 1 wins
+<<p1>>Pmax=? [ F ("win1"&rounds<=k) ]
+
+// player 1 wins
+<<p1>>Pmin=? [ F ("win1"&rounds<=k) ]
+
+// player 2 wins
+<<p2>>Pmin=? [ F ("win0"&rounds<=k) ]
+
+// player 2 wins
+<<p2>>Pmax=? [ F ("win0"&rounds<=k) ]
 
 <<p1>>R{"utility1"}max=? [ F rounds=k ]
 

@@ -2,8 +2,8 @@ csg
 //IEA AIE 2024
 //author: Abdelhakim Baouya
 
-player p1  GeneratedDecisiontree endplayer  //Human decision 
-player p2  PDT endplayer //PDT
+player p1  GeneratedDecisiontree endplayer  //  win 0
+player p2  PDT endplayer //PDT win 1
 
 
 const int UP =1;
@@ -58,52 +58,52 @@ module RegisterCertainty //Almost Certainly Not
         win : [-1..1] init -1 ;
 	//1 for successful interventions
 	//0 for non successful interventions
-	[att_rule1, rule1]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule1, rule2]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule1, rule3]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-        [att_rule1, rule4]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule1, rule5]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-        [att_rule1, rule6]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
+	[att_rule1, rule1]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule1, rule2]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule1, rule3]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+        [att_rule1, rule4]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule1, rule5]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+        [att_rule1, rule6]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
 
-	[att_rule2, rule1]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule2, rule2]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ;
-	[att_rule2, rule3]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ;
-        [att_rule2, rule4]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ;
-	[att_rule2, rule5]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ;
-        [att_rule2, rule6]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
+	[att_rule2, rule1]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule2, rule2]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ;
+	[att_rule2, rule3]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ;
+        [att_rule2, rule4]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ;
+	[att_rule2, rule5]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ;
+        [att_rule2, rule6]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
 
-	[att_rule3, rule1]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule3, rule2]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule3, rule3]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-        [att_rule3, rule4]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-	[att_rule3, rule5]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
-        [att_rule3, rule6]   true -> 0.93:(win'=1)+ 0.07:(win'=0) ; 
+	[att_rule3, rule1]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule3, rule2]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule3, rule3]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+        [att_rule3, rule4]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+	[att_rule3, rule5]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
+        [att_rule3, rule6]   true -> 0.93:(win'=0)+ 0.07:(win'=1) ; 
 endmodule
 
 module RegisterProbablyNot //Probably Not
         winProbablyNot : [-1..1] init -1 ;
 	//1 for successful interventions
 	//0 for non successful interventions
-	[att_rule1, rule1]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule1, rule2]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule1, rule3]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-        [att_rule1, rule4]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule1, rule5]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-        [att_rule1, rule6]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
+	[att_rule1, rule1]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule1, rule2]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule1, rule3]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+        [att_rule1, rule4]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule1, rule5]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+        [att_rule1, rule6]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ;  
 
-	[att_rule2, rule1]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule2, rule2]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule2, rule3]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-        [att_rule2, rule4]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule2, rule5]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-        [att_rule2, rule6]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
+	[att_rule2, rule1]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule2, rule2]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule2, rule3]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+        [att_rule2, rule4]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule2, rule5]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+        [att_rule2, rule6]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
 
-	[att_rule3, rule1]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule3, rule2]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule3, rule3]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-        [att_rule3, rule4]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-	[att_rule3, rule5]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
-        [att_rule3, rule6]   true -> 0.7:(winProbablyNot'=1)+ 0.3:(winProbablyNot'=0) ; 
+	[att_rule3, rule1]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule3, rule2]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule3, rule3]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+        [att_rule3, rule4]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+	[att_rule3, rule5]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
+        [att_rule3, rule6]   true -> 0.7:(winProbablyNot'=0)+ 0.3:(winProbablyNot'=1) ; 
 endmodule
 
 module RegisterChancesAboutEven //Chances About Even
@@ -137,26 +137,26 @@ module RegisterProbable //Probable
         winProbable : [-1..1] init -1 ;
 	//1 for successful interventions
 	//0 for non successful interventions
-	[att_rule1, rule1]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule1, rule2]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule1, rule3]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-        [att_rule1, rule4]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule1, rule5]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-        [att_rule1, rule6]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
+	[att_rule1, rule1]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule1, rule2]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule1, rule3]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+        [att_rule1, rule4]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule1, rule5]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+        [att_rule1, rule6]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
 
-	[att_rule2, rule1]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule2, rule2]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule2, rule3]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-        [att_rule2, rule4]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule2, rule5]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-        [att_rule2, rule6]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
+	[att_rule2, rule1]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule2, rule2]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule2, rule3]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+        [att_rule2, rule4]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule2, rule5]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+        [att_rule2, rule6]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
 
-	[att_rule3, rule1]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule3, rule2]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-	[att_rule3, rule3]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-        [att_rule3, rule4]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ;  
-	[att_rule3, rule5]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ; 
-        [att_rule3, rule6]   true -> 0.25:(winProbable'=1)+ 0.75:(winProbable'=0) ;  
+	[att_rule3, rule1]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule3, rule2]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+	[att_rule3, rule3]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+        [att_rule3, rule4]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ;   
+	[att_rule3, rule5]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ; 
+        [att_rule3, rule6]   true -> 0.25:(winProbable'=0)+ 0.75:(winProbable'=1) ;  
 endmodule
 
 
@@ -164,26 +164,26 @@ module RegisterAlmostCertain //Almost certain
         winAlmostCertain  : [-1..1] init -1 ;
 	//1 for successful interventions
 	//0 for non successful interventions
-	[att_rule1, rule1]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule1, rule2]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule1, rule3]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-        [att_rule1, rule4]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule1, rule5]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-        [att_rule1, rule6]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
+	[att_rule1, rule1]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+	[att_rule1, rule2]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+	[att_rule1, rule3]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+        [att_rule1, rule4]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ;  
+	[att_rule1, rule5]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ;  
+        [att_rule1, rule6]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
 
-	[att_rule2, rule1]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule2, rule2]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule2, rule3]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-        [att_rule2, rule4]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule2, rule5]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-        [att_rule2, rule6]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ;  
+	[att_rule2, rule1]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+	[att_rule2, rule2]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+	[att_rule2, rule3]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+        [att_rule2, rule4]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ;  
+	[att_rule2, rule5]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+        [att_rule2, rule6]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ;  
 
-	[att_rule3, rule1]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule3, rule2]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-	[att_rule3, rule3]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-        [att_rule3, rule4]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ;  
-	[att_rule3, rule5]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ; 
-        [att_rule3, rule6]   true -> 0.07:(winAlmostCertain'=1)+ 0.93:(winAlmostCertain'=0) ;  
+	[att_rule3, rule1]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+	[att_rule3, rule2]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+	[att_rule3, rule3]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+        [att_rule3, rule4]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ;  
+	[att_rule3, rule5]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ; 
+        [att_rule3, rule6]   true -> 0.07:(winAlmostCertain'=0)+ 0.93:(winAlmostCertain'=1) ;   
 endmodule
 
 module RegisterCertain //Almost certain
@@ -213,15 +213,23 @@ module RegisterCertain //Almost certain
 endmodule
 
 
+label "win1" = win=1 & winProbablyNot=1 & winChancesAboutEven=1 & winProbable=1 & winCertain=1 & winAlmostCertain=1;
+
+label "win0" = win=0 & winProbablyNot=0 & winChancesAboutEven=0 & winProbable=0 & winCertain=0 & winAlmostCertain=0;
+
+formula win1 = win=1 & winProbablyNot=1 & winChancesAboutEven=1 & winProbable=1 & winCertain=1 & winAlmostCertain=1;
+
+formula win0 = win=0 & winProbablyNot=0 & winChancesAboutEven=0 & winProbable=0 & winCertain=0 & winAlmostCertain=0;
+
 // reward structure for player Human
 rewards "utility1"
-	win=0 | winProbablyNot=0 | winChancesAboutEven=0 | winProbable=0 | winCertain=0 | winAlmostCertain=0:  cost;// Attacks and successful interventions
-	win=1 | winProbablyNot=1 | winChancesAboutEven=1 | winProbable=1 | winCertain=1 | winAlmostCertain=1: -cost;// Attacks and non successful interventions
+	win1 :  cost; //Attacks and non successful interventions
+	win0 :  -cost;// Attacks and successful interventions
 endrewards
 
 
 // reward structure for player PDT
 rewards "utility2"
-	win=1 | winProbablyNot=1 | winChancesAboutEven=1 | winProbable=1 | winCertain=1 | winAlmostCertain=1:  cost; //Attacks and non successful interventions
-	win=0 | winProbablyNot=0 | winChancesAboutEven=0 | winProbable=0 | winCertain=0 | winAlmostCertain=0: -cost;// Attacks and successful interventions
+	win0:  cost;// Attacks and successful interventions
+	win1: -cost;// Attacks and non successful interventions
 endrewards
