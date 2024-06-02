@@ -1,0 +1,15 @@
+const int T;
+
+// probaibility to replace the sattelite in 15 years
+<<p1,p2,p3>>Pmax=? [ F ((s2=REPLACE|s1=MANUFECTURE)&rounds<=k) ]
+
+<<p1,p2>>R{"replaceOnOrbit"}max=? [ F (rounds=k) ]
+
+<<p1,p3>>R{"replaceOnGround"}max=? [ F (rounds=k) ]
+
+<<p2>>R{"costOnOrbit"}max=? [ F (rounds=k) ]
+
+<<p2>>R{"costOnGround"}min=? [ F (rounds=k) ]
+
+<<p1,p2,p3>>R{"replace"}max=? [ F (rounds=k) ]/T
+

@@ -1,0 +1,286 @@
+csg
+//SEAA 2024
+//author: Abdelhakim Baouya
+
+// Player definitions 
+player p1  OnGroundManoeuvers  endplayer  // Player 1 performing On-Ground Maneuvers
+player p2  OnOrbitManoeuvers  endplayer  // Player 2 performing On-Orbit Maneuvers
+player p3  Environement       endplayer  // Player 3 representing the Environment
+
+// Constants used in the model
+const double r=0.80;// sattelite reliability 
+const double Pn = 0.9;                   // Probability of successful launch
+const int mtbf=129600; //= 15 * 12 * 30 * 24;   // Mean time between failures (in hours)
+const int mttr=24;//mean time to repair
+
+const double c1=1;// in millions
+const double c2=15; //in millions
+//const int T;   
+//const int z;                            // Placeholder for total simulation time (needs to be defined)
+const double exp = 2.71828;              // Mathematical constant e (base of natural logarithm)
+const double talpha = 4320;              // Mean Time to Unscheduled Interruption (in hours)
+const double Pbeta = 0.8;                 // Probability of resolving a failure in-orbit
+const double tgamma = 24;                // Time to build a new satellite (in hours)
+const double tdelta = 1440;              // Time to manufacture a new satellite (in hours)
+const double tmttr=mttr; //= 24;                 // Mean time to repair a satellite  (in hours)
+
+// Define states for the maneuvers
+const int STANDBY = 0;                    // Satellite is operational
+const int UPDATE = 1;                     // Satellite undergoing software update
+const int CHECKSATTELITE = 2;             // Checking satellite health
+const int REPLACE = 3;                    // Replacing a failed satellite
+const int ONGROUNDSPARE = 4;              // Spare satellite on ground
+const int LAUNCH = 5;                     // Launching a new satellite
+const int BUILD = 6;                      // Building a new satellite
+const int MANUFECTURE = 7;                 // Manufacturing a new satellite
+
+// Define failure modes
+const int SCHEDULED = 2;                  // Scheduled maintenance/update
+const int UNSCHEDULED = 3;                // Unscheduled failure/interruption
+const int FAILURE = 1;                    // General failure state
+
+const int NORMAL = 0;                     // Normal operational mode
+
+const k; // number of rounds
+
+// module to count the rounds
+module rounds
+
+	rounds : [0..k+1];
+	
+	[] rounds<=k -> (rounds'=rounds+1);
+	[] rounds=k+1 -> true;
+
+endmodule
+
+module OnGroundManoeuvers
+
+s1: [0..10] init 0;
+
+[OnGroundStandby]                 	s1=STANDBY                  -> (s1'=STANDBY);
+
+[OnGroundSpare]                 	s1=STANDBY                  -> (s1'=ONGROUNDSPARE);
+
+[CheckOnGroundSatelliteToBuild]       	s1=ONGROUNDSPARE            -> (1-((mtbf)/(mtbf+tgamma))):(s1'=BUILD)+((mtbf)/(mtbf+tgamma)):(s1'=STANDBY);
+
+[CheckOnGroundSatelliteToManufecture]   s1=BUILD            	    -> (1-((mtbf)/(mtbf+tdelta))):(s1'=MANUFECTURE)+((mtbf)/(mtbf+tdelta)):(s1'=STANDBY);
+
+[BuildOnGroundSatellite]       		s1=MANUFECTURE    	    -> (s1'=LAUNCH);
+
+[ResetOnGroundManoeuvers]       	s1=LAUNCH                   -> (1-Pn):(s1'=LAUNCH)+(Pn):(s1'=STANDBY);
+
+endmodule
+
+// Module definition - defines a scope for the following code block
+module OnOrbitManoeuvers
+
+// State variable declaration with initial value
+s2: [0..10] init 0;  // s2 is an integer variable ranging from 0 to 10, initialized to 0
+
+// State transition - standby state
+[OnOrbitStandby]                 	// Label for the transition
+s2=STANDBY -> (s2'=STANDBY);       // The system is in standby state (s2=STANDBY) and remains in standby (s2'=STANDBY)
+
+// State transition - repair on-orbit software update
+[RepairOnOrbitSoftwareUpdate]   	// Label for the transition
+s2=STANDBY -> (s2'=UPDATE);       // The system transitions from standby (s2=STANDBY) to update state (s2'=UPDATE) for software update
+
+// State transition - check for redundant satellite (from update state)
+[CheckOnOrbitRedundantSatellite]        s2=UPDATE  -> (1-((mtbf)/(mtbf+tmttr))):(s2'=CHECKSATTELITE)+((mtbf)/(mtbf+tmttr)):(s2'=STANDBY) ;
+
+// State transition - move/replace redundant satellite (from check state)
+[MoveReplaceRedundantSatellite]         s2=CHECKSATTELITE           -> Pbeta:(s2'=REPLACE)+(1-Pbeta):(s2'=ONGROUNDSPARE);
+
+// State transition - reset to standby
+[ResetOnOrbitManoeuvers]       		// Label for the transition
+s2=ONGROUNDSPARE | s2=REPLACE | s2=UPDATE    -> (s2'=STANDBY);  // The system can reset to standby from various states (ONGROUNDSPARE, REPLACE, UPDATE) and sets s2' (next state) to standby
+
+// End of module definition
+endmodule
+
+module SatteliteInteruptionandFailure
+MODE: [0..1] init 1;
+
+win: [0..3] init 0;
+
+[Scheduled,OnOrbitStandby,OnGroundStandby] MODE=1 -> true;
+
+[Scheduled,OnOrbitStandby,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Scheduled,OnOrbitStandby,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Scheduled,OnOrbitStandby,BuildOnGroundSatellite] MODE=0 -> true;
+[Scheduled,OnOrbitStandby,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Scheduled,RepairOnOrbitSoftwareUpdate,OnGroundStandby] MODE=0 -> true;
+[Scheduled,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Scheduled,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Scheduled,RepairOnOrbitSoftwareUpdate,BuildOnGroundSatellite] MODE=0 -> true;
+[Scheduled,RepairOnOrbitSoftwareUpdate,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Scheduled,CheckOnOrbitRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Scheduled,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Scheduled,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Scheduled,CheckOnOrbitRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Scheduled,CheckOnOrbitRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Scheduled,MoveReplaceRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Scheduled,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Scheduled,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Scheduled,MoveReplaceRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Scheduled,MoveReplaceRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Scheduled,ResetOnOrbitManoeuvers,OnGroundStandby] MODE=0 -> true;
+[Scheduled,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Scheduled,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Scheduled,ResetOnOrbitManoeuvers,BuildOnGroundSatellite] MODE=0 -> true;
+[Scheduled,ResetOnOrbitManoeuvers,ResetOnGroundManoeuvers] MODE=0 -> true;
+
+[Unscheduled,OnOrbitStandby,OnGroundStandby] MODE=1 -> true;
+
+[Unscheduled,OnOrbitStandby,CheckOnGroundSatelliteToBuild]  MODE=0-> true;
+[Unscheduled,OnOrbitStandby,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Unscheduled,OnOrbitStandby,BuildOnGroundSatellite] MODE=0 -> true;
+[Unscheduled,OnOrbitStandby,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Unscheduled,RepairOnOrbitSoftwareUpdate,OnGroundStandby] MODE=0 -> true;
+[Unscheduled,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Unscheduled,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Unscheduled,RepairOnOrbitSoftwareUpdate,BuildOnGroundSatellite] MODE=0 -> true;
+[Unscheduled,RepairOnOrbitSoftwareUpdate,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Unscheduled,CheckOnOrbitRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Unscheduled,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Unscheduled,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Unscheduled,CheckOnOrbitRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Unscheduled,CheckOnOrbitRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Unscheduled,MoveReplaceRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Unscheduled,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Unscheduled,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Unscheduled,MoveReplaceRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Unscheduled,MoveReplaceRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Unscheduled,ResetOnOrbitManoeuvers,OnGroundStandby] MODE=0 -> true;
+[Unscheduled,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Unscheduled,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Unscheduled,ResetOnOrbitManoeuvers,BuildOnGroundSatellite] MODE=0 -> true;
+[Unscheduled,ResetOnOrbitManoeuvers,ResetOnGroundManoeuvers] MODE=0 -> true;
+
+
+
+[Failure,OnOrbitStandby,OnGroundStandby] MODE=1 -> true;
+[Failure,OnOrbitStandby,CheckOnGroundSatelliteToBuild] MODE=1 -> true;
+[Failure,OnOrbitStandby,CheckOnGroundSatelliteToManufecture] MODE=1 -> true;
+[Failure,OnOrbitStandby,BuildOnGroundSatellite] MODE=1 -> true;
+[Failure,OnOrbitStandby,ResetOnGroundManoeuvers] MODE=1 -> true;
+[Failure,RepairOnOrbitSoftwareUpdate,OnGroundStandby] MODE=1 -> true;
+[Failure,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToBuild] MODE=1 -> true;
+[Failure,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToManufecture] MODE=1 -> true;
+[Failure,RepairOnOrbitSoftwareUpdate,BuildOnGroundSatellite] MODE=1 -> true;
+[Failure,RepairOnOrbitSoftwareUpdate,ResetOnGroundManoeuvers] MODE=1 -> true;
+[Failure,CheckOnOrbitRedundantSatellite,OnGroundStandby] MODE=1 -> true;
+[Failure,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=1 -> true;
+[Failure,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=1 -> true;
+[Failure,CheckOnOrbitRedundantSatellite,BuildOnGroundSatellite] MODE=1 -> true;
+[Failure,CheckOnOrbitRedundantSatellite,ResetOnGroundManoeuvers] MODE=1 -> true;
+[Failure,MoveReplaceRedundantSatellite,OnGroundStandby] MODE=1 -> true;
+[Failure,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=1 -> true;
+[Failure,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=1 -> true;
+[Failure,MoveReplaceRedundantSatellite,BuildOnGroundSatellite] MODE=1 -> true;
+[Failure,MoveReplaceRedundantSatellite,ResetOnGroundManoeuvers] MODE=1 -> true;
+[Failure,ResetOnOrbitManoeuvers,OnGroundStandby] MODE=1 -> true;
+[Failure,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToBuild] MODE=1 -> true;
+[Failure,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToManufecture] MODE=1 -> true;
+[Failure,ResetOnOrbitManoeuvers,BuildOnGroundSatellite] MODE=1 -> true;
+[Failure,ResetOnOrbitManoeuvers,ResetOnGroundManoeuvers] MODE=1 -> true;
+
+[Normal,OnOrbitStandby,OnGroundStandby] MODE=1 -> true;
+
+[Normal,OnOrbitStandby,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Normal,OnOrbitStandby,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Normal,OnOrbitStandby,BuildOnGroundSatellite] MODE=0 -> true;
+[Normal,OnOrbitStandby,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Normal,RepairOnOrbitSoftwareUpdate,OnGroundStandby] MODE=0 -> true;
+[Normal,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Normal,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Normal,RepairOnOrbitSoftwareUpdate,BuildOnGroundSatellite] MODE=0 -> true;
+[Normal,RepairOnOrbitSoftwareUpdate,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Normal,CheckOnOrbitRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Normal,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Normal,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Normal,CheckOnOrbitRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Normal,CheckOnOrbitRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Normal,MoveReplaceRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Normal,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Normal,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Normal,MoveReplaceRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Normal,MoveReplaceRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Normal,ResetOnOrbitManoeuvers,OnGroundStandby] MODE=0 -> true;
+[Normal,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Normal,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Normal,ResetOnOrbitManoeuvers,BuildOnGroundSatellite] MODE=0 -> true;
+[Normal,ResetOnOrbitManoeuvers,ResetOnGroundManoeuvers]MODE=0 -> true;
+
+
+
+[Reset,OnOrbitStandby,CheckOnGroundSatelliteToBuild] !(s3=FAILURE) -> true;
+[Reset,OnOrbitStandby,CheckOnGroundSatelliteToManufecture] !(s3=FAILURE) -> true;
+[Reset,OnOrbitStandby,BuildOnGroundSatellite] !(s3=FAILURE) -> true;
+
+
+
+[Reset,RepairOnOrbitSoftwareUpdate,OnGroundStandby] MODE=0 -> true;
+[Reset,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Reset,RepairOnOrbitSoftwareUpdate,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Reset,RepairOnOrbitSoftwareUpdate,BuildOnGroundSatellite] MODE=0 -> true;
+[Reset,RepairOnOrbitSoftwareUpdate,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Reset,CheckOnOrbitRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Reset,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Reset,CheckOnOrbitRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Reset,CheckOnOrbitRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Reset,CheckOnOrbitRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+[Reset,MoveReplaceRedundantSatellite,OnGroundStandby] MODE=0 -> true;
+[Reset,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Reset,MoveReplaceRedundantSatellite,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Reset,MoveReplaceRedundantSatellite,BuildOnGroundSatellite] MODE=0 -> true;
+[Reset,MoveReplaceRedundantSatellite,ResetOnGroundManoeuvers] MODE=0 -> true;
+
+[Reset,OnOrbitStandby,OnGroundStandby] MODE=0 -> true ;
+[Reset,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToBuild] MODE=0 -> true;
+[Reset,ResetOnOrbitManoeuvers,CheckOnGroundSatelliteToManufecture] MODE=0 -> true;
+[Reset,ResetOnOrbitManoeuvers,BuildOnGroundSatellite] MODE=0 -> true;
+
+[Reset,ResetOnOrbitManoeuvers,ResetOnGroundManoeuvers] MODE=1 -> true;
+[Reset,OnOrbitStandby,ResetOnGroundManoeuvers] MODE=1 -> true; 
+[Reset,ResetOnOrbitManoeuvers,OnGroundStandby] MODE=1 -> true;
+
+
+
+endmodule
+
+
+
+module Environement
+s3: [0..10] init 0;
+
+[Scheduled]   s3=NORMAL 			->  ((mtbf)/(mtbf+talpha)):(s3'=NORMAL)	+(1-(mtbf)/(mtbf+talpha)):(s3'=SCHEDULED) ;
+[Unscheduled] s3=NORMAL 			-> ( (mtbf)/(mtbf+talpha)):(s3'=NORMAL)+(1-(mtbf)/(mtbf+talpha)):(s3'=UNSCHEDULED) ;
+[Failure]     s3=NORMAL 			->  r:(s3'=NORMAL )	+(1-r):(s3'=FAILURE) ;
+[Normal]      s3=SCHEDULED | s3=UNSCHEDULED     -> (s3'=NORMAL);
+[Reset]       s3=FAILURE  			-> (s3'=NORMAL);
+
+endmodule
+
+rewards "replaceOnOrbit"
+	 s2=REPLACE     : 1; 
+endrewards
+rewards "replaceOnGround"
+	 s1=MANUFECTURE : 1; 
+endrewards
+
+rewards "replace"
+	 s2=REPLACE     : 1; 
+	 s1=MANUFECTURE : 1; 
+endrewards
+
+rewards "costOnOrbit"
+	s2=REPLACE     : c1*rounds; 
+endrewards
+
+rewards "costOnGround"
+	s1=MANUFECTURE : c2*rounds; 
+endrewards
+
+
+
