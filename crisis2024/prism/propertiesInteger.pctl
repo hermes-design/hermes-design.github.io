@@ -1,0 +1,9 @@
+const int T;
+
+// probaibility to replace the sattelite in 15 years
+<<p1,p2>>Pmax=? [ F (CB_1 = 8&rounds<=k) ]
+
+<<p1,p2>>Pmin=? [ F (CB_1 = 8&rounds<=k) ]
+
+<<p1,p2>>Pmin=? [ F (CA_1 = 15&rounds<=k) ]
+

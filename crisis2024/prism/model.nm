@@ -1,0 +1,288 @@
+csg
+
+player p1 Watchkeeping_Officer endplayer
+
+player p2 Duty_Officer endplayer
+
+player p3 Captain endplayer
+
+player p4 Crew_A endplayer
+
+player p5 Crew_B endplayer
+
+player p6 Crew_C endplayer
+
+player p7 Crew_D endplayer
+
+player p8 Chief_Officer endplayer
+
+
+//Global variables for player Watchkeeping_Officer
+
+const double ProbW_1=0.0224;
+const double ProbW_2=0.0629;
+const double ProbW_3=0.0396;
+//Global variables for player Duty_Officer
+const double ProbD_5=0.0363;
+const double ProbD_1=0.0336;
+const double ProbD_2=0.0245;
+const double ProbD_3=0.0223;
+const double ProbD_4=0.0108;
+//Global variables for player Captain
+const double ProbA_4=0.000401;
+const double ProbA_1=0.0175;
+const double ProbA_2=0.0228;
+const double ProbA_3=0.00174;
+//Global variables for player Crew_A
+const double ProbCA_15=0.00401;
+const double ProbCA_1=0.00711;
+const double ProbCA_2=0.0123;
+const double ProbCA_3=0.015;
+const double ProbCA_4=0.0982;
+const double ProbCA_5=0.0156;
+const double ProbCA_6=0.0104;
+const double ProbCA_7=0.0104;
+const double ProbCA_8=0.0156;
+const double ProbCA_9=0.0104;
+const double ProbCA_10=0.0129;
+const double ProbCA_11=0.0129;
+const double ProbCA_12=0.0103;
+const double ProbCA_13=0.0104;
+const double ProbCA_14=0.00320;
+//Global variables for player Crew_B
+const double ProbCB_1=0.0157;
+const double ProbCB_2=0.0157;
+const double ProbCB_3=0.0181;
+
+const double ProbCB_4=0.0059;
+const double ProbCB_5=0.0219;
+const double ProbCB_6=0.285;
+const double ProbCB_7=0;
+const double ProbCB_8=0.226;
+
+const double ProbCB_9=0.00320;
+const double ProbCB_10=0.00401;
+//Global variables for player Crew_C
+const double ProbCC_1=0.0147;
+const double ProbCC_2=0.0146;
+
+const double ProbCC_3=0.0059;
+const double ProbCC_4=0.0219;
+const double ProbCC_5=0.285;
+const double ProbCC_6=0;
+const double ProbCC_7=0.226;
+
+const double ProbCC_8=0.00320;
+const double ProbCC_9=0.00401;
+//Global variables for player Crew_D
+const double ProbCD_6=0.00401;
+const double ProbCD_1=0.00906;
+const double ProbCD_2=0.006;
+const double ProbCD_3=0.0143;
+const double ProbCD_4=0.00773;
+const double ProbCD_5=0.00320;
+//Global variables for player Chief_Officer
+const double ProbC_2=0.00312;
+const double ProbC_1=0.0105;
+
+const int Wing_Bridge=0;
+const int Navigation_Bridge=1;
+const int Cabin_Room=2;
+const int Boat_Deck=3;
+const int Rescue_Boat=4;
+const int MAX_POSITION = 5;
+const int NOT_DEFINED = -1;
+
+
+const k; // number of rounds
+
+// module to count the rounds
+module rounds
+
+	rounds : [0..k+1];
+	
+	[] rounds<=k -> (rounds'=rounds+1);
+	[] rounds=k+1 -> true;
+
+endmodule
+
+
+module Watchkeeping_Officer
+    W_P: [0..MAX_POSITION] init Wing_Bridge; 
+    W_1: bool init true; 
+    W_2: bool init false; 
+    W_3: bool init false; 
+  [a_W_1] W_1 = true & W_P = Wing_Bridge -> (1 - ProbW_1):(W_1' = false) & (W_2' = true) & (W_P' = Wing_Bridge)+ ProbW_1:(W_1' = true);
+  [a_W_2] W_2 = true & W_P = Wing_Bridge -> (1 - ProbW_2):(W_2' = false) & (W_3' = true) & (W_P' = Navigation_Bridge)+ ProbW_2:(W_2' = true);
+  [a_W_3] W_3 = true & W_P = Navigation_Bridge->  (1 - ProbW_3):(W_3' = false) & (W_P' = Wing_Bridge)&(W_1' = true)+ ProbW_3:(W_3' = true);
+endmodule 
+
+module scheduler1
+  
+  [a_W_3,a_D_0] W_3 = true & W_P = Navigation_Bridge & D_P = Navigation_Bridge->true;
+
+endmodule
+
+
+
+module Duty_Officer
+    D_P: [0..MAX_POSITION] init Navigation_Bridge; 
+    D_1: bool init false; 
+    D_2: bool init false; 
+    D_3: bool init false; 
+    D_4: bool init false; 
+    D_5: bool init false; 
+  [a_D_0] W_3 = true & W_P = Navigation_Bridge & D_P = Navigation_Bridge -> (D_1' = true);
+  [a_D_1] D_1 = true & D_P = Navigation_Bridge-> (1 - ProbD_1):(D_1' = false) & (D_2' = true) & (D_P' = Navigation_Bridge)+ ProbD_1:(D_1' = true);
+  [a_D_2] D_2 = true & D_P = Navigation_Bridge-> (1 - ProbD_2):(D_2' = false) & (D_3' = true) & (D_P' = Navigation_Bridge)+ ProbD_2:(D_2' = true);
+  [a_D_3] D_3 = true & D_P = Navigation_Bridge-> (1 - ProbD_3):(D_3' = false) & (D_4' = true) & (D_P' = Navigation_Bridge)+ ProbD_3:(D_3' = true);
+  [a_D_4] D_4 = true & D_P = Navigation_Bridge-> (1 - ProbD_4):(D_4' = false) & (D_5' = true) & (D_P' = Navigation_Bridge)+ ProbD_4:(D_4' = true);
+  [a_D_5] D_5 = true & D_P = Navigation_Bridge-> (1 - ProbD_5):(D_5' = false) & (D_P' = Navigation_Bridge)+ ProbD_5:(D_5' = true);
+endmodule 
+
+module scheduler2
+  [a_D_3, a_A_0] D_3 = true & D_P = Navigation_Bridge-> true;
+endmodule
+
+module Captain
+    A_P: [0..MAX_POSITION] init Cabin_Room; 
+    A_1: bool init false; 
+    A_2: bool init false; 
+    A_3: bool init false; 
+    A_4: bool init false; 
+  [a_A_0] D_3 = true & D_P = Navigation_Bridge = true 		       -> (A_1' = true);
+  [a_A_1] A_1 = true & A_P = Cabin_Room-> (1 - ProbA_1):(A_1' = false) & (A_2' = true) & (A_P' = Cabin_Room)+ ProbA_1:(A_1' = true);
+  [a_A_2] A_2 = true & A_P = Cabin_Room-> (1 - ProbA_2):(A_2' = false) & (A_3' = true) & (A_P' = Cabin_Room)+ ProbA_2:(A_2' = true);
+  [a_A_3] A_3 = true & A_P = Cabin_Room-> (1 - ProbA_3):(A_3' = false) & (A_4' = true) & (A_P' = Navigation_Bridge)+ ProbA_3:(A_3' = true);
+  [a_A_4] A_4 = true & A_P = Navigation_Bridge->  (1 - ProbA_4):(A_4' = false) & (A_P' = Cabin_Room)+ ProbA_4:(A_4' = true);
+endmodule 
+
+
+module scheduler3
+  [a_D_4, a_CA_0,a_CB_0,a_CC_0,a_CD_0] D_4 = true & D_P = Navigation_Bridge -> true;
+endmodule
+
+
+module Crew_A
+    CA_P: [0..MAX_POSITION] init Boat_Deck; 
+    CA_1: bool init false; 
+    CA_2: bool init false; 
+    CA_3: bool init false; 
+    CA_4: bool init false; 
+    CA_5: bool init false; 
+    CA_6: bool init false; 
+    CA_7: bool init false; 
+    CA_8: bool init false; 
+    CA_9: bool init false; 
+    CA_10: bool init false; 
+    CA_11: bool init false; 
+    CA_12: bool init false; 
+    CA_13: bool init false; 
+    CA_14: bool init false; 
+    CA_15: bool init false; 
+
+  [a_CA_0] D_4 = true & D_P = Navigation_Bridge -> (CA_1' = true);
+  [a_CA_1] CA_1  = true & CA_P = Boat_Deck -> (1 - ProbCA_1):(CA_1' = false) & (CA_2' = true) & (CA_P' = Rescue_Boat)+ ProbCA_1:(CA_1' = true);
+  [a_CA_2] CA_2  = true & CA_P = Rescue_Boat-> (1 - ProbCA_2):(CA_2' = false) & (CA_3' = true) & (CA_P' = Rescue_Boat)+ ProbCA_2:(CA_2' = true);
+  [a_CA_3] CA_3  = true & CA_P = Rescue_Boat-> (1 - ProbCA_3):(CA_3' = false) & (CA_4' = true) & (CA_P' = Rescue_Boat)+ ProbCA_3:(CA_3' = true);
+  [a_CA_4] CA_4  = true & CA_P = Rescue_Boat-> (1 - ProbCA_4):(CA_4' = false) & (CA_5' = true) & (CA_P' = Rescue_Boat)+ ProbCA_4:(CA_4' = true);
+  [a_CA_5] CA_5  = true & CA_P = Rescue_Boat-> (1 - ProbCA_5):(CA_5' = false) & (CA_6' = true) & (CA_P' = Rescue_Boat)+ ProbCA_5:(CA_5' = true);
+  [a_CA_6] CA_6  = true & CA_P = Rescue_Boat-> (1 - ProbCA_6):(CA_6' = false) & (CA_7' = true) & (CA_P' = Rescue_Boat)+ ProbCA_6:(CA_6' = true);
+  [a_CA_7] CA_7  = true & CA_P = Rescue_Boat-> (1 - ProbCA_7):(CA_7' = false) & (CA_8' = true) & (CA_P' = Rescue_Boat)+ ProbCA_7:(CA_7' = true);
+  [a_CA_8] CA_8  = true & CA_P = Rescue_Boat-> (1 - ProbCA_8):(CA_8' = false) & (CA_9' = true) & (CA_P' = Rescue_Boat)+ ProbCA_8:(CA_8' = true);
+  [a_CA_9] CA_9  = true & CA_P = Rescue_Boat-> (1 - ProbCA_9):(CA_9' = false) & (CA_10' = true) & (CA_P' = Rescue_Boat)+ ProbCA_9:(CA_9' = true);
+  [a_CA_10] CA_10 = true & CA_P = Rescue_Boat-> (1 - ProbCA_10):(CA_10' = false) & (CA_11' = true) & (CA_P' = Rescue_Boat)+ ProbCA_10:(CA_10' = true);
+  [a_CA_11] CA_11 = true & CA_P = Rescue_Boat-> (1 - ProbCA_11):(CA_11' = false) & (CA_12' = true) & (CA_P' = Rescue_Boat)+ ProbCA_11:(CA_11' = true);
+  [a_CA_12] CA_12 = true & CA_P = Rescue_Boat-> (1 - ProbCA_12):(CA_12' = false) & (CA_13' = true) & (CA_P' = Rescue_Boat)+ ProbCA_12:(CA_12' = true);
+  [a_CA_13] CA_13 = true & CA_P = Rescue_Boat-> (1 - ProbCA_13):(CA_13' = false) & (CA_14' = true) & (CA_P' = Rescue_Boat)+ ProbCA_13:(CA_13' = true);
+  [a_CA_14] CA_14 = true & CA_P = Rescue_Boat-> (1 - ProbCA_14):(CA_14' = false) & (CA_15' = true) & (CA_P' = Rescue_Boat)+ ProbCA_14:(CA_14' = true);
+  [a_CA_15] CA_15 = true & CA_P = Rescue_Boat-> (1 - ProbCA_15):(CA_15' = false) & (CA_P' = Boat_Deck)+ ProbCA_15:(CA_15' = true);
+endmodule 
+
+module Crew_B
+    CB_P: [0..MAX_POSITION] init Boat_Deck; 
+    CB_1: bool init false; 
+    CB_2: bool init false; 
+    CB_3: bool init false; 
+    CB_4: bool init false; 
+    CB_5: bool init false; 
+    CB_6: bool init false; 
+    CB_7: bool init false; 
+    CB_8: bool init false; 
+    CB_9: bool init false; 
+    CB_10: bool init false; 
+
+  [a_CB_0] D_4 = true & D_P = Navigation_Bridge -> (CB_1' = true);
+  [a_CB_1] CB_1 = true & CB_P = Boat_Deck  -> (1 - ProbCB_1):(CB_1' = false) & (CB_2' = true) & (CB_P' = Rescue_Boat)+ ProbCB_1:(CB_1' = true);
+  [a_CB_2] CB_2 = true & CB_P = Rescue_Boat-> (1 - ProbCB_2):(CB_2' = false) & (CB_3' = true) & (CB_P' = Rescue_Boat)+ ProbCB_2:(CB_2' = true);
+  [a_CB_3] CB_3 = true & CB_P = Rescue_Boat-> (1 - ProbCB_3):(CB_3' = false) & (CB_4' = true) & (CB_P' = Rescue_Boat)+ ProbCB_3:(CB_3' = true);
+  [a_CB_4] CB_4 = true & CB_P = Rescue_Boat-> (1 - ProbCB_4):(CB_4' = false) & (CB_5' = true) & (CB_P' = Rescue_Boat)+ ProbCB_4:(CB_4' = true);
+
+  [a_CB_5] CB_5 = true & CB_P = Rescue_Boat-> (1 - ProbCB_5):(CB_5' = false) & (CB_6' = true) & (CB_P' = Rescue_Boat)+ ProbCB_5:(CB_5' = true);
+  [a_CB_6] CB_6 = true & CB_P = Rescue_Boat-> (1 - ProbCB_6):(CB_6' = false) & (CB_7' = true) & (CB_P' = Rescue_Boat)+ ProbCB_6:(CB_6' = true);
+  [a_CB_7] CB_7 = true & CB_P = Rescue_Boat-> (1 - ProbCB_7):(CB_7' = false) & (CB_8' = true) & (CB_P' = Rescue_Boat)+ ProbCB_7:(CB_7' = true);
+  [a_CB_8] CB_8 = true & CB_P = Rescue_Boat-> (1 - ProbCB_8):(CB_8' = false) & (CB_9' = true) & (CB_P' = Rescue_Boat)+ ProbCB_8:(CB_8' = true);
+  [a_CB_9] CB_9 = true & CB_P = Rescue_Boat-> (1 - ProbCB_9):(CB_9' = false) & (CB_10' = true) & (CB_P' = Rescue_Boat)+ ProbCB_9:(CB_9' = true);
+
+  [a_CB_10] CB_10 = true & CB_P = Rescue_Boat-> (1 - ProbCB_5):(CB_10' = false) & (CB_P' = Boat_Deck)+ ProbCB_10:(CB_10' = true);
+endmodule 
+
+module Crew_C
+    CC_P: [0..MAX_POSITION] init Boat_Deck; 
+    CC_1: bool init false; 
+    CC_2: bool init false; 
+    CC_3: bool init false; 
+    CC_4: bool init false; 
+    CC_5: bool init false; 
+    CC_6: bool init false; 
+    CC_7: bool init false; 
+    CC_8: bool init false; 
+    CC_9: bool init false; 
+
+  [a_CC_0] D_4 = true & D_P = Navigation_Bridge -> (CC_1' = true);
+  [a_CC_1] CC_1 = true & CC_P = Boat_Deck  -> (1 - ProbCC_1):(CC_1' = false) & (CC_2' = true) & (CC_P' = Rescue_Boat)+ ProbCC_1:(CC_1' = true);
+  [a_CC_2] CC_2 = true & CC_P = Rescue_Boat-> (1 - ProbCC_2):(CC_2' = false) & (CC_3' = true) & (CC_P' = Rescue_Boat)+ ProbCC_2:(CC_2' = true);
+  [a_CC_3] CC_3 = true & CC_P = Rescue_Boat-> (1 - ProbCC_3):(CC_3' = false) & (CC_4' = true) & (CC_P' = Rescue_Boat)+ ProbCC_3:(CC_3' = true);
+
+  [a_CC_4] CC_4 = true & CC_P = Rescue_Boat-> (1 - ProbCC_4):(CC_4' = false) & (CC_5' = true) & (CC_P' = Rescue_Boat)+ ProbCC_4:(CC_4' = true);
+  [a_CC_5] CC_5 = true & CC_P = Rescue_Boat-> (1 - ProbCC_5):(CC_5' = false) & (CC_6' = true) & (CC_P' = Rescue_Boat)+ ProbCC_5:(CC_5' = true);
+  [a_CC_6] CC_6 = true & CC_P = Rescue_Boat-> (1 - ProbCC_6):(CC_6' = false) & (CC_7' = true) & (CC_P' = Rescue_Boat)+ ProbCC_6:(CC_6' = true);
+  [a_CC_7] CC_7 = true & CC_P = Rescue_Boat-> (1 - ProbCC_7):(CC_7' = false) & (CC_8' = true) & (CC_P' = Rescue_Boat)+ ProbCC_7:(CC_7' = true);
+  [a_CC_8] CC_8 = true & CC_P = Rescue_Boat-> (1 - ProbCC_8):(CC_8' = false) & (CC_9' = true) & (CC_P' = Rescue_Boat)+ ProbCC_8:(CC_8' = true);
+
+  [a_CC_9] CC_9 = true & CC_P = Rescue_Boat-> (1 - ProbCC_4):(CC_9' = false) & (CC_1' = true) & (CC_P' = Boat_Deck)+ ProbCC_4:(CC_9' = true);
+endmodule 
+
+module Crew_D
+    CD_P: [0..MAX_POSITION] init Boat_Deck; 
+    CD_1: bool init false; 
+    CD_2: bool init false; 
+    CD_3: bool init false; 
+    CD_4: bool init false; 
+    CD_5: bool init false; 
+  [a_CD_0] D_4 = true & D_P = Navigation_Bridge -> (CD_1' = true);
+  [a_CD_1] CD_1 = true & CD_P = Boat_Deck-> (1 - ProbCD_1):(CD_1' = false) & (CD_2' = true) & (CD_P' = Rescue_Boat)+ ProbCD_1:(CD_1' = true);
+  [a_CD_2] CD_2 = true & CD_P = Rescue_Boat-> (1 - ProbCD_2):(CD_2' = false) & (CD_3' = true) & (CD_P' = Rescue_Boat)+ ProbCD_2:(CD_2' = true);
+  [a_CD_3] CD_3 = true & CD_P = Rescue_Boat-> (1 - ProbCD_3):(CD_3' = false) & (CD_4' = true) & (CD_P' = Rescue_Boat)+ ProbCD_3:(CD_3' = true);
+  [a_CD_4] CD_4 = true & CD_P = Rescue_Boat-> (1 - ProbCD_4):(CD_4' = false) & (CD_5' = true) & (CD_P' = Rescue_Boat)+ ProbCD_4:(CD_4' = true);
+  [a_CD_5] CD_5 = true & CD_P = Rescue_Boat-> (1 - ProbCD_5):(CD_5' = false) & (CD_P' = Boat_Deck)+ ProbCD_5:(CD_5' = true);
+endmodule 
+
+module scheduler4
+
+  [a_C_0, a_CD_5, a_CB_5,a_CC_9] CD_5 = true & CD_P = Rescue_Boat & CC_9 = true & CC_P = Rescue_Boat & CB_10 = true & CB_P = Rescue_Boat-> true;
+
+endmodule
+
+module Chief_Officer
+    C_P: [0..MAX_POSITION] init Boat_Deck; 
+    C_1: bool init false; 
+    C_2: bool init false; 
+
+  [a_C_0] CD_5 = true & CD_P = Rescue_Boat & CC_9 = true & CC_P = Rescue_Boat & CB_10 = true & CB_P = Rescue_Boat -> (C_1' = true);
+  [a_C_1] C_1 = true & C_P = Boat_Deck-> (1 - ProbC_1):(C_1' = false) & (C_2' = true) & (C_P' = Boat_Deck)+ ProbC_1:(C_1' = true);
+  [a_C_2] C_2 = true & C_P = Boat_Deck-> (1 - ProbC_2):(C_2' = false) & (C_P' = Boat_Deck)+ ProbC_2:(C_2' = true);
+endmodule 
+
+
+
