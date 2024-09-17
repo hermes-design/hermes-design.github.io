@@ -1,0 +1,437 @@
+digraph MDP {
+node [label="",shape="box"];
+0 [label="0\n(0,1,-1,0,0,0,-1)"];
+0 -> n0_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n0_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n0_0 -> 1 [label="0.09999999999999998"];
+n0_0 -> 2 [label="0.9"];
+1 [label="1\n(1,1,0,1,0,0,-1)"];
+1 -> n1_0 [label="0:Sat",arrowhead="none"];
+n1_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n1_0 -> 1 [label="1.0"];
+2 [label="2\n(1,1,1,-1,0,0,-1)"];
+2 -> n2_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n2_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n2_0 -> 3 [label="0.09999999999999998"];
+n2_0 -> 4 [label="0.9"];
+3 [label="3\n(2,1,0,1,-1,-1,-1)"];
+3 -> n3_0 [label="0:Sat",arrowhead="none"];
+n3_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n3_0 -> 3 [label="1.0"];
+4 [label="4\n(2,1,1,-1,-1,-1,-1)"];
+4 -> n4_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n4_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n4_0 -> 5 [label="0.09999999999999998"];
+n4_0 -> 6 [label="0.9"];
+5 [label="5\n(3,1,0,1,-1,-1,-1)"];
+5 -> n5_0 [label="0:Sat",arrowhead="none"];
+n5_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n5_0 -> 5 [label="1.0"];
+6 [label="6\n(3,1,1,-1,-1,-1,-1)"];
+6 -> n6_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n6_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n6_0 -> 7 [label="0.09999999999999998"];
+n6_0 -> 8 [label="0.9"];
+7 [label="7\n(4,1,0,1,-1,-1,-1)"];
+7 -> n7_0 [label="0:Sat",arrowhead="none"];
+n7_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n7_0 -> 7 [label="1.0"];
+8 [label="8\n(4,1,1,-1,-1,-1,-1)"];
+8 -> n8_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n8_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n8_0 -> 9 [label="0.9"];
+n8_0 -> 60 [label="0.09999999999999998"];
+9 [label="9\n(5,1,1,-1,-1,-1,-1)"];
+9 -> n9_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n9_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n9_0 -> 10 [label="0.09999999999999998"];
+n9_0 -> 11 [label="0.9"];
+10 [label="10\n(6,1,0,1,-1,-1,-1)"];
+10 -> n10_0 [label="0:Sat",arrowhead="none"];
+n10_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n10_0 -> 10 [label="1.0"];
+11 [label="11\n(6,1,1,-1,-1,-1,-1)"];
+11 -> n11_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n11_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n11_0 -> 12 [label="0.09999999999999998"];
+n11_0 -> 13 [label="0.9"];
+12 [label="12\n(7,1,0,1,-1,-1,-1)"];
+12 -> n12_0 [label="0:Sat",arrowhead="none"];
+n12_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n12_0 -> 12 [label="1.0"];
+13 [label="13\n(7,1,1,-1,-1,-1,-1)"];
+13 -> n13_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n13_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n13_0 -> 14 [label="0.09999999999999998"];
+n13_0 -> 15 [label="0.9"];
+14 [label="14\n(8,1,0,1,-1,-1,-1)"];
+14 -> n14_0 [label="0:Sat",arrowhead="none"];
+n14_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n14_0 -> 14 [label="1.0"];
+15 [label="15\n(8,1,1,-1,-1,-1,-1)"];
+15 -> n15_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n15_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n15_0 -> 16 [label="0.9"];
+n15_0 -> 59 [label="0.09999999999999998"];
+16 [label="16\n(9,1,1,-1,-1,-1,-1)"];
+16 -> n16_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n16_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n16_0 -> 17 [label="0.09999999999999998"];
+n16_0 -> 18 [label="0.9"];
+17 [label="17\n(10,1,0,1,-1,-1,-1)"];
+17 -> n17_0 [label="0:Sat",arrowhead="none"];
+n17_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n17_0 -> 17 [label="1.0"];
+18 [label="18\n(10,1,1,-1,-1,-1,-1)"];
+18 -> n18_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n18_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n18_0 -> 19 [label="0.09999999999999998"];
+n18_0 -> 20 [label="0.9"];
+19 [label="19\n(11,1,0,1,-1,-1,-1)"];
+19 -> n19_0 [label="0:Sat",arrowhead="none"];
+n19_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n19_0 -> 19 [label="1.0"];
+20 [label="20\n(11,1,1,-1,-1,-1,-1)"];
+20 -> n20_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n20_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n20_0 -> 21 [label="0.09999999999999998"];
+n20_0 -> 22 [label="0.9"];
+21 [label="21\n(12,1,0,1,-1,-1,-1)"];
+21 -> n21_0 [label="0:Sat",arrowhead="none"];
+n21_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n21_0 -> 21 [label="1.0"];
+22 [label="22\n(12,1,1,-1,-1,-1,-1)"];
+22 -> n22_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n22_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n22_0 -> 23 [label="0.9"];
+n22_0 -> 58 [label="0.09999999999999998"];
+23 [label="23\n(13,1,1,-1,-1,-1,-1)"];
+23 -> n23_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n23_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n23_0 -> 24 [label="0.09999999999999998"];
+n23_0 -> 25 [label="0.9"];
+24 [label="24\n(14,1,0,1,-1,-1,-1)"];
+24 -> n24_0 [label="0:Sat",arrowhead="none"];
+n24_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n24_0 -> 24 [label="1.0"];
+25 [label="25\n(14,1,1,-1,-1,-1,-1)"];
+25 -> n25_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n25_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n25_0 -> 26 [label="0.09999999999999998"];
+n25_0 -> 27 [label="0.9"];
+26 [label="26\n(15,1,0,1,-1,-1,-1)"];
+26 -> n26_0 [label="0:Sat",arrowhead="none"];
+n26_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n26_0 -> 26 [label="1.0"];
+27 [label="27\n(15,1,1,-1,-1,-1,-1)"];
+27 -> n27_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n27_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n27_0 -> 28 [label="0.09999999999999998"];
+n27_0 -> 29 [label="0.9"];
+28 [label="28\n(16,1,0,1,-1,-1,-1)"];
+28 -> n28_0 [label="0:Sat",arrowhead="none"];
+n28_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n28_0 -> 28 [label="1.0"];
+29 [label="29\n(16,1,1,-1,-1,-1,-1)"];
+29 -> n29_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n29_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n29_0 -> 57 [label="0.09999999999999998"];
+n29_0 -> 30 [label="0.9"];
+30 [label="30\n(17,1,1,-1,-1,-1,-1)"];
+30 -> n30_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n30_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n30_0 -> 32 [label="0.9"];
+n30_0 -> 31 [label="0.09999999999999998"];
+31 [label="31\n(18,1,0,1,-1,-1,-1)"];
+31 -> n31_0 [label="0:Sat",arrowhead="none"];
+n31_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n31_0 -> 31 [label="1.0"];
+32 [label="32\n(18,1,1,-1,-1,-1,-1)"];
+32 -> n32_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n32_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n32_0 -> 33 [label="0.09999999999999998"];
+n32_0 -> 34 [label="0.9"];
+33 [label="33\n(19,1,0,1,-1,-1,-1)"];
+33 -> n33_0 [label="0:Sat",arrowhead="none"];
+n33_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n33_0 -> 33 [label="1.0"];
+34 [label="34\n(19,1,1,-1,-1,-1,-1)"];
+34 -> n34_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n34_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n34_0 -> 35 [label="0.09999999999999998"];
+n34_0 -> 36 [label="0.9"];
+35 [label="35\n(20,1,0,1,-1,-1,-1)"];
+35 -> n35_0 [label="0:Sat",arrowhead="none"];
+n35_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n35_0 -> 35 [label="1.0"];
+36 [label="36\n(20,1,1,-1,-1,-1,-1)"];
+36 -> n36_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n36_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n36_0 -> 37 [label="0.9"];
+n36_0 -> 56 [label="0.09999999999999998"];
+37 [label="37\n(21,1,1,-1,-1,-1,-1)"];
+37 -> n37_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n37_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n37_0 -> 38 [label="0.09999999999999998"];
+n37_0 -> 39 [label="0.9"];
+38 [label="38\n(22,1,0,1,-1,-1,-1)"];
+38 -> n38_0 [label="0:Sat",arrowhead="none"];
+n38_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n38_0 -> 38 [label="1.0"];
+39 [label="39\n(22,1,1,-1,-1,-1,-1)"];
+39 -> n39_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n39_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n39_0 -> 40 [label="0.09999999999999998"];
+n39_0 -> 41 [label="0.9"];
+40 [label="40\n(23,1,0,1,-1,-1,-1)"];
+40 -> n40_0 [label="0:Sat",arrowhead="none"];
+n40_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n40_0 -> 40 [label="1.0"];
+41 [label="41\n(23,1,1,-1,-1,-1,-1)"];
+41 -> n41_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n41_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n41_0 -> 42 [label="0.09999999999999998"];
+n41_0 -> 43 [label="0.9"];
+42 [label="42\n(24,1,0,1,-1,-1,-1)"];
+42 -> n42_0 [label="0:Sat",arrowhead="none"];
+n42_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n42_0 -> 42 [label="1.0"];
+43 [label="43\n(24,1,1,-1,-1,-1,-1)"];
+43 -> n43_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n43_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n43_0 -> 55 [label="0.09999999999999998"];
+n43_0 -> 44 [label="0.9"];
+44 [label="44\n(25,1,1,-1,-1,-1,-1)"];
+44 -> n44_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n44_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n44_0 -> 45 [label="0.09999999999999998"];
+n44_0 -> 46 [label="0.9"];
+45 [label="45\n(26,1,0,1,-1,-1,-1)"];
+45 -> n45_0 [label="0:Sat",arrowhead="none"];
+n45_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n45_0 -> 45 [label="1.0"];
+46 [label="46\n(26,1,1,-1,-1,-1,-1)"];
+46 -> n46_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n46_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n46_0 -> 48 [label="0.9"];
+n46_0 -> 47 [label="0.09999999999999998"];
+47 [label="47\n(27,1,0,1,-1,-1,-1)"];
+47 -> n47_0 [label="0:Sat",arrowhead="none"];
+n47_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n47_0 -> 47 [label="1.0"];
+48 [label="48\n(27,1,1,-1,-1,-1,-1)"];
+48 -> n48_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n48_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n48_0 -> 49 [label="0.09999999999999998"];
+n48_0 -> 50 [label="0.9"];
+49 [label="49\n(28,1,0,1,-1,-1,-1)"];
+49 -> n49_0 [label="0:Sat",arrowhead="none"];
+n49_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n49_0 -> 49 [label="1.0"];
+50 [label="50\n(28,1,1,-1,-1,-1,-1)"];
+50 -> n50_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n50_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n50_0 -> 51 [label="0.9"];
+n50_0 -> 54 [label="0.09999999999999998"];
+51 [label="51\n(29,1,1,-1,-1,-1,-1)"];
+51 -> n51_0 [label="0:1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]",arrowhead="none"];
+n51_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n51_0 -> 52 [label="0.09999999999999998"];
+n51_0 -> 53 [label="0.9"];
+52 [label="52\n(30,1,0,1,-1,-1,-1)"];
+52 -> n52_0 [label="0:Sat",arrowhead="none"];
+n52_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n52_0 -> 52 [label="1.0"];
+53 [label="53\n(30,1,1,-1,-1,-1,-1)"];
+53 -> n53_0 [label="0:Unsat",arrowhead="none"];
+n53_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n53_0 -> 53 [label="1.0"];
+54 [label="54\n(29,1,0,1,-1,-1,-1)"];
+54 -> n54_0 [label="0:Sat",arrowhead="none"];
+n54_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n54_0 -> 54 [label="1.0"];
+55 [label="55\n(25,1,0,1,-1,-1,-1)"];
+55 -> n55_0 [label="0:Sat",arrowhead="none"];
+n55_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n55_0 -> 55 [label="1.0"];
+56 [label="56\n(21,1,0,1,-1,-1,-1)"];
+56 -> n56_0 [label="0:Sat",arrowhead="none"];
+n56_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n56_0 -> 56 [label="1.0"];
+57 [label="57\n(17,1,0,1,-1,-1,-1)"];
+57 -> n57_0 [label="0:Sat",arrowhead="none"];
+n57_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n57_0 -> 57 [label="1.0"];
+58 [label="58\n(13,1,0,1,-1,-1,-1)"];
+58 -> n58_0 [label="0:Sat",arrowhead="none"];
+n58_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n58_0 -> 58 [label="1.0"];
+59 [label="59\n(9,1,0,1,-1,-1,-1)"];
+59 -> n59_0 [label="0:Sat",arrowhead="none"];
+n59_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n59_0 -> 59 [label="1.0"];
+60 [label="60\n(5,1,0,1,-1,-1,-1)"];
+60 -> n60_0 [label="0:Sat",arrowhead="none"];
+n60_0 [ shape=point,width=0.1,height=0.1,label="" ];
+n60_0 -> 60 [label="1.0"];
+}
+
+/*
+ -- Transitions --  
+61 61 91
+0 0 1 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+0 0 2 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+1 0 1 1 Sat
+2 0 3 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+2 0 4 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+3 0 3 1 Sat
+4 0 5 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+4 0 6 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+5 0 5 1 Sat
+6 0 7 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+6 0 8 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+7 0 7 1 Sat
+8 0 9 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+8 0 60 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+9 0 10 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+9 0 11 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+10 0 10 1 Sat
+11 0 12 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+11 0 13 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+12 0 12 1 Sat
+13 0 14 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+13 0 15 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+14 0 14 1 Sat
+15 0 16 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+15 0 59 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+16 0 17 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+16 0 18 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+17 0 17 1 Sat
+18 0 19 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+18 0 20 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+19 0 19 1 Sat
+20 0 21 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+20 0 22 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+21 0 21 1 Sat
+22 0 23 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+22 0 58 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+23 0 24 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+23 0 25 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+24 0 24 1 Sat
+25 0 26 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+25 0 27 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+26 0 26 1 Sat
+27 0 28 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+27 0 29 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+28 0 28 1 Sat
+29 0 30 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+29 0 57 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+30 0 31 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+30 0 32 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+31 0 31 1 Sat
+32 0 33 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+32 0 34 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+33 0 33 1 Sat
+34 0 35 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+34 0 36 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+35 0 35 1 Sat
+36 0 37 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+36 0 56 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+37 0 38 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+37 0 39 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+38 0 38 1 Sat
+39 0 40 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+39 0 41 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+40 0 40 1 Sat
+41 0 42 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+41 0 43 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+42 0 42 1 Sat
+43 0 44 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+43 0 55 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+44 0 45 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+44 0 46 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+45 0 45 1 Sat
+46 0 47 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+46 0 48 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+47 0 47 1 Sat
+48 0 49 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+48 0 50 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+49 0 49 1 Sat
+50 0 51 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+50 0 54 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+51 0 52 0.1 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+51 0 53 0.9 1.0: [writeDrone][readCrane_1][readCrane_2]--[writeAttack_1]
+52 0 52 1 Sat
+53 0 53 1 Unsat
+54 0 54 1 Sat
+55 0 55 1 Sat
+56 0 56 1 Sat
+57 0 57 1 Sat
+58 0 58 1 Sat
+59 0 59 1 Sat
+60 0 60 1 Sat
+
+ -- States --  
+(rounds,Drone_Lift,win,data_1,Crane_1_Lift,Crane_2_Lift,Attack_1_Lift)
+0:(0,1,-1,0,0,0,-1)
+1:(1,1,0,1,0,0,-1)
+2:(1,1,1,-1,0,0,-1)
+3:(2,1,0,1,-1,-1,-1)
+4:(2,1,1,-1,-1,-1,-1)
+5:(3,1,0,1,-1,-1,-1)
+6:(3,1,1,-1,-1,-1,-1)
+7:(4,1,0,1,-1,-1,-1)
+8:(4,1,1,-1,-1,-1,-1)
+9:(5,1,1,-1,-1,-1,-1)
+10:(6,1,0,1,-1,-1,-1)
+11:(6,1,1,-1,-1,-1,-1)
+12:(7,1,0,1,-1,-1,-1)
+13:(7,1,1,-1,-1,-1,-1)
+14:(8,1,0,1,-1,-1,-1)
+15:(8,1,1,-1,-1,-1,-1)
+16:(9,1,1,-1,-1,-1,-1)
+17:(10,1,0,1,-1,-1,-1)
+18:(10,1,1,-1,-1,-1,-1)
+19:(11,1,0,1,-1,-1,-1)
+20:(11,1,1,-1,-1,-1,-1)
+21:(12,1,0,1,-1,-1,-1)
+22:(12,1,1,-1,-1,-1,-1)
+23:(13,1,1,-1,-1,-1,-1)
+24:(14,1,0,1,-1,-1,-1)
+25:(14,1,1,-1,-1,-1,-1)
+26:(15,1,0,1,-1,-1,-1)
+27:(15,1,1,-1,-1,-1,-1)
+28:(16,1,0,1,-1,-1,-1)
+29:(16,1,1,-1,-1,-1,-1)
+30:(17,1,1,-1,-1,-1,-1)
+31:(18,1,0,1,-1,-1,-1)
+32:(18,1,1,-1,-1,-1,-1)
+33:(19,1,0,1,-1,-1,-1)
+34:(19,1,1,-1,-1,-1,-1)
+35:(20,1,0,1,-1,-1,-1)
+36:(20,1,1,-1,-1,-1,-1)
+37:(21,1,1,-1,-1,-1,-1)
+38:(22,1,0,1,-1,-1,-1)
+39:(22,1,1,-1,-1,-1,-1)
+40:(23,1,0,1,-1,-1,-1)
+41:(23,1,1,-1,-1,-1,-1)
+42:(24,1,0,1,-1,-1,-1)
+43:(24,1,1,-1,-1,-1,-1)
+44:(25,1,1,-1,-1,-1,-1)
+45:(26,1,0,1,-1,-1,-1)
+46:(26,1,1,-1,-1,-1,-1)
+47:(27,1,0,1,-1,-1,-1)
+48:(27,1,1,-1,-1,-1,-1)
+49:(28,1,0,1,-1,-1,-1)
+50:(28,1,1,-1,-1,-1,-1)
+51:(29,1,1,-1,-1,-1,-1)
+52:(30,1,0,1,-1,-1,-1)
+53:(30,1,1,-1,-1,-1,-1)
+54:(29,1,0,1,-1,-1,-1)
+55:(25,1,0,1,-1,-1,-1)
+56:(21,1,0,1,-1,-1,-1)
+57:(17,1,0,1,-1,-1,-1)
+58:(13,1,0,1,-1,-1,-1)
+59:(9,1,0,1,-1,-1,-1)
+60:(5,1,0,1,-1,-1,-1)
+*/

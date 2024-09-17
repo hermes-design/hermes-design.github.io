@@ -1,0 +1,106 @@
+csg
+//scisec 2024
+
+player p1  // Drone
+  Drone
+endplayer
+player p2  // Crane 1
+  Crane_1
+endplayer
+player p3  // Crane 2
+  Crane_2
+endplayer
+player p4  // Attacker 1
+  Attack_1
+endplayer
+player p5  // Attacker 2
+  Attack_2
+endplayer
+
+
+const double FREQ;
+const int LIFT =1;
+const int TAMPER =-1;
+const int EMPTY =0;
+const int Attack_Lift= TAMPER;
+const double cost = 1.0; // Reward for winning
+
+const k; // number of rounds
+
+// Module to count rounds
+module rounds
+  rounds : [0..k+1];
+
+  // Transition: increment rounds if not at max
+  [] rounds <= k -> (rounds' = rounds + 1);
+  // Stay at max rounds
+  [] rounds = k+1 -> true;
+endmodule
+
+module Drone
+Drone_Lift : [-1..1] init LIFT ;
+
+// Activate the drone (presumably sends a signal)
+[writeDrone] true -> true;
+
+endmodule
+
+
+
+//register
+module ConnectorDroneCrane_1 
+// Win state (1: Attacker wins, 0: Drone wins)
+win : [-1..1] init -1;
+// Data from Drone (lifted object / attack signal)
+data_1 : [-1..1] init 0;
+
+// Transition: based on actions, update win and data_1
+[writeDrone, readCrane_1 , readCrane_2 ,writeAttack_1,writeAttack_2]   true  -> (1-FREQ):(data_1'=Drone_Lift) & (win'=0) +(FREQ):(data_1'=Attack_Lift)& (win'=1); 
+
+endmodule
+
+module Crane_1
+Crane_1_Lift : [-1..1] init EMPTY ;
+
+// Read data from Connector
+[readCrane_1]  true -> (Crane_1_Lift'=data_1);
+endmodule
+
+
+module Crane_2
+Crane_2_Lift : [-1..1] init EMPTY ;
+
+// Read data from Connector
+[readCrane_2]  true -> (Crane_2_Lift'=data_1);
+
+endmodule
+
+module Attack_1
+  // Activate attack (presumably sends a signal)
+  [writeAttack_1] true -> true;
+endmodule
+
+
+module Attack_2
+    // Activate attack (presumably sends a signal)
+  [writeAttack_2] true -> true;
+endmodule
+
+// Define labels for game outcomes (more descriptive)
+label "win1" = win=1 ;
+label "win0" = win=0 ;
+
+// Define formulas for game outcomes (consistent with labels)
+formula win1 = win=1 ;
+formula win0 = win=0 ;
+
+// Reward structure for attacker (attacker gains reward when attack is successful)
+rewards "utility1"
+	win1 :  cost; // Positive reward for successful attack
+endrewards
+
+
+// Reward structure for drone (drone gains reward when attack fails)
+rewards "utility2"
+	win0:  cost; // Positive reward ffor successful broadcasting
+endrewards

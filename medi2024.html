@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MEDI2024</title>
+      <style type="text/css">
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .content {
+      min-height: 100%;
+      margin-left: 40px;
+      margin-right: 30px;
+      padding-bottom: 40px; /* Adjust this value to leave space for the footer */
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f5f5f5;
+      padding: 10px;
+      text-align: center;
+    }
+        
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Actual card with shadow */
+.card {
+  height: 200px;
+  width: 200px;
+  border-radius: 5px;
+  box-shadow: 1px 2px 3px 4px rgba(12,12,12,0.2);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+ .hidden {
+      display: none;
+    }
+    </style>
+</head>
+<body>
+ <div class="hidden">
+    <script type="text/javascript" src="//rf.revolvermaps.com/0/0/9.js?i=5mo8xt39x3p" async="async"></script>
+  </div>
+
+  <div class="content">  
+<div class="prism-citebox">
+<div class="prism-citeboxheader">
+
+<h1 style="color:green;font-size:18px;">MEDI 2024:</h1>
+</div>
+<ul><li align="justify">
+Abdelhakim Baouya, Brahim Hamid, Saddek Bensalem, and Otmane Ait Mohamed. 
+<font color= red>From Component-Based to Game-Theoretic Models: Analyzing Security as Collaborative Behaviors in Cyber-Physical Systems.</font>.
+In <em> 13th International Conference on Model and Data Engineering (MEDI) </em>, 2024 (Submitted).</li></ul>
+
+  
+
+<h1 style="color:green;font-size:14px;">Developed Artefacts</h1>
+
+  <table>
+  <tr>
+    <th>ID</th>
+    <th>PRISM-CSG Model Description</th>
+    <th>Model</th>
+    <th>Properties</th>
+  </tr>
+  <tr>
+    <td>P1</td>
+    <td>PRISM model for drone-assisted orchestration with one attacker.</td>
+    <td> <a href="medi/prism/model.nm">[View Model]</a> </td>
+    <td><a href="medi/prism/propeties.pctl">[View Properies]</a>  </td>
+  </tr>
+  <tr>
+    <th>ID</th>
+    <th>Sclability - PRISM Model Description</th>
+    <th>Model</th>
+    <th>Properties</th>
+  </tr>
+  <tr>
+    <td>S1</td>
+    <td>PRISM-CSG model for drone-assisted orchestration with two attacker.</td>
+    <td> <a href="medi/prism/modelTwoAttakers.nm">[View Model]</a> </td>
+    <td><a href="medi/prism/propetiesTwo.pctl">[View Properies]</a>  </td>
+  </tr>
+    <tr>
+    <td>S2</td>
+    <td>PRISM model for drone-assisted orchestration with four attacker.</td>
+    <td> <a href="medi/prism/modelFourAttakers.nm">[View Model]</a> </td>
+    <td><a href="medi/prism/propetiesFour.pctl">[View Properies]</a>  </td>
+  </tr>
+      <tr>
+    <td>S3</td>
+    <td>PRISM model for drone-assisted orchestration with six attacker.</td>
+    <td> <a href="medi/prism/modelSixAttakers.nm">[View Model]</a> </td>
+    <td><a href="medi/prism/propetiesSix.pctl">[View Properies]</a>  </td>
+  </tr>
+    <tr>
+    <td>S4</td>
+    <td>PRISM model for drone-assisted orchestration with two attacker in FIFO mode.</td>
+    <td> <a href="medi/prism/modelTwoAttakersFIFO.nm">[View Model]</a> </td>
+    <td><a href="medi/prism/propetiesTwo.pctl">[View Properies]</a>  </td>
+  </tr>   
+    
+    
+</table>
+
+    </div>
+
+
+
+  <footer>
+    <p><em>This page was developed for MEDI 2024.</em></p>
+   
+  </footer>
+
+</body>

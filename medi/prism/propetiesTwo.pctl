@@ -1,0 +1,12 @@
+<<p1,p2,p3>>Pmax=? [ F ("win0"&rounds<=k) ]
+
+<<p1,p2,p3>>Pmin=? [ F ("win0"&rounds<=k) ]
+
+<<p2,p3,p4,p5>>Pmin=? [ F ("win1"&rounds<=k) ]
+
+<<p2,p3,p4,p5>>Pmax=? [ F ("win1"&rounds<=k) ]
+
+<<p1,p2,p3>>R{"utility1"}max=? [ F rounds=k ]
+
+<<p2,p3,p4,p4,p5>>R{"utility2"}max=? [ F rounds=k ]
+
