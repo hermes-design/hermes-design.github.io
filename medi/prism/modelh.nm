@@ -1,0 +1,177 @@
+csg
+//MEDI 2024
+
+player p1  // Drone
+  Drone
+endplayer
+player p2  // Crane 1
+  Crane_1
+endplayer
+
+player p3  // Crane 2
+  Crane_2
+endplayer
+
+player p4  // Drone_actor
+  Drone_actor
+endplayer
+
+player p5  // Crane_1_Actor
+  Crane_1_Actor
+endplayer
+
+player p6  // Crane_2_Actor
+  Crane_2_Actor
+endplayer
+
+const double exp = 2.71828; 
+const double t ; 
+const double MTBF = 10000; 
+const double p_d_fail=1- pow(exp, (-t/MTBF));
+const double p_c_fail=0.816;
+const double HEP=0;//4.2/100000;
+
+const int LIFT =1;
+const int TAMPER =-1;
+const int EMPTY =0;
+const int MAX_DRONE_TASKS =10;
+const int MAX_DRONE_ACTIONS_TASKS =3;
+const int MAX_CRANE_ACTIONS_TASKS =3;
+const int MAX_CRANE_ACTOR_ACTIONS_TASKS =2;
+
+const double cost = 1.0; // Reward for winning
+
+const k; // number of rounds
+
+// Module to count rounds
+module rounds
+  rounds : [0..k+1];
+
+  // Transition: increment rounds if not at max
+  [] rounds <= k -> (rounds' = rounds + 1);
+  // Stay at max rounds
+  [] rounds = k+1 -> true;
+endmodule
+
+module Drone
+  // D_L: Indicates whether the drone is available for tasks (true) or currently engaged in a task (false)
+  D_L : bool init true ;
+
+  // D: Represents the current state of the drone:
+  //   0: Idle (waiting for a task)
+  //   1: Located (ready to receive a task)
+  //   2: Sending position (transmitting its location)
+  //   3: Synchronizing (adjusting its code)
+  D : [-1..MAX_DRONE_TASKS] init 0 ;
+
+  // Action to locate the drone
+  [a_locate_cart] D_L & D=0 -> (D'=1);
+
+  // Action to send the drone's position
+  [a_send_position] D_L & D=1 ->  p_d_fail:(D'=3)+(1-p_d_fail):(D'=2);
+
+  // Action to reset the drone's state (either back to idle or to a failure state)
+  [a_reset] D_L & D=2 -> (D'=0);
+
+  // Action to synchronize the drone's code
+  [a_d_synch] D_L & D=3 -> (D'=0);
+endmodule
+
+//register
+module ConnectorDroneActor
+[a_a_sync,a_d_synch] D_L & D=3 & DA=0 -> true;
+endmodule
+
+module Drone_actor
+  // Define a variable to represent the drone's current action or task
+  DA: [-1..MAX_DRONE_ACTIONS_TASKS] init 0;
+
+  // Transition to synchronize the drone's actions
+  [a_a_sync] DA=0 -> (DA'=0);
+endmodule
+
+
+//register
+module ConnectorDroneCrane
+[a_send_position,a_c1_poistion_received,a_c2_poistion_received] D_L & D=1 & C1=0 & C2=0  -> true;
+endmodule
+
+module Crane_1
+    // C1 represents the current state of the crane's tasks
+    C1: [-1..MAX_CRANE_ACTIONS_TASKS] init 0; // crane tasks
+
+    // Transition rule: Crane receives a position command and starts a task
+    [a_c1_poistion_received] C1=0 -> (C1'=1);
+
+    // Transition rule: Crane receives a lift command and attempts to complete the task
+    // with a probability of failure (p_c_fail)
+    [a_c1_lift] C1=1 -> p_c_fail:(C1'=3)+(1-p_c_fail):(C1'=2);
+
+    [a_c1_reset]C1=2 -> (C1'=0);
+
+    [a_c1_lift_fail] C1=3 -> (C1'=0);
+endmodule
+
+//register
+module ConnectorActorCrane1
+[a_c1_a_lift,a_c1_lift] C1=1 & C1A=0 -> true;
+endmodule
+
+module Crane_1_Actor
+  // C1A represents the current state or action of the crane actor.
+  C1A: [-1..MAX_CRANE_ACTOR_ACTIONS_TASKS] init 0;
+
+  // The [a_c1_a_lift] label indicates that this transition is triggered by an event
+  // related to the crane actor lifting an object.
+  [a_c1_a_init] C1A=0         -> HEP:(C1A'=0)+(1-HEP):(C1A'=1);
+  [a_c1_a_lift]		C1A=1 -> (C1A'=0);
+endmodule
+
+
+module Crane_2
+  // Represents the state or action of the crane
+  C2: [-1..MAX_CRANE_ACTIONS_TASKS] init 0; // crane tasks
+
+  // Transition triggered when the crane receives a position command
+  [a_c2_poistion_received] C2=0 -> (C2'=1);
+
+  // Transition representing the crane attempting to lift an object
+  // The outcome is probabilistic: either success or failure
+  [a_c2_lift] C2=1 -> p_c_fail:(C2'=3)+(1-p_c_fail):(C2'=2);
+
+  [a_c2_reset]C2=2 -> (C2'=0);
+
+  [a_c2_lift_fail] C2=3 -> (C2'=0);
+endmodule
+
+//register
+module ConnectorActorCrane2
+[a_c2_a_lift,a_c2_lift] C2=1 & C2A=0 -> true;
+endmodule
+
+module Crane_2_Actor
+
+  // Variable declaration:
+  // C2A: Current state or action of the crane actor
+  C2A: [-1..MAX_CRANE_ACTOR_ACTIONS_TASKS] init 0;
+
+  // Transition:
+  // a_c2_a_lift: Action to lift an object
+  [a_c2_a_init] C2A=0 -> HEP:(C2A'=0)+(1-HEP):(C2A'=1);
+  [a_c2_a_lift] C2A=1 -> (C2A'=0);
+
+endmodule
+
+
+label "lift"= D=2 & C1=2 & C2=2 & C1A=1 & C2A=1;
+
+
+rewards "lift"
+ 	 [a_a_sync,a_d_synch] true : 1;
+	 [a_c1_a_lift,a_c1_lift]true : 1;
+         [a_c2_a_lift,a_c2_lift] true : 1;
+endrewards
+
+rewards "cost"
+ 	 true : 1;
+endrewards
