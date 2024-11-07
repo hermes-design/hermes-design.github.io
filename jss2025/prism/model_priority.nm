@@ -1,0 +1,303 @@
+csg
+//SEAA 2024
+//author: Abdelhakim Baouya
+
+// Player definitions 
+player p1  OnGroundManoeuvers  endplayer  // Player 1 performing On-Ground Maneuvers
+player p2  OnOrbitManoeuvers  endplayer  // Player 2 performing On-Orbit Maneuvers
+player p3  Environment       endplayer  // Player 3 representing the Environment
+
+
+//Priority
+const double OnGroundPriority;
+
+//Personal
+const int ON_GROUND_PLAYER= 1;
+const int ON_ORBIT_PLAYER= 2;
+
+// Constants used in the model
+const double r=0.80;// sattelite reliability 
+const double Pn = 0.9;                   // Probability of successful launch
+const double lt_mtbf=129600; //= 15 * 12 * 30 * 24;   // Mean time between failures (in hours) for long term failure
+const double st_mtbf=4320;     // Mean time between failures (in hours) for short term failure
+const double soft_mtbf=64800;    //= 7.5 * 12 * 30 * 24;   // Mean time between failures (in hours) for scheduled interuption
+const double om_mtbf=4320;    //= 0.5 * 12 * 30 * 24;   // Mean time between failures (in hours) for scheduled interuption
+const double mttr=24;        //mean time to repair
+const double uns_mtbf = 4320;              // Mean Time to Unscheduled Interruption (in hours)
+
+// Probabilities of different failure modes
+const double pr_st  = st_mtbf/(lt_mtbf+st_mtbf+soft_mtbf+om_mtbf+uns_mtbf); // Short-term failure probability
+const double pr_lt  = lt_mtbf/(lt_mtbf+st_mtbf+soft_mtbf+om_mtbf+uns_mtbf); // Long-term failure probability
+const double pr_soft= soft_mtbf/(lt_mtbf+st_mtbf+soft_mtbf+om_mtbf+uns_mtbf); // Software failure probability
+const double pr_om  = om_mtbf/(lt_mtbf+st_mtbf+soft_mtbf+om_mtbf+uns_mtbf); // Operational failure probability
+const double pr_eol = 0.6; // End-of-life failure probability
+const double pr_uns = uns_mtbf/(lt_mtbf+st_mtbf+soft_mtbf+om_mtbf+uns_mtbf); // Unscheduled interruption probability
+const double pr_amsi= 0.00005; // AMSI alert probability
+
+const double c1=1;// in millions
+const double c2=15; //in millions
+//const int T;   
+//const int z;                            // Placeholder for total simulation time (needs to be defined)
+const double exp = 2.71828;              // Mathematical constant e (base of natural logarithm)
+
+//On orbit repair
+const double Pbeta = 0.8;                 // Probability of successfully repairing a failed satellite in orbit
+const double Py = 1/9; //probability of the satellite can be successfully carried to the orbit
+
+const double tgamma = 24;                // Time required to repair a failed satellite (in hours)
+const double tdelta = 24;                // Time required to manufacture a new satellite (in hours)
+const double tk = 24;                  // Time required for a new satellite to reach its operational position (in hours)
+
+//On ground repair
+const double pr_build= tgamma/ (tgamma+tdelta+tk);       // Probability of repairing a failed satellite
+const double pr_manufacture= tdelta/ (tgamma+tdelta+tk); // Probability of manufacturing a new satellite
+
+// ON ground states
+const int ON_GROUND_STANDBY = 0; // Satellite is in on-ground standby mode
+const int CHECK_SPARE_SATTELITE_ON_GROUND = 1; // Checking for a spare satellite on the ground
+const int ON_GROUND_BUILD_SATTELITE = 2; // Building a spare satellite on the ground
+const int ON_GROUND_MANUFECTURE_SATTELITE = 3; // Satellite is being manufactured on the ground
+const int ON_GROUND_LAUNCH_SATTELITE = 4; // Launching a spare satellite from the ground
+const int LAUNCH_SUCESS = 5; // Satellite launch successful
+
+
+//ON orbit states
+const int ON_ORBIT_STANDBY = 0; // Satellite is in standby mode
+const int SEND_COMMAND = 1; // Satellite is sending software commands
+const int REPLACE_FAIL = 2; // Satellite replacement failed
+const int UPDATE_SUCESS = 3; // Software update successful
+const int REPLACE_SUCESS = 4; // Satellite replacement successful
+const int CHECK_REDUNDANT_SUBSYSTEM = 5; // Checking for a redundant subsystem
+const int CHECK_REDUNDANT_SATTELITE = 6; // Checking for a redundant satellite
+const int DEPLOY_REDUNDANT_SUBSYSTEM = 7; // Deploying a redundant subsystem
+const int DEPLOY_REDUNDANT_SUBSYSTEM_SUCESS = 8; // Redundant subsystem deployment successful
+const int MOVE_REPLACE_FAILED = 9; // Move/replace operation failed
+const int CHECK_REDUNDANT_SATTELITE_UNAVAILABLE = 10; // Redundant satellite unavailable
+
+// Define failure modes
+const int LTFAILURE = 1;    // Long-term hardware failure
+const int SCHEDULED = 2;    // Soft failure
+const int UNSCHEDULED = 3;  // Unexpected failure or interruption
+const int OMACTIVITIES = 4; // Ongoing O&M activities 
+const int STFAILURE = 5;    // Short-term hardware failure
+const int EOLFAILURE = 6;   // End-of-life failure
+const int AMSIALERT = 7;    // AMSI Alert
+const int UMSIALERT = 8;    // UMSI Alert
+const int PERSISTANTFAILURE = 9; //Persisatnt for 1 Hour
+    		
+    		
+const int NORMAL = 0;                     // Normal operational mode
+
+const k; // number of rounds
+
+// module to count the rounds
+module rounds
+
+	rounds : [0..k+1];
+	
+	[] rounds<=k -> (rounds'=rounds+1);
+	[] rounds=k+1 -> true;
+
+endmodule
+
+module OnGroundManoeuvers
+
+    // State variable: s1 represents the current state of the satellite on the ground
+    s1 : [0..10] init 0;
+
+    // State transition: On-ground standby
+    [OnGroundStandby] s1=ON_GROUND_STANDBY -> (s1'=ON_GROUND_STANDBY); // The satellite remains in the on-ground standby state
+
+    // State transition: Move to on-ground spare state
+    [OnGroundSpare] s1=ON_GROUND_STANDBY -> (s1'=CHECK_SPARE_SATTELITE_ON_GROUND); // The satellite transitions to the check spare satellite on-ground state
+
+    // State transition: Check if a spare satellite can be built on-ground
+    [CheckOnGroundSatelliteToBuild] s1=CHECK_SPARE_SATTELITE_ON_GROUND -> pr_build:(s1'=ON_GROUND_BUILD_SATTELITE) + (1-pr_build):(s1'=ON_GROUND_LAUNCH_SATTELITE); // The satellite either transitions to the build satellite state with probability pr_build or the launch satellite state with probability (1-pr_build)
+
+    // State transition: Check if a spare satellite can be manufactured
+    [CheckOnGroundSatelliteToManufecture] s1=ON_GROUND_BUILD_SATTELITE -> pr_manufacture:(s1'=ON_GROUND_MANUFECTURE_SATTELITE) + (1-pr_manufacture):(s1'=ON_GROUND_STANDBY); // The satellite either transitions to the manufacture satellite state with probability pr_manufacture or back to the standby state with probability (1-pr_manufacture)
+
+    // State transition: Manufacture satellite on-ground
+    [ManufectureOnGroundSatellite] s1=ON_GROUND_MANUFECTURE_SATTELITE -> (s1'=ON_GROUND_LAUNCH_SATTELITE); // The satellite transitions to the launch satellite state after manufacturing
+
+    // State transition: Perform on-ground launch
+    [PerformOnGroundLaunch] s1=ON_GROUND_LAUNCH_SATTELITE -> (1-Pn):(s1'=LAUNCH_SUCESS) + (Pn):(s1'=CHECK_SPARE_SATTELITE_ON_GROUND); // The satellite either transitions to the launch success state with probability (1-Pn) or back to the check spare satellite on-ground state with probability Pn
+
+    // State transition: Launch success
+    [LaunchSucess] s1=LAUNCH_SUCESS -> (s1'=ON_GROUND_STANDBY); // The satellite transitions back to the standby state after a successful launch
+
+endmodule
+
+module OnOrbitManoeuvers
+
+    // State variable declaration with initial value
+    s2: [0..11] init 0;  // s2 is an integer variable ranging from 0 to 11, initialized to 0
+
+    // State transition - standby state
+    [OnOrbitStandby]  s2=ON_ORBIT_STANDBY -> (s2'=ON_ORBIT_STANDBY);       // The system remains in the standby state
+
+    // State transition - send software commands
+    [SendSoftwareCommands]  s2=ON_ORBIT_STANDBY -> (s2'=SEND_COMMAND);       // The system transitions to the send command state
+
+    // State transition - switch to redundant subsystem
+    [SwitchToRedundantSubsystem]  s2=ON_ORBIT_STANDBY -> (s2'=CHECK_REDUNDANT_SUBSYSTEM); // The system transitions to the check redundant subsystem state
+
+    // State transition - check for redundant satellite
+    [CheckRedundantSatellite]  s2=ON_ORBIT_STANDBY -> (s2'=CHECK_REDUNDANT_SATTELITE); // The system transitions to the check redundant satellite state
+
+    // State transition - update system (from send command state)
+    [UpdateSystem]  s2=SEND_COMMAND -> Pbeta:(s2'=UPDATE_SUCESS) + (1-Pbeta):(s2'=CHECK_REDUNDANT_SATTELITE); // The system transitions to the update success state with probability Pbeta or back to the check redundant satellite state with probability (1-Pbeta)
+
+    // State transition - update success
+    [UpdateSucess]  s2=UPDATE_SUCESS -> (s2'=ON_ORBIT_STANDBY); // The system transitions back to the standby state after a successful update
+
+    // State transition - switch to redundant subsystem (from check redundant subsystem state)
+    [SwitchToRedundantSubsystem]  s2=CHECK_REDUNDANT_SUBSYSTEM -> (1-Pbeta):(s2'=CHECK_REDUNDANT_SATTELITE) + Pbeta:(s2'=DEPLOY_REDUNDANT_SUBSYSTEM); // Similar to the previous transition, the system transitions to either the check redundant satellite state or the deploy redundant subsystem state based on probabilities
+
+    // State transition - redundant subsystem success
+    [RedundantSubsystemSucess]  s2=DEPLOY_REDUNDANT_SUBSYSTEM -> (s2'=DEPLOY_REDUNDANT_SUBSYSTEM_SUCESS); // The system transitions to the redundant subsystem success state
+
+    // State transition - move/replace redundant satellite (from check redundant satellite state)
+    [MoveReplaceRedundantSatellite]  s2=CHECK_REDUNDANT_SATTELITE -> Pbeta:(s2'=MOVE_REPLACE_FAILED) + (1-Pbeta):(s2'=CHECK_REDUNDANT_SATTELITE_UNAVAILABLE); // The system transitions to either the move/replace failed state or the check redundant satellite unavailable state based on probabilities
+
+    // State transition - replace satellite
+    [ReplaceSattelite]  s2=MOVE_REPLACE_FAILED -> Pbeta:(s2'=REPLACE_SUCESS) + (1-Pbeta):(s2'=REPLACE_FAIL); // The system transitions to either the replace success state or the replace fail state based on probabilities
+
+    // State transition - replace success
+    [ReplaceSucess]  s2=REPLACE_SUCESS -> (s2'=ON_ORBIT_STANDBY); // The system transitions back to the standby state after a successful replacement
+
+    // State transition - failure on orbit
+    [FailureOnOrbit]  s2=REPLACE_FAIL | s2=CHECK_REDUNDANT_SATTELITE_UNAVAILABLE -> (s2'=ON_ORBIT_STANDBY); // The system transitions back to the standby state in case of a failure
+
+// End of module definition
+endmodule
+
+// Module SatteliteInteruptionandFailure
+// This module models the scenarios where a satellite failure occurs and the system attempts to recover by switching to a redundant satellite or launching a new one.
+
+module SatteliteInteruptionandFailure
+    win: [0..3] init 0; // Win counter to track successful recovery scenarios
+
+   
+    [Failure,OnOrbitStandby,OnGroundStandby] s2=ON_ORBIT_STANDBY & s1=ON_GROUND_STANDBY -> OnGroundPriority:(win'=ON_GROUND_PLAYER)+(1-OnGroundPriority):(win'=ON_ORBIT_PLAYER);
+
+    // Manage ST failure: If a short-term failure occurs, the system attempts to switch to a redundant subsystem and goes to the standby state.
+    [STFailure,SwitchToRedundantSubsystem,OnGroundStandby] s3=NORMAL & s2=ON_ORBIT_STANDBY & s1=ON_GROUND_STANDBY & win=ON_ORBIT_PLAYER-> (win'=ON_ORBIT_PLAYER);
+
+    // Manage EOL failure: If an end-of-life failure occurs, the system checks for a redundant satellite and goes to the standby state.
+    [EOLFailure,CheckRedundantSatellite,OnGroundStandby] s3=NORMAL & s2=ON_ORBIT_STANDBY & s1=ON_GROUND_STANDBY & win=ON_ORBIT_PLAYER-> (win'=ON_ORBIT_PLAYER);
+
+    // Manage LT failure: If a long-term failure occurs, the system sends software commands and goes to the standby state.
+    [LTFailure, SendSoftwareCommands,OnGroundStandby] s3=NORMAL & s2=ON_ORBIT_STANDBY & s1=ON_GROUND_STANDBY & win=ON_ORBIT_PLAYER -> (win'=ON_ORBIT_PLAYER);
+
+    // Successful replacement of a failed satellite: If a replacement is successful, the system goes to the standby state.
+    [Failure, ReplaceSucess,OnGroundStandby]  s2=REPLACE_SUCESS & s1=ON_GROUND_STANDBY & win=ON_ORBIT_PLAYER -> (win'=ON_ORBIT_PLAYER);
+
+    // Successful launch of a new satellite and system reset: If a new satellite is launched successfully, the system goes to the standby state.
+    [Reset, FailureOnOrbit,LaunchSucess] s2=ON_ORBIT_STANDBY & s1=LAUNCH_SUCESS & win=ON_GROUND_PLAYER-> (win'=ON_GROUND_PLAYER);
+
+endmodule
+
+
+
+module Environment
+    // s3: System State (0: Normal, 1-10: Various Failure States)
+    s3: [0..10] init 0;
+
+    // Scheduled Event: Transition from Normal to Scheduled state
+    [Scheduled]    s3=NORMAL 	->  (1-pr_st):(s3'=NORMAL)	+pr_st:(s3'=SCHEDULED) ;
+
+    // Unscheduled Event: Transition from Normal to Unscheduled state
+    [Unscheduled]  s3=NORMAL 	->  (1-pr_uns):(s3'=NORMAL)	+pr_uns:(s3'=UNSCHEDULED) ;
+
+    // OMActivities Event: Transition from Normal to OMActivities state
+    [OMActivities] s3=NORMAL 	->  (1-pr_om):(s3'=NORMAL)	+pr_om:(s3'=OMACTIVITIES) ;
+
+    // LTFailure Event: Transition from Normal to LTFailure state
+    [LTFailure]    s3=NORMAL 	->  (1-pr_lt):(s3'=NORMAL )	+pr_lt:(s3'=LTFAILURE) ;
+
+    // STFailure Event: Transition from Normal to STFailure state
+    [STFailure]    s3=NORMAL 	->  (1-pr_st):(s3'=NORMAL )	+pr_st:(s3'=STFAILURE) ;
+
+    // EOLFailure Event: Transition from Normal to EOLFailure state
+    [EOLFailure]   s3=NORMAL 	->  (1-pr_eol):(s3'=NORMAL )	+pr_eol:(s3'=EOLFAILURE) ;
+
+    // AMSIAlert Event: Transition from Scheduled to AMSIAlert or UMSIAlert state
+    [AMSIAlert]    s3=SCHEDULED ->  0.5:(s3'=PERSISTANTFAILURE )+(0.5*pr_amsi):(s3'=AMSIALERT )	+(0.5*(1-pr_amsi)):(s3'=UMSIALERT) ;
+    
+    [Persist]      s3=PERSISTANTFAILURE -> (pr_amsi):(s3'=AMSIALERT )	+(1-pr_amsi):(s3'=UMSIALERT) ;
+
+    // Failure notification
+    [Failure]      s3=LTFAILURE | s3=SCHEDULED | s3=UNSCHEDULED | s3=STFAILURE | s3=EOLFAILURE | s3=UMSIALERT | s3=AMSIALERT -> true;
+    
+    // Reset Event: Transition from any failure state back to Normal state
+    [Reset]        true -> (s3'=NORMAL);
+    
+endmodule
+
+label "replace" = s2=REPLACE_SUCESS;
+
+label "manufecture" =  s1=ON_GROUND_MANUFECTURE_SATTELITE;
+
+label "repairOnOrbitOnground" =  (s1=ON_GROUND_MANUFECTURE_SATTELITE) | (s2=REPLACE_SUCESS);
+
+label "Persistance" =  s3=PERSISTANTFAILURE;
+
+rewards "replace"
+	 s2=REPLACE_SUCESS     : 1; 
+endrewards
+
+rewards "manufecture"
+	 s1=ON_GROUND_MANUFECTURE_SATTELITE : 1; 
+endrewards
+
+rewards "repairOnOrbitOnground"
+	 s2=REPLACE_SUCESS     : 1; 
+	 s1=ON_GROUND_MANUFECTURE_SATTELITE : 1; 
+endrewards
+
+rewards "costOnOrbit"
+	s2=REPLACE_SUCESS     : 1; 
+endrewards
+
+rewards "costOnGround"
+	s1=ON_GROUND_MANUFECTURE_SATTELITE : 1; 
+endrewards
+
+rewards "costOnOrbitOnGround"
+	s1=ON_GROUND_MANUFECTURE_SATTELITE : 1; 
+	s2=REPLACE_SUCESS     : 1; 
+endrewards
+
+rewards "Persistance"
+	[Persist] true :1 ; 
+endrewards
+
+
+label "Loss_Continuty" = (s3=UNSCHEDULED) | (s3=OMACTIVITIES) | (s3=LTFAILURE) | (s3=STFAILURE) | (s3=EOLFAILURE);
+
+rewards "Loss_Continuty"
+	[Unscheduled]  true :1 ; 
+	[OMActivities] true :1 ; 
+	[LTFailure]    true :1 ; 
+	[STFailure]    true :1 ; 
+	[EOLFailure]   true :1 ;  
+endrewards
+
+
+label "Loss_Integrity" = s3=UMSIALERT;
+
+rewards "Loss_Integrity"
+	s3=UMSIALERT : 1 ;
+endrewards
+
+label "On_Orbit_Player" = win=ON_ORBIT_PLAYER;
+rewards "On_Orbit_Player"
+	win=ON_ORBIT_PLAYER : 1 ;
+endrewards
+
+label "On_Ground_Player" = win=ON_GROUND_PLAYER;
+rewards "On_Ground_Player"
+	win=ON_GROUND_PLAYER : 1 ;
+endrewards
+

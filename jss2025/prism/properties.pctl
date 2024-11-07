@@ -1,0 +1,67 @@
+const int T;
+
+// probaibility to replace the sattelite on orbit in 15 years
+<<p2,p3>>Pmax=? [ F (("replace")&rounds<=k) ]
+
+// probaibility to manufecture the sattelite On Ground the sattelite in 15 years
+<<p1,p3>>Pmax=? [ F (("manufecture")&rounds<=k) ]
+
+// probaibility to replace the sattelite on orbit in 15 years
+<<p1,p2,p3>>Pmax=? [ F (("repairOnOrbitOnground")&rounds<=k) ]
+
+// Rewards to repair the sattelite on orbit and on the ground in 15 years
+<<p1,p2,p3>>R{"repairOnOrbitOnground"}max=? [ F (rounds=k) ]
+
+// Rewards to replace the sattelite on orbit in 15 years
+<<p2,p3>>R{"replace"}max=? [ F (rounds=k) ]
+
+// Rewards to manufecture the sattelite on ground in 15 years
+<<p1,p3>>R{"manufecture"}max=? [ F (rounds=k) ]
+
+// Cost Rewards to replace the sattelite on orbit and on the ground in 15 years
+<<p1,p2,p3>>R{"costOnOrbitOnGround"}max=? [ F (rounds=k) ]
+
+// Cost Rewards to replace the sattelite on orbit in 15 years
+<<p2,p3>>R{"costOnOrbit"}max=? [ F (rounds=k) ]
+
+// Cost Rewards to manufecture the sattelite on ground in 15 years
+<<p1,p3>>R{"costOnGround"}min=? [ F (rounds=k) ]
+
+<<p1,p2,p3>>R{"replace"}max=? [ F (rounds=k) ]/T
+
+// maximum Rewards for soft errors persistance in 15 years
+<<p1,p2,p3>>Pmax=? [ F (("Persistance")&rounds<=k) ]
+
+// maximum Rewards for soft errors persistance in 15 years
+<<p1,p2,p3>>R{"Persistance"}max=? [ F (rounds=k) ]
+
+// maximum Rewards for soft errors persistance in 15 years
+<<p3>>R{"Persistance"}max=? [ F (rounds=k) ]
+
+// maximum probability to loss Continuty in 15 years
+<<p1,p2,p3>>Pmax=? [ F (("Loss_Continuty")&rounds<=k) ]
+
+// maximum probability to loss Continuty in 15 years
+<<p1,p2>>Pmax=? [ F (("Loss_Continuty")&rounds<=k) ]
+
+// maximum probability to loss Continuty in 15 years
+<<p3>>Pmax=? [ F (("Loss_Continuty")&rounds<=k) ]
+
+// maximum rewards to loss Continuty in 15 years
+<<p1,p2,p3>>R{"Loss_Continuty"}max=? [ F (rounds=k) ]
+
+// maximum rewards to loss Continuty in 15 years
+<<p3>>R{"Loss_Continuty"}max=? [ F (rounds=k) ]
+
+// maximum probability to loss integrity in 15 years
+<<p1,p2,p3>>Pmax=? [ F (("Loss_Integrity")&rounds<=k) ]
+
+// maximum probability to loss integrity in 15 years
+<<p3>>Pmax=? [ F (("Loss_Integrity")&rounds<=k) ]
+
+// maximum rewards to loss integrity in 15 years
+<<p1,p2,p3>>R{"Loss_Integrity"}max=? [ F (rounds=k) ]
+
+// maximum rewards to loss integrity in 15 years
+<<p3>>R{"Loss_Integrity"}max=? [ F (rounds=k) ]
+
