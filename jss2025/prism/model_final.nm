@@ -10,6 +10,9 @@ player p3  Environment       endplayer  // Player 3 representing the Environment
 
 //Priority
 const double OnGroundPriority;
+//Personal
+const int ON_GROUND_PLAYER= 1;
+const int ON_ORBIT_PLAYER= 2;
 
 // Constants used in the model
 const double r=0.80;// sattelite reliability 
@@ -20,6 +23,7 @@ const double soft_mtbf=64800;    //= 7.5 * 12 * 30 * 24;   // Mean time between 
 const double om_mtbf=4320;    //= 0.5 * 12 * 30 * 24;   // Mean time between failures (in hours) for scheduled interuption
 const double mttr=24;        //mean time to repair
 const double uns_mtbf = 4320;              // Mean Time to Unscheduled Interruption (in hours)
+const double p_slot ;              // Available slots on orbit
 
 // Probabilities of different failure modes
 const double pr_st  = st_mtbf/(lt_mtbf+st_mtbf+soft_mtbf+om_mtbf+uns_mtbf); // Short-term failure probability
@@ -154,7 +158,7 @@ module OnOrbitManoeuvers
     [RedundantSubsystemSucess]  s2=DEPLOY_REDUNDANT_SUBSYSTEM -> (s2'=DEPLOY_REDUNDANT_SUBSYSTEM_SUCESS); // The system transitions to the redundant subsystem success state
 
     // State transition - move/replace redundant satellite (from check redundant satellite state)
-    [MoveReplaceRedundantSatellite]  s2=CHECK_REDUNDANT_SATTELITE -> Pbeta:(s2'=MOVE_REPLACE_FAILED) + (1-Pbeta):(s2'=CHECK_REDUNDANT_SATTELITE_UNAVAILABLE); // The system transitions to either the move/replace failed state or the check redundant satellite unavailable state based on probabilities
+    [MoveReplaceRedundantSatellite]  s2=CHECK_REDUNDANT_SATTELITE -> p_slot:(s2'=MOVE_REPLACE_FAILED) + (1-p_slot):(s2'=CHECK_REDUNDANT_SATTELITE_UNAVAILABLE); // The system transitions to either the move/replace failed state or the check redundant satellite unavailable state based on probabilities
 
     // State transition - replace satellite
     [ReplaceSattelite]  s2=MOVE_REPLACE_FAILED -> Pbeta:(s2'=REPLACE_SUCESS) + (1-Pbeta):(s2'=REPLACE_FAIL); // The system transitions to either the replace success state or the replace fail state based on probabilities
