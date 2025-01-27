@@ -1,0 +1,37 @@
+const double T;
+
+// // Probability of any failure occurring within T hours
+P=? [ true U<=T "SAR_FLS_down" ]
+
+P=? [ true U<=T "SAR_RLS_down" ]
+
+P=? [ true U<=T*3600 "down" ]
+
+P=? [ true U<=T "SAR_DETECTION_down" ]
+
+P=? [ true U<=T*3600 "up" ]
+
+P=? [ true U<=T*3600 "danger" ]
+
+P=? [ ("hfail") U<=T !"hfail" ]
+
+R{"up_fail"}=? [ C<=T*3600 ]
+
+P=? [ true U<=T*3600 "down"&"fail" ]
+
+P=? [ true U<=T*3600 "danger"&"fail" ]
+
+R{"down_fail"}=? [ C<=T*3600 ]
+
+R{"danger_fail"}=? [ C<=T*3600 ]
+
+P=? [ "up" U<=T !"up" ]
+
+P=? [ "up" U<=T*3600 "down" ]
+
+P=? [ "up" U<=T*3600 "danger" ]
+
+P=? [ "up" U<=T !"up" ]
+
+P=? [ "up" U<=T*3600 SAR_FLS_s=Degraded ]
+
