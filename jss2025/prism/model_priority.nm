@@ -244,11 +244,11 @@ label "repairOnOrbitOnground" =  (s1=ON_GROUND_MANUFECTURE_SATTELITE) | (s2=REPL
 label "Persistance" =  s3=PERSISTANTFAILURE;
 
 rewards "replace"
-	 s2=REPLACE_SUCESS     : 1; 
+	 s2=REPLACE_SUCESS  & win=ON_GROUND_PLAYER   : 1; 
 endrewards
 
 rewards "manufecture"
-	 s1=ON_GROUND_MANUFECTURE_SATTELITE : 1; 
+	 s1=ON_GROUND_MANUFECTURE_SATTELITE & win=ON_ORBIT_PLAYER: 1; 
 endrewards
 
 rewards "repairOnOrbitOnground"

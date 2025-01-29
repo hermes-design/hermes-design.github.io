@@ -1,0 +1,42 @@
+// Simple game where two players are producer and consumer
+
+csg
+
+
+
+player p1 ProducerConsumer1 endplayer
+
+player p2 ProducerConsumer2 endplayer
+
+
+module ProducerConsumer1
+
+	s1 : [0..1] init 0;
+	[w1] s1=0 -> (s1'=0);
+	[r1] s1=0 -> (s1'=0);
+	[reset1] s1=0 -> (s1'=0);
+
+endmodule
+
+
+module connector
+
+	win : [0..2]init 0;
+	a : [0..2]init 0;
+	
+	[w1,w2] a=0 -> (a'=1) & (win'=0);
+        [r1,r2] a=0 -> (a'=1) & (win'=0);
+
+	[reset1,reset2] a=1 | a=2 | a=3 -> (a'=0) & (win'=0);
+
+	[r1,w2] a=0 -> (a'=2) & (win'=2);
+	[w1,r2] a=0 -> (a'=3) & (win'=1);
+
+endmodule
+
+module ProducerConsumer2
+	s2 : [0..1] init 0;
+	[w2] s2=0 -> (s2'=0);
+	[r2] s2=0 -> (s2'=0);
+	[reset2] s2=0 -> (s2'=0);
+endmodule

@@ -1,4 +1,5 @@
 const int T;
+const int MAX_ROUNDS;
 
 // probaibility to replace the sattelite on orbit in 15 years
 <<p2,p3>>Pmax=? [ F (("replace")&rounds<=k) ]
@@ -9,9 +10,6 @@ const int T;
 // probaibility to replace the sattelite on orbit in 15 years
 <<p1,p2,p3>>Pmax=? [ F (("repairOnOrbitOnground")&rounds<=k) ]
 
-
-
-
 // Rewards to repair the sattelite on orbit and on the ground in 15 years
 <<p1,p2,p3>>R{"repairOnOrbitOnground"}max=? [ F (rounds=k) ]
 
@@ -20,9 +18,6 @@ const int T;
 
 // Rewards to manufecture the sattelite on ground in 15 years
 <<p1,p3>>R{"manufecture"}max=? [ F (rounds=k) ]
-
-
-
 
 // Cost Rewards to replace the sattelite on orbit and on the ground in 15 years
 <<p1,p2,p3>>R{"costOnOrbitOnGround"}max=? [ F (rounds=k) ]
@@ -35,7 +30,7 @@ const int T;
 
 <<p1,p2,p3>>R{"replace"}max=? [ F (rounds=k) ]/T
 
-
+<<p1,p2,p3>>R{"replaceOrManufecture"}max=? [ F (rounds=k) ]/(<<p3>>R{"Loss_Continuty"}max=? [ F (rounds=MAX_ROUNDS) ])
 
 // maximum Rewards for soft errors persistance in 15 years
 <<p1,p2,p3>>Pmax=? [ F (("Persistance")&rounds<=k) ]
@@ -60,9 +55,6 @@ const int T;
 
 // maximum rewards to loss Continuty in 15 years
 <<p3>>R{"Loss_Continuty"}max=? [ F (rounds=k) ]
-
-
-
 
 // maximum probability to loss integrity in 15 years
 <<p1,p2,p3>>Pmax=? [ F (("Loss_Integrity")&rounds<=k) ]
