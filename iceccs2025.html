@@ -12,10 +12,10 @@
 
     .content {
       min-height: 100%;
-      margin: 0 40px;
-      padding-bottom: 40px; /* Adjust this value to leave space for the footer */
+      margin: 100px 50px; /* Adjusted margin for better readability */
+      padding-bottom: 40px; 
     }
-
+    
     footer {
       position: fixed;
       bottom: 0;
@@ -71,6 +71,11 @@
       color: green;
       font-size: 14px;
     }
+    
+    code {
+      background-color: #f0f0f0;
+      padding: 5px;
+      
 
     li {
       text-align: justify;
@@ -139,23 +144,88 @@ hs.src = ('//s10.histats.com/js15_as.js');
         <tr>
           <td>P1</td>
           <td>CTMC Model of SAR Galileo.</td>
-          <td><a href="newcas/prism/modelparameters.nm">[Download]</a></td>
-          <td><a href="newcas/prism/properties.csl">[Download]</a></td>
+          <td><a href="iceccss/prism/modelparameters.nm">[Download]</a></td>
+          <td><a href="iceccss/prism/properties.csl">[Download]</a></td>
         </tr>
         
         <tr>
           <td>P2</td>
           <td>CTMC Model of SAR Galileo with Human Parameters.</td>
-          <td><a href="newcas/prism/modelparametersh.nm">[Download]</a></td>
-          <td><a href="newcas/prism/properties.csl">[Download]</a></td>
+          <td><a href="iceccss/prism/modelwithumanparam.nm">[Download]</a></td>
+          <td><a href="iceccss/prism/properties.csl">[Download]</a></td>
         </tr>
 	
       </table>
-    </div>
+   
 
- 
- </div>
+  <div class="content">
+    <div class="citebox">
+  <h2>1. Loading a PRISM Model</h2>
+  <p>
+    1. Open a terminal: Launch a terminal window in the directory where your PRISM model (.prism file) is located. 
+  </p>
+  <p>
+    2. Execute the following command:
+  </p>
+  <code>
+    prism model_name.prism 
+  </code>
+  <p>
+    Replace `model_name` with the actual name of your PRISM file. 
+  </p>
+  <p>
+    For example:
+  </p>
+  <code>
+    prism my_model.prism 
+  </code>
+  <p>
+    This command loads the PRISM model into the PRISM environment.
+  </p>
 
+  <h2>2. Verifying Model Syntax</h2>
+  <p>
+    PRISM will automatically check the syntax of your model when you load it. If there are any syntax errors, PRISM will display error messages indicating the problematic lines. Correct these errors in your .prism file and reload the model.
+  </p>
+
+  <h2>3. Running an Experiment</h2>
+  <p>
+    To perform an experiment (e.g., calculate probabilities, verify a property), use the following command:
+  </p>
+  <code>
+    prism <your_model_name>.prism -prop <properties_file_name>.props
+  </code>
+  <ul>
+    <li><code>model_name.prism</code>: The name of the file containing your PRISM model.</li>
+    <li><code>properties_file_name.props</code>: The name of the file containing the properties to be verified (optional).</li>
+  </ul>
+
+  <p>
+    For example:
+  </p>
+  <code>
+    prism my_model.prism -prop my_properties.props
+  </code>
+
+  <p>
+    If you don't have a properties file, you can specify the property directly on the command line:
+  </p>
+  <code>
+    prism my_model.prism -p "P=? [F state_A]" 
+  </code>
+  <p>
+    This command checks the probability of reaching state "state_A" in the model.
+  </p>
+
+  <h2>Interpreting the results</h2>
+  <p>
+    PRISM will display the analysis results in the console. Results may include probabilities, mean times, counter-examples (if a property is not satisfied), etc.
+  </p>
+  <p>
+    Results can also be exported in various formats (e.g., text, XML) for further analysis.
+  </p>
+
+</div>
 <footer>
   <div style="display: flex; align-items: center;">
      <a href="https://www.ico-occitanie.fr/">
