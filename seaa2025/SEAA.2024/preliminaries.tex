@@ -1,0 +1,84 @@
+Concurrent stochastic multi-player games (CSGs) \cite{Kwiatkowska2019,Kwiatkowska2020} is an extension of Probabilistic Automata (PA) PA \cite{ref27}  where the formalism is based on the idea that players make choices concurrently in each state and then transition simultaneously. In CSGs, each player controls one or more modules, and the actions that label commands within a player's modules must only be used by that specific player. 
+
+To express the coalition game, we rely on PRISM \cite{Kwiatkowskaprism2011}. The PRISM model is composed of a set of modules that can synchronize. A set of variables and commands characterizes each module. The variable's valuations represent the state of the module \cmt{represented by \emath{S}}. A set of commands is used to describe the behavior of each module (i.e., transitions). A command takes the form: $ [a_{1}, \ldots, a_{n}] g \rightarrow \lambda_{1}: u_{1} + \ldots+ \lambda_{n}: u_{n} $ or, \emath{[a_{1}, \ldots, a_{n}] g \rightarrow u}, which means, for actions \emath{a_{i}} \cmt{(\emath{a_{i} \in A})} if the guard \quot{\emath{g}} is true, then, an update \quot{\emath{u_{i}}} is enabled with a probability \quot{\emath{\lambda_{i}}}. A guard is a logical proposition consisting of variable evaluation and propositional logic operators. The update \quot{\emath{u_{i}}} is an evaluation of variables expressed as a conjunction of assignments: \emath{v_{i}'=val_{i}+\ldots+v_{n}'=val_{n}} where \quot{\emath{v_{i}}} \cmt{\emath{\in V}, such that V is a set local and global variable} are local variables and \emath{val_{i}} are values evaluated via expressions denoted by \quot{\emath{\theta}} such that \emath{ \theta: V \rightarrow \mathbb{D}}, \cmt{\emath{\mathbb{D}} is the domain variables}. 
+
+CSGs are augmented with reward structures \cite{Kwiatkowska2019,Kwiatkowska2020}  as \emath{r_{A} : S \times A \longrightarrow \mathbb{R}} is an action reward function which assigns each state (\emath{s\in S}) and action (\emath{a \in A}) tuple pair to a real value that is accumulated when the action tuple is selected in the state and \emath{r_{s} : S \longrightarrow \mathbb{R}}  is a state reward function which assigns each state to a real value that is accumulated when the state is reached.
+
+
+The properties related to CSGs are expressed in the temporal logic rPATL \cite{hutchisonautomatic2012} (short for reward Probabilistic Alternating Temporal Logic). The property grammar is based on CTL \cite{baierprinciples2008} extended with coalition operator \emathtt{\langle\langle C\rangle\rangle} of ATL \cite{Alur2002} and probabilistic operator \emathtt{P} of PCTL \cite{hanssonlogic1994}. For instance, for the following property expressed in natural language: \quot{\emph{Players 1 and 2 have a strategy to ensure that the probability of system failure occurring within 100 rounds is less than 0.001, regardless of the strategies of attacks}} is expressed in rPATL as: \emathtt{\langle\langle 1,2\rangle\rangle P_{<0.001} [ F \ (fail  \ \& \ rounds =100)]}. Here, \quot{\emathtt{fail}} is the label that refers to the system failure states. Concerning rewards structure, the property expressed in natural language: \quot{\emph{What is the reward r within 100 rounds to reach \quot{\emathtt{fail}} for both Players 1 and 2 for a selected strategy ?}} is expressed in rPATL as \emathtt{\langle\langle 1,2\rangle\rangle R=? [  F \ (fail  \ \& \ rounds =100)] }
+
+\begin{example}
+\label{exp:csg:architecture}   
+Consider the CSG shown in \fig{fig:even:odds} in \cite{BAOUYA2024101161}, which corresponds to two players repeatedly performing a scheduled read and write operation. Transitions are labeled with actions where \emath{A = (r_{1}r_{2}), (w_{1}w_{2}), (w_{2}r_{1}), (r_{2}w_{2}), (reset_{1} reset_{2}).}The CSG starts in state \quot{s0}, and states \quot{s1}, \quot{s2}, and \quot{s3} are labeled with atomic propositions corresponding to a player winning. Each player is involved by writing and reading operations.
+%\tikzset{every picture/.style={ scale=0.95,line width=0.2pt}} %set default line width to     
+\noindent
+\begin{figure}[!htb]
+    \centering
+    %\input{tikzevenodds}
+      \includegraphics[width=250pt, height =200pt]{examplecsg.pdf}
+    \caption{Read and Write Game Model in CSG \cite{BAOUYA2024101161}.}
+    \label{fig:even:odds}
+\end{figure} 
+
+
+Considering the modeled system in \fig{fig:even:odds}, when Player 1 initiates the game and emerges victorious by writing, the property is expressed as: \emathtt{\langle\langle 1 \rangle\rangle P_{>0.99}=? [ F \ win=1 ]}. The model and properties associated with the example are available at \cite{BAOUYA2024101161}. 
+
+
+A dedicated non-player module orchestrates read and write operations in the PRISM code of \lst{exampleinprism}. All commands are labeled with at least two ports, corresponding to the players responsible for triggering the internal write and read operations. The \quot{win} variable defines the player's success in writing (taking values 1 or 2).
+The first commands in lines 5-6 represent unscheduled writing (i.e., reading) operations. As these operations are executed, a reset command is introduced in line 8 to indicate an idle state. Subsequently, the commands depicted in lines 9-10 enforce an order between writing and reading operations.  
+\lstdefinestyle{framed}
+{
+	frame=lrb,         
+	mathescape,
+	numbers=left,
+	belowcaptionskip=-1pt,
+    xleftmargin=3.11em,
+		xrightmargin=0.03cm,
+    framexleftmargin=3em,
+	framexrightmargin=0pt,
+	framextopmargin=5pt,
+	framexbottommargin=5pt,
+	framesep=0pt,
+	rulesep=0pt,
+	numbers=left,
+}
+    
+%\lstset{breaklines=true,style=framed,escapeinside={<@}{@>},
+%	morekeywords={void, int, public,private,class,protected, submodules, network,connections, const, init,int,,bool, double, module,rewards,endrewards, endmodule},basicstyle=\scriptsize\ttfamily, keywordstyle=\bfseries\color{eminence}, 
+%	morecomment=[f][\color{forestgreen}][0]{/*},
+%    label=queueemodel
+%}
+\lstset{
+    breaklines=true,
+    style=framed,
+    escapeinside={<@}{@>},
+    morekeywords={void, int, public, private, class, protected, submodules, network, connections, const, init, int, bool, double, module, rewards, endrewards, endmodule},
+    basicstyle=\scriptsize\ttfamily,
+    keywordstyle=\bfseries\color{blue},
+    morecomment=[f][\color{green!70!black}][0]{/*},
+        morecomment=[l][\color{green!30!black}]{//},
+    label=queueemodel
+}
+
+
+\begin{figure}[!htb]            
+\begin{minipage}{9cm}
+\begin{lstlisting}[style=framed,%customc,
+	caption=PRISM Code for Read/Write of \fig{fig:even:odds},
+ 	label=exampleinprism]	
+module Orchestrator
+ win : [0..2]init 0;
+ a : [0..2]init 0;
+	
+ [w1,w2] s=0 -> (s'=1) & (win'=0);
+        [r1,r2] s=0 -> (s'=1) & (win'=0);
+
+ [reset1,reset2] s=1 | s=2 | s=3 -> (s'=0) & (win'=0);
+ [r1,w2] s=0 -> (s'=2) & (win'=2);
+ [w1,r2] s=0 -> (s'=3) & (win'=1);
+endmodule
+\end{lstlisting}
+ \end{minipage}  
+\end{figure}
+
+\end{example}

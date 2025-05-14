@@ -1,0 +1,23 @@
+const int T;
+
+// // Probability of any failure occurring within T hours
+P=? [ true U<=T "SAR_FLS_down" ]
+
+P=? [ true U<=T "SAR_RLS_down" ]
+
+P=? [ true U<=T "up" ]
+
+P=? [ true U<=T SAR_SAT_s=Degraded ]
+
+P=? [ true U<=T SAR_RLS ]
+
+P=? [ true U<=T "up" ]
+
+P=? [ true U<=T SAR_FLS ]
+
+P=? [ true U<=T SAR_DETECTION ]
+
+P=? [ true U<=T down ]
+
+P=? [ true U<=T up ]
+
