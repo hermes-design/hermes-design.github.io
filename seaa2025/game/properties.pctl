@@ -1,0 +1,14 @@
+<<p1,p2>>Pmax=? [ F ((degradation=3&degradation=1)&rounds<=k) ]
+
+<<p1>>R{"human"}max=? [ F (rounds=k) ]
+
+<<p1>>R{"human"}min=? [ F (rounds=k) ]
+
+<<p2>>R{"human"}max=? [ F (rounds=k) ]
+
+<<p2>>R{"Uptime"}max=? [ F (rounds=k) ]
+
+<<p1,p2>>R{"Uptime"}max=? [ F (rounds=k) ]/(<<p1,p2>>R{"Uptime"}max=? [ F (rounds=k) ]+ <<p1,p2>>R{"Downtime"}max=? [ F (rounds=k) ])
+
+1-(<<p1,p2>>R{"Uptime"}max=? [ F (rounds=k) ]/(<<p1,p2>>R{"Uptime"}max=? [ F (rounds=k) ]+ <<p1,p2>>R{"Downtime"}max=? [ F (rounds=k) ]))
+

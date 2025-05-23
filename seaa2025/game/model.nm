@@ -1,0 +1,91 @@
+// Simple game where two players are sattelite and human
+//SEAA 2025
+//author: Abdelhakim Baouya
+csg
+
+const double pf;// human degradation
+const double ph=1-pf;// human degradation
+const double ps; //sattelite degradation
+
+const double days=30*60*60*60; 
+
+// System states
+const int Operational = 2;       // The system is fully functional 
+const int Degraded = 1;          // The system has reduced functionality 
+const int Severely_Degraded = 0; // The system is severely limited or non-functional 
+const int Broadcast_Signal = 0;  // Represents the action/event of broadcasting a signal
+
+player p1 Human endplayer           // Player p1 represents the "Human" component 
+player p2 SatteliteDegradation endplayer  // Player p2 represents the "SatteliteDegradation" component 
+
+const k; // number of rounds
+
+// module to count the rounds
+module rounds
+
+	rounds : [0..k+1];
+	
+	[] rounds<=k -> (rounds'=rounds+1);
+	[] rounds=k+1 -> true;
+
+endmodule
+
+module Human
+
+	s1 : [0..2] init Operational; // s1 represents the state of the human observer: 2=Operational, 1=Degraded
+	
+	// When the observer performs an operation (OPH), they remain operational with probability ph, 
+	// or their state degrades with probability (1-ph)
+	[OPH] s1=Operational -> ph:(s1'=Operational)+(1-ph):(s1'=Degraded); 
+	
+	// After a reset action (RESET1), the human observer returns to the operational state
+	[RESET1] s1=Degraded -> (s1'=Operational); 
+
+endmodule
+
+
+module Observer
+
+	degradation : [0..3] init 0;	
+
+	// If both human (s1) and satellite (s2) are degraded, degradation becomes 3
+	[RESET1,RESET2] s2=Degraded & s1=Degraded         -> (degradation'=3);
+
+	// If human (s1) is degraded and satellite (s2) is operational, degradation becomes 1
+	[RESET1,OPS]      s1=Degraded & s2=Operational     -> (degradation'=1);
+	
+	// If both human (s1) and satellite (s2) are operational, degradation is 0
+	[OPH,OPS]         s1=Operational & s2=Operational -> (degradation'=0);
+			
+	// If human (s1) is operational and satellite (s2) is degraded, degradation becomes 2
+	[OPH,RESET2]      s1=Operational & s2=Degraded      -> (degradation'=2);
+
+endmodule
+
+module SatteliteDegradation
+
+	s2 : [0..2] init Operational; // s2 represents the satellite's state
+
+	// From Operational, the satellite can degrade with probability ps or stay Operational (1-ps)
+	[OPS] s2=Operational -> ps:(s2'=Degraded)+(1-ps):(s2'=Operational);
+	
+	// When RESET2 occurs and the satellite is Degraded, it returns to Operational
+	[RESET2] s2=Degraded    ->    (s2'=Operational);
+	
+endmodule
+
+
+rewards "human"
+	s1=Degraded : 1; 
+endrewards
+
+rewards "Uptime"
+	s1=Operational & s2=Operational : 1; 
+endrewards
+
+rewards "Downtime"
+	s1=Degraded | s2=Degraded : 1; 
+endrewards
+
+
+

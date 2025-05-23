@@ -152,7 +152,14 @@ hs.src = ('//s10.histats.com/js15_as.js');
           <td><a href="seaa2025/prism/modelwithumanparam.nm">[Download]</a></td>
           <td><a href="seaa2025/prism/properties.csl">[Download]</a></td>
         </tr>
-	
+
+        <tr>
+          <td>P3</td>
+          <td>CSG Model of SAR Galileo with Human Parameters.</td>
+          <td><a href="seaa2025/game/model.nm">[Download]</a></td>
+          <td><a href="seaa2025/game/properties.pctl">[Download]</a></td>
+        </tr>
+        	
 	        <tr>
           <th>ID</th>
           <th>Python Code Description</th>
@@ -179,7 +186,7 @@ hs.src = ('//s10.histats.com/js15_as.js');
     2. Execute the following command:
   </p>
   <code>
-    prism model_name.prism 
+    prism model_name.nm
   </code>
   <p>
     Replace `model_name` with the actual name of your PRISM file. 
@@ -188,7 +195,7 @@ hs.src = ('//s10.histats.com/js15_as.js');
     For example:
   </p>
   <code>
-    prism my_model.prism 
+    prism my_model.nm
   </code>
   <p>
     This command loads the PRISM model into the PRISM environment.
@@ -204,7 +211,7 @@ hs.src = ('//s10.histats.com/js15_as.js');
     To perform an experiment (e.g., calculate probabilities, verify a property), use the following command:
   </p>
   <code>
-    prism <your_model_name>.prism -prop <properties_file_name>.props
+    prism <your_model_name>.nm -prop <properties_file_name>.props
   </code>
   <ul>
     <li><code>model_name.prism</code>: The name of the file containing your PRISM model.</li>
@@ -215,14 +222,14 @@ hs.src = ('//s10.histats.com/js15_as.js');
     For example:
   </p>
   <code>
-    prism my_model.prism -prop my_properties.props
+    prism my_model.nm -prop my_properties.props
   </code>
 
   <p>
     If you don't have a properties file, you can specify the property directly on the command line:
   </p>
   <code>
-    prism my_model.prism -p "P=? [F state_A]" 
+    prism my_model.nm -p "P=? [F state_A]" 
   </code>
   <p>
     This command checks the probability of reaching state "state_A" in the model.
