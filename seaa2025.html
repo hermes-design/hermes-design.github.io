@@ -1,8 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>SEAA 2025</title>
-  <style type="text/css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SEAA 2025 - PRISM Models and Documentation">
+  <title>SEAA 2025 - PRISM Models</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="seaa2025.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      Prism.highlightAll();
+    });
+  </script>
+  <style>
     body {
       height: 100%;
       margin: 0;
@@ -75,7 +87,7 @@
     code {
       background-color: #f0f0f0;
       padding: 5px;
-      
+    }
 
     li {
       text-align: justify;
@@ -94,12 +106,14 @@
       color: #333;
     }
     
-     .hidden {
+    .hidden {
       display: none;
     }
   </style>
 </head>
 <body>
+
+
  <div class="hidden">
 <script type="text/javascript">var _Hasync= _Hasync|| [];
 _Hasync.push(['Histats.start', '1,4940300,4,0,0,0,00010000']);
@@ -112,136 +126,146 @@ hs.src = ('//s10.histats.com/js15_as.js');
 })();</script>
 <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4940300&101" alt="free tracking" border="0"></a></noscript>
   </div>
-  
-  <div class="content">
-    <div class="citebox">
-      <div class="citeboxheader">
-        <h1>SEAA 2025:</h1>
-      </div>
-      <ul>
-        <li>Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.
-          <span style="color: red;">Quantitative Assessment of Performance Degradation in Model-Based Galileo SAR Systems Under Human Operator Physiological and Psychological Variability</span>.
-           In <em>SEAA </em>, 2025 (Submitted).
-        </li>
-      </ul>
-    </div>
 
-    <div class="citebox">
-      <table>
-	     <tr>
-		<th style="background-color: #00aaff; color: white;" colspan="4">Developed Artefacts</th>
-		</tr>
-	  
-	  
-        <tr>
-          <th>ID</th>
-          <th>PRISM Model Description</th>
-          <th>Model</th>
-          <th>Properties</th>
-        </tr>
-        <tr>
-          <td>P1</td>
-          <td>CTMC Model of SAR Galileo.</td>
-          <td><a href="seaa2025/prism/modelparameters.nm">[Download]</a></td>
-          <td><a href="seaa2025/prism/properties.csl">[Download]</a></td>
-        </tr>
-        
-        <tr>
-          <td>P2</td>
-          <td>CTMC Model of SAR Galileo with Human Parameters.</td>
-          <td><a href="seaa2025/prism/modelwithumanparam.nm">[Download]</a></td>
-          <td><a href="seaa2025/prism/properties.csl">[Download]</a></td>
-        </tr>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#paper" aria-label="Paper Information">Paper</a></li>
+          <li><a href="#artefacts" aria-label="Download Artefacts">Artefacts</a></li>
+          <li><a href="#prism-guide" aria-label="PRISM Guide">PRISM Guide</a></li>
+        </ul>
+      </nav>
+    </header>
 
-        <tr>
-          <td>P3</td>
-          <td>CSG Model of SAR Galileo with Human Parameters.</td>
-          <td><a href="seaa2025/game/model.nm">[Download]</a></td>
-          <td><a href="seaa2025/game/properties.pctl">[Download]</a></td>
-        </tr>
-        	
-	        <tr>
-          <th>ID</th>
-          <th>Python Code Description</th>
-          <th>Model</th>
-          <th>Properties</th>
-        </tr>
-        <tr>
-          <td>C1</td>
-          <td>Python code for performance estimation and source code analysis.</td>
-          <td><a href="seaa2025/python/eval.py">[Download]</a></td>
-          <td></td>
-        </tr>
-        
-      </table>
-   
+    <main class="content">
+      <section id="paper" class="paper-info citebox">
+        <header class="citeboxheader">
+          <h1>SEAA 2025</h1>
+        </header>
+        <article>
+          <p><a href="https://hbaouya.github.io/" target="_blank" rel="noopener noreferrer">Abdelhakim Baouya</a>, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.</p>
+          <p>Quantitative Assessment of Performance Degradation in Model-Based Galileo SAR Systems Under Human Operator Physiological and Psychological Variability.</p>
+          <p>In <em>51st Euromicro Conference Series on Software Engineering and Advanced Applications (SEAA)</em>, 2025 (Submitted).</p>
+        </article>
+      </section>
 
-  <div class="content">
-    <div class="citebox">
-  <h2>1. Loading a PRISM Model</h2>
-  <p>
-    1. Open a terminal: Launch a terminal window in the directory where your PRISM model (.prism file) is located. 
-  </p>
-  <p>
-    2. Execute the following command:
-  </p>
-  <code>
-    prism model_name.nm
-  </code>
-  <p>
-    Replace `model_name` with the actual name of your PRISM file. 
-  </p>
-  <p>
-    For example:
-  </p>
-  <code>
-    prism my_model.nm
-  </code>
-  <p>
-    This command loads the PRISM model into the PRISM environment.
-  </p>
+      <section id="artefacts" class="artefacts citebox">
+        <h2>Developed Artefacts</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>PRISM Model Description</th>
+                <th>Model</th>
+                <th>Properties</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>P1</td>
+                <td>CTMC Model of SAR Galileo</td>
+                <td>
+                  <a href="seaa2025/prism/modelparameters.nm" download aria-label="Download CTMC Model">[Download]</a>
+                </td>
+                <td>
+                  <a href="seaa2025/prism/properties.csl" download aria-label="Download Properties">[Download]</a>
+                </td>
+              </tr>
+              <tr>
+                <td>P2</td>
+                <td>CTMC Model of SAR Galileo with Human Parameters</td>
+                <td>
+                  <a href="seaa2025/prism/modelwithumanparam.nm" download aria-label="Download CTMC Model with Human Parameters">[Download]</a>
+                </td>
+                <td>
+                  <a href="seaa2025/prism/properties.csl" download aria-label="Download Properties">[Download]</a>
+                </td>
+              </tr>
+              <tr>
+                <td>P3</td>
+                <td>CSG Model of SAR Galileo with Human Parameters</td>
+                <td>
+                  <a href="seaa2025/game/model.nm" download aria-label="Download CSG Model">[Download]</a>
+                </td>
+                <td>
+                  <a href="seaa2025/game/properties.pctl" download aria-label="Download Properties">[Download]</a>
+                </td>
+              </tr>
+            </tbody>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Python Code Description</th>
+                <th>Model</th>
+                <th>Properties</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>C1</td>
+                <td>Python code for performance estimation and source code analysis</td>
+                <td>
+                  <a href="seaa2025/python/eval.py" download aria-label="Download Python Code">[Download]</a>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-  <h2>2. Verifying Model Syntax</h2>
-  <p>
-    PRISM will automatically check the syntax of your model when you load it. If there are any syntax errors, PRISM will display error messages indicating the problematic lines. Correct these errors in your .prism file and reload the model.
-  </p>
+      <section id="prism-guide" class="prism-guide citebox">
+        <h2>PRISM Guide</h2>
+        <div class="guide-section">
+          <h3>Loading a PRISM Model</h3>
+          <ol>
+            <li>Open a terminal in the directory containing your PRISM model (.prism file)</li>
+            <li>Execute the following command:</li>
+          </ol>
+          <div class="code-block">
+            <code class="language-bash">prism model_name.nm</code>
+          </div>
+          <p>Replace <code>model_name</code> with your actual model file name.</p>
+          <p>For example:</p>
+          <div class="code-block">
+            <code class="language-bash">prism my_model.nm</code>
+          </div>
+          <p>This command loads the PRISM model into the environment.</p>
 
-  <h2>3. Running an Experiment</h2>
-  <p>
-    To perform an experiment (e.g., calculate probabilities, verify a property), use the following command:
-  </p>
-  <code>
-    prism <your_model_name>.nm -prop <properties_file_name>.props
-  </code>
-  <ul>
-    <li><code>model_name.prism</code>: The name of the file containing your PRISM model.</li>
-    <li><code>properties_file_name.props</code>: The name of the file containing the properties to be verified (optional).</li>
+          <h3>Verifying Model Syntax</h3>
+          <p>PRISM automatically checks your model's syntax. If there are errors, they will be displayed with line numbers. Fix these errors in your .prism file and reload the model.</p>
+
+          <h3>Running Experiments</h3>
+          <p>To run experiments (calculate probabilities or verify properties), use the following command:</p>
+          <div class="code-block">
+            <code class="language-bash">prism model_name.nm -prop property_name</code>
+          </div>
+          <ul>
+            <li><code>model_name.prism</code>: The name of the file containing your PRISM model.</li>
+            <li><code>property_name</code>: The name of the property to be verified (optional).</li>
+          </ul>
+          <p>For example:</p>
+          <div class="code-block">
+            <code class="language-bash">prism my_model.nm -prop my_properties.props</code>
+          </div>
+          <p>If you don't have a properties file, you can specify the property directly on the command line:</p>
+          <div class="code-block">
+            <code class="language-bash">prism my_model.nm -p "P=? [F state_A]"</code>
+          </div>
+          <p>This command checks the probability of reaching state "state_A" in the model.</p>
+
+          <h3>Interpreting the results</h3>
+          <p>PRISM will display the analysis results in the console. Results may include probabilities, mean times, counter-examples (if a property is not satisfied), etc.</p>
+          <p>Results can also be exported in various formats (e.g., text, XML) for further analysis.</p>
+        </div>
+      </section>
+    </main>
+
+
   </ul>
 
-  <p>
-    For example:
-  </p>
-  <code>
-    prism my_model.nm -prop my_properties.props
-  </code>
-
-  <p>
-    If you don't have a properties file, you can specify the property directly on the command line:
-  </p>
-  <code>
-    prism my_model.nm -p "P=? [F state_A]" 
-  </code>
-  <p>
-    This command checks the probability of reaching state "state_A" in the model.
-  </p>
-
-  <h2>Interpreting the results</h2>
-  <p>
-    PRISM will display the analysis results in the console. Results may include probabilities, mean times, counter-examples (if a property is not satisfied), etc.
-  </p>
-  <p>
-    Results can also be exported in various formats (e.g., text, XML) for further analysis.
-  </p>
 
 </div>
 <footer>
