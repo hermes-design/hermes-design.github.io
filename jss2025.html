@@ -1,104 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <title>Journal of Systems and Software</title>
-  <style type="text/css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="JSS 2025 - PRISM Models and Documentation">
+  <title>JSS 2025 - PRISM Models</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Prism.js CSS (Tomorrow Night theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <!-- Custom Styles -->
+  <style>
+    /* Inter Font */
     body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
     }
-
-    .content {
-      min-height: 100%;
-      margin: 0 40px;
-      padding-bottom: 40px; /* Adjust this value to leave space for the footer */
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #f5f5f5;
-      padding: 10px;
-      text-align: center;
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
     }
-
-    .container {
-      height: 100vh;
-      width: 100vw;
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    /* Active Nav Link Style */
+    .nav-link-active {
+      @apply bg-sky-700 text-white;
+    }
+    /* Ensure content pushes footer down */
+    .page-wrapper {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+      min-height: 100vh;
     }
-
-    /* Actual card with shadow */
-    .card {
-      height: 200px;
-      width: 200px;
-      border-radius: 5px;
-      box-shadow: 1px 2px 3px 4px rgba(12,12,12,0.2);
+    .content-wrapper {
+      flex-grow: 1;
     }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
+    /* Styling for code elements not in pre blocks */
+    code:not(pre > code) {
+      @apply bg-gray-200 text-gray-800 px-1 py-0.5 rounded-md text-sm;
     }
-
-    th, td {
-      text-align: left;
-      padding: 8px;
+    /* Styling for pre blocks (Prism.js will also apply styles) */
+    pre[class*="language-"] {
+      @apply rounded-lg shadow-md my-6;
     }
-
-    tr:nth-child(even){
-      background-color: #f2f2f2;
-    }
-
-    th {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    h1 {
-      color: green;
-      font-size: 18px;
-    }
-
-    h2 {
-      color: green;
-      font-size: 14px;
-    }
-
-    li {
-      text-align: justify;
-    }
-
-    .citebox {
-      margin: 20px;
-    }
-
-    .citeboxheader {
-      margin-bottom: 10px;
-    }
-
-    .citeboxheader h1 {
-      font-size: 18px;
-      color: #333;
-    }
-    
-     .hidden {
+         .hidden {
       display: none;
     }
   </style>
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 leading-relaxed">
+
+
  <div class="hidden">
-   <!-- Histats.com  START  (aync)-->
 <script type="text/javascript">var _Hasync= _Hasync|| [];
-_Hasync.push(['Histats.start', '1,4927060,4,0,0,0,00010000']);
+_Hasync.push(['Histats.start', '1,4962627,4,0,0,0,00010000']);
 _Hasync.push(['Histats.fasi', '1']);
 _Hasync.push(['Histats.track_hits', '']);
 (function() {
@@ -106,115 +72,379 @@ var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async
 hs.src = ('//s10.histats.com/js15_as.js');
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
 })();</script>
-<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4927060&101" alt="counter stats" border="0"></a></noscript>
-<!-- Histats.com  END  -->
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4962627&101" alt="counter free hit invisible" border="0"></a></noscript>
   </div>
   
-  <div class="content">
-    <div class="citebox">
-      <div class="citeboxheader">
-        <h1>Euromicro Software Engineering and Advanced Applications: 50th Anniversary | Journal of Systems and Software 2025</h1>
+  
+  <div class="page-wrapper">
+    <!-- Header & Navigation -->
+    <header class="bg-sky-600 text-white shadow-lg sticky top-0 z-50">
+      <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <a href="#" class="text-2xl font-bold">JSS 2025</a>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <a href="#paper" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Paper</a>
+              <a href="#artefacts" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Artefacts</a>
+              <a href="#prism-guide" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">PRISM Guide</a>
+            </div>
+          </div>
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden">
+            <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-sky-200 hover:text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <!-- Mobile Menu -->
+      <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a href="#paper" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Paper</a>
+          <a href="#artefacts" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Artefacts</a>
+          <a href="#prism-guide" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">PRISM Guide</a>
+        </div>
       </div>
-      <ul>
-        <li>Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.
-          <span style="color: red;">Model-Based Dependability and Performance Analysis for Satellite Systems with Collaborative Maintenance Maneuvers via Stochastic Games</span>.
-           In <em>The Journal of Systems and Software </em>, 2025 (Submitted).
-        </li>
-      </ul>
-    </div>
+    </header>
 
-    <div class="citebox">
-      <table>
-	     <tr>
-		<th style="background-color: #00aaff; color: white;" colspan="4">Developed Artefacts</th>
-		</tr>
-	  
-	  
-        <tr>
-          <th>ID</th>
-          <th>PRISM Model Description</th>
-          <th>Model</th>
-          <th>Properties</th>
-        </tr>
-        <tr>
-          <td>P1</td>
-          <td>Modeling Simple CSG Model.</td>
-          <td><a href="jss2025/example/model.nm">[Download]</a></td>
-          <td><a href="jss2025/example/properties.pctl">[Download]</a></td>
-        </tr>
-        <tr>
-          <td>P2</td>
-          <td>CSG Model for Implementing Sattelite System.</td>
-          <td><a href="jss2025/prism/model_final.nm">[Download]</a></td>
-          <td><a href="jss2025/prism/properties.pctl">[Download]</a></td>
-        </tr>
-             <tr>
-          <td>P2</td>
-          <td>CSG Model for Implementing Sattelite System with Priority.</td>
-          <td><a href="jss2025/prism/model_priority.nm">[Download]</a></td>
-          <td><a href="jss2025/prism/properties_priority.pctl">[Download]</a></td>
-        </tr>
-	
-      </table>
-    </div>
-  <div class="content">  
-    <h1>Using PRISM-games (v3.2.1)</h1>
+    <!-- Main Content -->
+    <main class="content-wrapper container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Paper Information Section -->
+      <section id="paper" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <header class="mb-4 border-b pb-2">
+          <h1 class="text-2xl font-semibold text-sky-700">Euromicro Software Engineering and Advanced Applications: 50th Anniversary | Journal of Systems and Software 2025</h1>
+        </header>
+        <article class="text-gray-700">
+          <p class="text-xl font-medium">Model-Based Dependability and Performance Analysis for Satellite Systems with Collaborative Maintenance Maneuvers via Stochastic Games</p>
+          <p class="mt-2 italic">Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.</p>
+          <p class="mt-1 text-sm">In <em class="font-semibold">Journal of Systems and Software</em>, 2025 (Submitted).</p>
+        </article>
+      </section>
 
-  <h2>Downloading PRISM-games</h2>
-
-  <ol>
-    <li><strong>Visit the download page:**
-      <a href="https://www.prismmodelchecker.org/games/download.php">https://www.prismmodelchecker.org/games/download.php</a>
-    </li>
-    <li><strong>Download the appropriate binary:**
-      <ul>
-        <li>Check your computer's operating system (Windows, macOS, Linux).</li>
-        <li>Check your computer's architecture (32-bit or 64-bit).</li>
-        <li>Download the corresponding binary file.</li>
-      </ul>
-    </li>
-  </ol>
-
-  <h2>Installing PRISM-games</h2>
-
-  <p>Follow the installation instructions provided on the official website:</p>
-  <a href="https://www.prismmodelchecker.org/games/installation.php">https://www.prismmodelchecker.org/other-downloads.php</a>
-
-  <h2>Using PRISM-games</h2>
-
-  <ol>
-    <li><strong>Read the manual:**
-      <a href="https://www.prismmodelchecker.org/games/instructions.php">https://www.prismmodelchecker.org/games/instructions.php</a>
-    </li>
-    <li><strong>Use sample models:**
-      <a href="https://www.prismmodelchecker.org/games/instructions.php">https://www.prismmodelchecker.org/games/instructions.php</a>
-    </li>
-    
-    <li><strong>Load a CSG model    </li>
-    
-    <li><strong>Load properties file: It contains the rPATL properties    </li>
-    
-  </ol>
-
+      <!-- Artefacts Section -->
+      <section id="artefacts" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">Developed Artefacts</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 rounded-lg">
+            <thead>
+              <tr>
+                <th scope="col" colspan="4" class="px-6 py-3 text-left text-m font-medium text-white uppercase tracking-wider bg-sky-500">PRISM Artefacts</th>
+              </tr>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PRISM Model Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Properties</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P1</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Modeling Simple CSG Model.</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/example/model.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Simple CSG Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/example/properties.pctl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for Simple CSG Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P2</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CSG Model for Implementing Satellite System.</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/model_final.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/properties.pctl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P3</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CSG Model for Implementing Satellite System with Priority.</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/model_priority.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/properties_priority.pctl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                
+     
+                
+                
+              </tr>
+              
+              
+              
+                            <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">M2</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CSG Model for Implementing Satellite System with Four Teams</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/model_priority_scalable_four_teams.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/properties_priority_four_teams.pctl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                
+     
+                
+                
+              </tr>
+              
  
- </div>
  
- </div>
+ 
+                             <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">M3</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CSG Model for Implementing Satellite System with six Teams</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/model_priority_scalable_six_teams.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/prism/properties_priority_six_teams.pctl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                
+     
+                
+                
+              </tr>
+              
+              
+                           
+              
+              
+            </tbody>
+          </table>
+          <table class="min-w-full divide-y divide-gray-200 rounded-lg mt-8">
+             <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" colspan="4" class="px-6 py-3 text-left text-m font-medium text-white uppercase tracking-wider bg-sky-500">Python Artefacts</th>
+              </tr>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Python Code Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inputs</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C1</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Python code for performance estimation and source code analysis</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/python/eval.py" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Python Code">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">N/A</td>
+              </tr>
+              
+                           <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C1</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Python code for UCP analysis</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/python/ucp_reader.py" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Python Code">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"> <a href="jss2025/python/ucp_data.json" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Python Code">Download <i class="fas fa-download ml-1"></i></a></td>
+              </tr>
+              
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-<footer>
-  <div style="display: flex; align-items: center;">
-     <a href="https://www.ico-occitanie.fr/">
-    	<img src="logo2.png" alt="Logo 1" style="margin-right: 10px;" width="180" height="100">
-  </a>
+      <!-- PRISM Guide Section -->
+      <section id="prism-guide" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">PRISM Guide</h2>
+        <div class="space-y-6 text-gray-700">
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Downloading PRISM-games</h3>
+            <ol class="list-decimal list-inside space-y-1 pl-4">
+              <li>
+                <strong>Visit the download page:</strong>
+                <a href="https://www.prismmodelchecker.org/games/download.php" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://www.prismmodelchecker.org/games/download.php</a>
+              </li>
+              <li>
+                <strong>Download the appropriate binary:</strong>
+                <ul class="list-disc list-inside pl-6 mt-1 space-y-0.5">
+                  <li>Check your computer's operating system (Windows, macOS, Linux)</li>
+                  <li>Check your computer's architecture (32-bit or 64-bit)</li>
+                  <li>Download the corresponding binary file</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
 
-     <a href="https://www.irit.fr/">	
-    <img src="logo1.png" alt="Logo 2" style="margin-right: 10px;" width="180" height="100">
-	 </a>
-    <div style="text-align: center; margin: auto;">
-      <p><em>This page was developed for the ICO HERMES-Design project.</em></p>
-      <p><em>Contact: abaouya@acm.org</em></p>
-    </div>
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Installing PRISM-games</h3>
+            <p>Follow the installation instructions provided on the official website:
+              <a href="https://www.prismmodelchecker.org/games/installation.php" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://www.prismmodelchecker.org/games/installation.php</a>
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Using PRISM-games</h3>
+            <p>For detailed usage instructions, refer to the official documentation:
+              <a href="https://www.prismmodelchecker.org/games/manual.php" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://www.prismmodelchecker.org/games/manual.php</a>
+            </p>
+          </div>
+          
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Example PRISM-games CSG Code</h3>
+            <p>Here's a simple example of a CSG (Concurrent Stochastic Game) model in PRISM-games syntax:</p>
+            <pre><code class="language-clike">
+// example_csg.prism
+// A simple game with two players
+
+csg // Model type declaration
+
+player p1 // Player 1
+  module M1
+    x : [0..1] init 0; // Player 1's variable
+    [a] x=0 -> (x'=1); // Action 'a' available to p1 in state x=0
+    [b] x=1 -> (x'=0); // Action 'b' available to p1 in state x=1
+  endmodule
+endplayer
+
+player p2 // Player 2
+  module M2
+    y : [0..1] init 0; // Player 2's variable
+    [c] y=0 -> (y'=1); // Action 'c' available to p2 in state y=0
+    [d] y=1 -> (y'=0); // Action 'd' available to p2 in state y=1
+  endmodule
+endplayer
+
+// Global variables and transitions (optional, can be used for environment/shared state)
+module Environment
+  z : [0..1] init 0;
+  // Example of a probabilistic transition influenced by player actions
+  // This is a simplified representation; actual CSG transitions can be more complex
+  [a,c] z=0 -> 0.5:(z'=1) + 0.5:(z'=0); // If p1 plays 'a' and p2 plays 'c'
+  [b,d] z=1 -> (z'=0);
+endmodule
+
+// Rewards for player 1 (p1)
+rewards "goal_for_p1" player p1
+  x=1 & y=0 & z=1 : 1; // p1 gets a reward of 1 if this state is reached
+endrewards
+
+// Rewards for player 2 (p2) - can be defined similarly
+// rewards "goal_for_p2" player p2
+//   x=0 & y=1 : 1; 
+// endrewards
+            </code></pre>
+            <p class="mt-4">To analyze this CSG model, you would save it (e.g., as <code>example_csg.prism</code>) and then use PRISM-games to load it. Properties are typically specified using rPATL (reward Probabilistic Alternating-time Temporal Logic). For example, an rPATL property could be:</p>
+            <pre><code class="language-clike">
+// example_properties.pctl
+// Can player p1 ensure that eventually x=1 and y=0 and z=1 with probability 1?
+// (Assuming "goal_for_p1" is defined to give reward 1 in that state and 0 otherwise)
+&lt;&lt;p1&gt;&gt; Pmax=? [ F "goal_for_p1" ]
+
+// What is the maximum probability that player p1 can ensure eventually reaching a state
+// where x=1, regardless of player p2's actions?
+&lt;&lt;p1&gt;&gt; Pmax=? [ F (x=1) ]
+
+// Minimum expected reward for player p1 to reach "goal_for_p1"
+// (This might require specific reward structures and interpretations in CSGs)
+// &lt;&lt;p1&gt;&gt; Rmin{"goal_for_p1"}=? [ F (x=1 & y=0 & z=1) ]
+            </code></pre>
+            <p class="mt-2">Note: CSG modeling and rPATL property specification can be quite complex. The example above is a basic illustration. Refer to the PRISM-games manual for detailed syntax and capabilities.</p>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8 mt-auto">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0 text-center md:text-left">
+            <p class="text-sm">&copy; JSS 2025 - PRISM Models. All rights reserved.</p>
+            <p class="text-xs mt-1"><em>This page was developed for the ICO HERMES-Design project.</em></p>
+            <p class="text-xs"><em>Contact: abaouya@acm.org</em></p>
+          </div>
+          <div class="flex items-center space-x-6">
+            <!-- Placeholder for ICO Occitanie Logo -->
+            <a href="https://www.ico-occitanie.fr/" target="_blank" rel="noopener noreferrer" class="hover:opacity-75 transition-opacity">
+              <img src="logo1.png" alt="ICO Occitanie Logo" width="180" height="100">
+            </a>
+            <!-- Placeholder for IRIT Logo -->
+            <a href="https://www.irit.fr/" target="_blank" rel="noopener noreferrer" class="hover:opacity-75 transition-opacity">
+              <img src="logo2.png" alt="IRIT Logo" width="180" height="100">
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
-</footer>
+
+  <!-- Prism.js Core & CLike language -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+  <!-- You might need other languages for PRISM, e.g., prism-java or a custom one if PRISM syntax is very specific -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script> -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Prism.js for syntax highlighting
+      Prism.highlightAll();
+
+      // Mobile menu toggle
+      const menuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcons = menuButton.querySelectorAll('svg');
+
+      menuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+        const isExpanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+        menuButton.setAttribute('aria-expanded', !isExpanded);
+      });
+
+      // Smooth scroll and active link highlighting for navigation
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('main section[id]');
+
+      function updateActiveLink() {
+        let currentSectionId = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          // Adjust for sticky header height (approx 64px or 4rem)
+          if (window.scrollY >= sectionTop - 80) { 
+            currentSectionId = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('nav-link-active');
+          // Check if the link's href matches the current section ID
+          if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('nav-link-active');
+          }
+        });
+      }
+      
+      // Call on load and on scroll
+      updateActiveLink();
+      window.addEventListener('scroll', updateActiveLink);
+
+      // Close mobile menu when a link is clicked
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+          menuButton.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,101 @@
+{
+    "project_name": "GPS Sattelite System UCP",
+    "use_cases": [
+        {
+            "name": "GPS Sattelite System",
+            "description": "The location system based on GPS localization",
+            "complexity": "Complex"
+        }
+    ],
+    "actors": [
+        {
+            "name": "PRISM model Developer",
+            "description": "Main developer.",
+            "complexity": "Complex"
+        },
+        {
+            "name": "final user",
+            "description": "Manages system settings and content using GUI.",
+            "complexity": "simple"
+        }
+    ],
+    "environmental_factors": [
+        {
+            "name": "Familiarity with Development Environment",
+            "weight": 5.0
+        },
+        {
+            "name": "Application experience",
+            "weight": 5
+        },
+        {
+            "name": "Difficult programming language",
+            "weight": 5.0
+        }
+    ],
+    "technical_factors": [
+        {
+            "name": "Distributed System",
+            "weight": 0
+        },
+        {
+            "name": "Response time/performance objectives",
+            "weight": 5
+        },
+        {
+            "name": "End-user efficiency",
+            "weight": 5
+        },
+        {
+            "name": "Internal processing complexity",
+            "weight": 5
+        },
+        {
+            "name": "Code reusability",
+            "weight": 5
+        },
+        {
+            "name": "Easy to install",
+            "weight": 5
+        },
+                {
+            "name": "Easy to use",
+            "weight": 5
+        },
+        {
+            "name": "Portability to other platforms",
+            "weight": 0
+        },
+        {
+            "name": "System maintenance",
+            "weight": 5
+        },
+        {
+            "name": "Concurrent/parallel processing",
+            "weight": 5
+        },
+         {
+            "name": "Security features",
+            "weight": 0
+        },
+        {
+            "name": "Access for third parties",
+            "weight": 5
+        },
+        {
+            "name": "End user training",
+            "weight": 0.0
+        }
+        
+    ],
+    "unadjusted_use_case_weights": {
+        "simple": 5,
+        "average": 10,
+        "complex": 15
+    },
+    "unadjusted_actor_weights": {
+        "simple": 1,
+        "average": 2,
+        "complex": 3
+    }
+}

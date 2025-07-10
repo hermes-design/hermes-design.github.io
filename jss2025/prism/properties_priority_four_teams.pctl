@@ -1,0 +1,5 @@
+const int T;
+
+// Rewards to manufecture the sattelite on ground in 15 years
+<<p1,p3,p4,p5>>R{"manufecture"}max=? [ F (rounds=k) ]
+
