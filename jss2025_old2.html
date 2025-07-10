@@ -89,7 +89,6 @@ hs.src = ('//s10.histats.com/js15_as.js');
               <a href="#paper" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Paper</a>
               <a href="#artefacts" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Artefacts</a>
               <a href="#prism-guide" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">PRISM Guide</a>
-              <a href="#ucp-guide" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">UCP Guide</a>
             </div>
           </div>
           <!-- Mobile Menu Button -->
@@ -112,7 +111,6 @@ hs.src = ('//s10.histats.com/js15_as.js');
           <a href="#paper" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Paper</a>
           <a href="#artefacts" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Artefacts</a>
           <a href="#prism-guide" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">PRISM Guide</a>
-          <a href="#ucp-guide" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">UCP Guide</a>
         </div>
       </div>
     </header>
@@ -247,7 +245,7 @@ hs.src = ('//s10.histats.com/js15_as.js');
               </tr>
               
                            <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C2</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C1</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Python code for UCP analysis</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                   <a href="jss2025/python/ucp_reader.py" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Python Code">Download <i class="fas fa-download ml-1"></i></a>
@@ -361,134 +359,6 @@ endrewards
 
         </div>
       </section>
-
-      <!-- UCP Guide Section -->
-      <section id="ucp-guide" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">UCP (Use Case Points) Analysis Guide</h2>
-        <div class="space-y-6 text-gray-700">
-          <div>
-            <h3 class="text-xl font-medium text-gray-800 mb-2">About <code>ucp_reader.py</code></h3>
-            <p>The <code>ucp_reader.py</code> script is a Python utility designed to calculate Use Case Points (UCP) based on input data provided in a JSON file. It computes Unadjusted Use Case Weight (UUCW), Unadjusted Actor Weight (UAW), Technical Complexity Factor (TCF), Environmental Complexity Factor (ECF), and the final Use Case Points (UCP). Additionally, it generates an estimated effort in hours based on a range of "hours per UCP" values and saves this data to a CSV file.</p>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-medium text-gray-800 mb-2">How to Use <code>ucp_reader.py</code></h3>
-            <p>To run the <code>ucp_reader.py</code> script, you need to provide the path to your UCP data JSON file as a command-line argument. The script will then process this file, perform the calculations, print a summary to the console, and generate a CSV file named <code>ucp_estimated_effort.csv</code> in the same directory.</p>
-            <p class="mt-4"><strong>Command Line Usage:</strong></p>
-            <pre><code class="language-bash">
-python3 ucp_reader.py ucp_data.json
-            </code></pre>
-            <p class="mt-2">Replace <code>ucp_data.json</code> with the actual path to your JSON input file.</p>
-            <p class="mt-4"><strong>Example <code>ucp_data.json</code> Structure:</strong></p>
-            <p>The input JSON file should follow a specific structure, including sections for <code>use_cases</code>, <code>actors</code>, <code>environmental_factors</code>, <code>technical_factors</code>, and their respective weights. Here's the structure from the provided <code>ucp_data.json</code> file:</p>
-            <pre><code class="language-json">
-{
-    "project_name": "GPS Sattelite System UCP",
-    "use_cases": [
-        {
-            "name": "GPS Sattelite System",
-            "description": "The location system based on GPS localization",
-            "complexity": "Complex"
-        }
-    ],
-    "actors": [
-        {
-            "name": "PRISM model Developer",
-            "description": "Main developer.",
-            "complexity": "Complex"
-        },
-        {
-            "name": "final user",
-            "description": "Manages system settings and content using GUI.",
-            "complexity": "simple"
-        }
-    ],
-    "environmental_factors": [
-        {
-            "name": "Familiarity with Development Environment",
-            "weight": 5.0
-        },
-        {
-            "name": "Application experience",
-            "weight": 5
-        },
-        {
-            "name": "Difficult programming language",
-            "weight": 5.0
-        }
-    ],
-    "technical_factors": [
-        {
-            "name": "Distributed System",
-            "weight": 0
-        },
-        {
-            "name": "Response time/performance objectives",
-            "weight": 5
-        },
-        {
-            "name": "End-user efficiency",
-            "weight": 5
-        },
-        {
-            "name": "Internal processing complexity",
-            "weight": 5
-        },
-        {
-            "name": "Code reusability",
-            "weight": 5
-        },
-        {
-            "name": "Easy to install",
-            "weight": 5
-        },
-                {
-            "name": "Easy to use",
-            "weight": 5
-        },
-        {
-            "name": "Portability to other platforms",
-            "weight": 0
-        },
-        {
-            "name": "System maintenance",
-            "weight": 5
-        },
-        {
-            "name": "Concurrent/parallel processing",
-            "weight": 5
-        },
-         {
-            "name": "Security features",
-            "weight": 0
-        },
-        {
-            "name": "Access for third parties",
-            "weight": 5
-        },
-        {
-            "name": "End user training",
-            "weight": 0.0
-        }
-        
-    ],
-    "unadjusted_use_case_weights": {
-        "simple": 5,
-        "average": 10,
-        "complex": 15
-    },
-    "unadjusted_actor_weights": {
-        "simple": 1,
-        "average": 2,
-        "complex": 3
-    }
-}
-            </code></pre>
-            <p class="mt-2">Ensure your JSON file adheres to this structure for the script to parse the data correctly.</p>
-          </div>
-        </div>
-      </section>
-
     </main>
 
     <!-- Footer -->
@@ -518,8 +388,6 @@ python3 ucp_reader.py ucp_data.json
   <!-- Prism.js Core & CLike language -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
   <!-- You might need other languages for PRISM, e.g., prism-java or a custom one if PRISM syntax is very specific -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script> -->
 
@@ -580,4 +448,3 @@ python3 ucp_reader.py ucp_data.json
   </script>
 </body>
 </html>
-
