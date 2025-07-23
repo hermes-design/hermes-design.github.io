@@ -1,0 +1,159 @@
+ctmc
+
+// constants
+const int REFBE_MAX=8;
+
+const int Nominal = 2;
+const int Degraded = 1;
+const int Severely_Degraded = 0;
+const int k=12;//bursts
+
+// rates
+const int fls_degraded;
+const int fls_severely_degraded;
+
+
+//sattelite
+const double r=0.88;
+const double a=0.995;
+const double lifespan=12*365*24;
+const double lambda_sat =-log(r,2.71828183)/lifespan;
+const double sat_MTTR = (lambda_sat * (1 - a)) / a ;
+
+//SAR_RLS
+const double lambda_rls=(7/(30*24)); // 7 hours
+const double lambda_rlm=(7/(30*24)); // 7 hours
+const double SAR_RLS_AVAILABILITY=0.998;
+const double SAR_RLS_MESSAGES_FAIL=2000;
+const double SAR_RLS_MTTR=(lambda_sat * (1 - SAR_RLS_AVAILABILITY)) / SAR_RLS_AVAILABILITY ;
+
+//SAR_FLS
+const double lambda_fls1=(24/(30*24)); // 24 hours
+const double lambda_fls2=(48/(30*24)); // 48 hours
+const double lambda_comm_loss_2_ECA=24/(30*24); // 24 hours
+const double lambda_comm_loss_3_ECA=4/(30*24); // 4 hours
+const double lambda_comm_loss_5_days=(5*24)/(30*24); // 24 hours
+const double SAR_FLS_AVAILABILITY=0.997;
+const double SAR_FLS_MTTR=  (lambda_sat * (1 - SAR_FLS_AVAILABILITY)) / SAR_FLS_AVAILABILITY ;
+//REFBE
+const double lambda_REFBE=(5*24)/(30*24); // 5 days
+//LUT
+const double SAR_LUT_AVAILABILITY=0.987;
+const double SAR_LUT_MTTR=1 / (1 - SAR_LUT_AVAILABILITY);
+//SIS
+const double SIS_FAULT=0.00003;
+const double healthy_signal=0.9926;
+const double healthy_signal_recovery=15;
+const double SIGNAL_MTBF = (healthy_signal * healthy_signal_recovery) / (1 - healthy_signal);
+
+
+
+
+const double lambda_fls_degraded= fls_degraded=1?lambda_fls1:(fls_degraded=2 ? lambda_fls2 : (fls_degraded=3 ? 2*lambda_comm_loss_2_ECA : (fls_degraded=4 ? lambda_REFBE : (fls_degraded=5 ? REFBE_MAX*lambda_comm_loss_5_days : 0))));
+const double lambda_fls_severely_degraded=fls_severely_degraded=1?lambda_fls1:(fls_severely_degraded=2 ? lambda_fls2 : (fls_severely_degraded=3 ? 3*lambda_comm_loss_3_ECA : (fls_severely_degraded=4 ? REFBE_MAX*lambda_comm_loss_5_days : 0)));
+
+const double lambda_rls_degraded=lambda_rls;
+const double lambda_rls_severely_degraded=lambda_rlm;
+
+module SAR_FLS_SERVICE
+
+SAR_FLS_s : [0..3] init 3;
+
+[] SAR_FLS_s>0             -> lambda_fls_degraded:(SAR_FLS_s'=Degraded); // Degraded fault
+
+[] SAR_FLS_s>0             -> lambda_fls_severely_degraded:(SAR_FLS_s'=Severely_Degraded); // Severely Degraded mode
+
+[SAR_FLS_NOMINAL] SAR_FLS_s=Degraded       -> (1/SAR_FLS_MTTR) : (SAR_FLS_s'=Nominal); // repair after degraded
+
+endmodule
+
+label "SAR_FLS_down" = (SAR_FLS_s=Severely_Degraded) | (SAR_FLS_s=Degraded);
+
+
+module SAR_RLS_SERVICE
+
+SAR_RLS_s : [0..3] init 3;
+
+[] SAR_RLS_s>0             -> lambda_rls_degraded:(SAR_RLS_s'=Degraded); // Degraded fault
+
+[] SAR_RLS_s>0             -> lambda_rls_severely_degraded:(SAR_RLS_s'=Severely_Degraded); // Severely Degraded mode
+
+[SAR_RLS_NOMINAL] SAR_RLS_s=Degraded   -> (1/SAR_RLS_MTTR) : (SAR_RLS_s'=Nominal); // repair after degraded
+
+endmodule
+
+label "SAR_RLS_down" = (SAR_RLS_s=Severely_Degraded) | (SAR_RLS_s=Degraded);
+
+
+module SAR_DETECTION_SERVICE
+
+SAR_DETECTION_s : [0..3] init 3;
+
+[] SAR_DETECTION_s>0 -> 1/SIGNAL_MTBF:(SAR_DETECTION_s'=Degraded); // signal transmission
+
+[SAR_DETECTION_NOMINAL] SAR_DETECTION_s=Degraded    -> 1/healthy_signal_recovery: (SAR_DETECTION_s'=Nominal); // repair after degraded
+
+endmodule
+
+label "SAR_DETECTION_down" = (SAR_DETECTION_s=Severely_Degraded) | (SAR_DETECTION_s=Degraded);
+
+
+// connecting flow
+module flow
+
+SAR_FLS : bool init false; 
+
+SAR_RLS : bool init false; 
+
+SAR_DETECTION : bool init false;
+
+SAR_SAT : bool init true;
+
+[SAR_FLS_NOMINAL] true -> 1 : (SAR_FLS'=(SAR_FLS_s>=Nominal));
+
+[SAR_RLS_NOMINAL] true -> 1 : (SAR_RLS'=(SAR_RLS_s>=Nominal));
+
+[SAR_DETECTION_NOMINAL] true -> 1:(SAR_DETECTION'=(SAR_DETECTION_s>=Nominal));
+
+endmodule
+
+
+
+
+rewards "up"
+	up : 1/3600;
+endrewards
+
+rewards "danger"
+	danger : 1/3600;
+endrewards
+
+
+rewards "down"
+	down : 1/3600;
+endrewards
+
+
+
+
+label "down"= (SAR_RLS_s=Degraded)  | (SAR_FLS_s=Degraded) | (SAR_DETECTION_s=Degraded) ;
+formula down= (SAR_RLS_s=Degraded)  | (SAR_FLS_s=Degraded) | (SAR_DETECTION_s=Degraded) ;
+
+label "danger"= (SAR_RLS_s=Severely_Degraded)  | (SAR_FLS_s=Severely_Degraded)  ;
+formula danger= (SAR_RLS_s=Severely_Degraded)  | (SAR_FLS_s=Severely_Degraded)  ;
+
+label "degraded"= (SAR_RLS_s=Degraded)  | (SAR_FLS_s=Degraded) | (SAR_DETECTION_s=Degraded) ;
+formula degraded= (SAR_RLS_s=Degraded)  | (SAR_FLS_s=Degraded) | (SAR_DETECTION_s=Degraded) ;
+
+label "severly_degraded"= (SAR_RLS_s=Severely_Degraded)  | (SAR_FLS_s=Severely_Degraded)  ;
+formula severly_degraded= (SAR_RLS_s=Severely_Degraded)  | (SAR_FLS_s=Severely_Degraded)  ;
+
+
+label "up" = !down & !danger;
+
+formula up = !down & !danger;
+
+label "ok" = SAR_FLS & SAR_RLS & SAR_DETECTION;
+
+
+

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="JSS 2025 - PRISM Models and Documentation">
+  <title>IoT 2025 - PRISM Models</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Prism.js CSS (Tomorrow Night theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <!-- Custom Styles -->
+  <style>
+    /* Inter Font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    /* Active Nav Link Style */
+    .nav-link-active {
+      @apply bg-sky-700 text-white;
+    }
+    /* Ensure content pushes footer down */
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .content-wrapper {
+      flex-grow: 1;
+    }
+    /* Styling for code elements not in pre blocks */
+    code:not(pre > code) {
+      @apply bg-gray-200 text-gray-800 px-1 py-0.5 rounded-md text-sm;
+    }
+    /* Styling for pre blocks (Prism.js will also apply styles) */
+    pre[class*="language-"] {
+      @apply rounded-lg shadow-md my-6;
+    }
+         .hidden {
+      display: none;
+    }
+  </style>
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- MathJax for LaTeX rendering -->
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800 leading-relaxed">
+
+
+  
+  
+  <div class="page-wrapper">
+    <!-- Header & Navigation -->
+    <header class="bg-sky-600 text-white shadow-lg sticky top-0 z-50">
+      <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <a href="#" class="text-2xl font-bold">IoT 2025</a>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+            <!--  <a href="#paper" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Title</a>-->
+              <a href="#artefacts" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Artefacts</a>
+              <a href="#prism-guide" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">PRISM Guide</a>
+              <a href="#hypothermia-stages" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Hypothermia Stages</a>
+              <a href="#galileo-parameters" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Galileo Parameters</a>
+            </div>
+          </div>
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden">
+            <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-sky-200 hover:text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <!-- Mobile Menu -->
+      <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <!-- <a href="#paper" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Paper</a>-->
+          <a href="#artefacts" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Artefacts</a>
+          <a href="#prism-guide" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">PRISM Guide</a>
+          <a href="#hypothermia-stages" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Hypothermia Stages</a>
+          <a href="#galileo-parameters" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Galileo Parameters</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content-wrapper container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Paper Information Section -->
+      <section id="paper" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <header class="mb-4 border-b pb-2">
+          <h1 class="text-2xl font-semibold text-sky-700">Journal of Internet of Things 2025</h1>
+        </header>
+        <article class="text-gray-700">
+          <p class="text-xl font-medium">Quantitative Assessment of Performance Degradation in Model-Based Galileo SAR Systems Considering Human Factors: Hypothermia-Induced Physiological and Psychological Variability</p>
+          <p class="mt-2 italic">Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.</p>
+          <p class="mt-1 text-sm">In <em class="font-semibold">Elsevier Journal of Internet of Things</em>, 2025 (Submitted).</p>
+        </article>
+      </section>
+
+      <!-- Artefacts Section -->
+      <section id="artefacts" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">Developed Artefacts</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 rounded-lg">
+            <thead>
+              <tr>
+                <th scope="col" colspan="4" class="px-6 py-3 text-left text-m font-medium text-white uppercase tracking-wider bg-sky-500">PRISM Artefacts</th>
+              </tr>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PRISM Model Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Properties</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P1</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Modeling Hypothermia Status with CTMC.</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/hypothermia.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Simple CSG Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/properties.csl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for Simple CSG Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P2</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Satellite System Modeling in CTMC</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/hypothermia.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/properties.csl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P3</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A Composed Model for Human-in-the-Loop Systems using CTMC</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/hypothermia.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/properties.csl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+              </tr>
+            </tbody>
+                          <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">P4</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A CSG Model for Human-in-the-Loop Systems</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/hypothermia.nm" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="iot2025/prism/properties.csl" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Properties for CSG Satellite Model with Priority">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="min-w-full divide-y divide-gray-200 rounded-lg mt-8">
+             <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" colspan="4" class="px-6 py-3 text-left text-m font-medium text-white uppercase tracking-wider bg-sky-500">Python Artefacts</th>
+              </tr>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Python Code Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inputs</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C1</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Python code for performance estimation and source code analysis</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="jss2025/python/eval.py" download class="text-sky-600 hover:text-sky-800 hover:underline" aria-label="Download Python Code">Download <i class="fas fa-download ml-1"></i></a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">N/A</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PRISM Guide Section -->
+      <section id="prism-guide" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">PRISM Guide</h2>
+        <div class="space-y-6 text-gray-700">
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Downloading PRISM</h3>
+            <ol class="list-decimal list-inside space-y-1 pl-4">
+              <li>
+                <strong>Visit the download page:</strong>
+                <a href="https://www.prismmodelchecker.org/download.php" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://www.prismmodelchecker.org/download.php</a>
+              </li>
+              <li>
+                <strong>Download the appropriate binary:</strong>
+                <ul class="list-disc list-inside pl-6 mt-1 space-y-0.5">
+                  <li>Check your computer's operating system (Windows, macOS, Linux)</li>
+                  <li>Check your computer's architecture (32-bit or 64-bit)</li>
+                  <li>Download the corresponding binary file</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Installing PRISM</h3>
+            <p>Follow the installation instructions provided on the official website:
+              <a href="https://www.prismmodelchecker.org/manual/install.php" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://www.prismmodelchecker.org/manual.php</a>
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Using PRISM</h3>
+            <p>For detailed usage instructions, refer to the official documentation:
+              <a href="https://www.prismmodelchecker.org/manual.php" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://www.prismmodelchecker.org/manual.php</a>
+            </p>
+          </div>
+          
+          <!-- CTMC Enqueue/Dequeue example -->
+          <div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Modeling CTMC in PRISM: Enqueue and Dequeue System</h3>
+            <p>
+              This example models a simple queueing system using a Continuous-Time Markov Chain (CTMC).
+              Items arrive at a queue with a certain rate (enqueue), and are processed and leave the queue with another rate (dequeue).
+            </p>
+            <h4 class="text-lg font-medium text-gray-700 mt-4 mb-2">Example CTMC Model: Enqueue/Dequeue Queue</h4>
+            <pre><code class="language-clike">
+// enqueue_dequeue_ctmc.prism
+// Defines a Continuous-Time Markov Chain (CTMC) model
+
+ctmc
+
+// Constant for the maximum capacity of the queue
+const int MAX_CAPACITY = 5;
+
+// Module defining the queue behavior
+module Queue
+  // State variable 'count' represents the number of items in the queue
+  count : [0..MAX_CAPACITY] init 0; // Initial count is 0
+
+  // Transition for enqueueing an item
+  // If the queue is not full, an item can be enqueued
+  [enqueue] count < MAX_CAPACITY -> rate_enqueue : (count' = count + 1);
+
+  // Transition for dequeueing an item
+  // If there are items in the queue, an item can be dequeued
+  [dequeue] count > 0 -> rate_dequeue : (count' = count - 1);
+endmodule
+
+// Rates for enqueue and dequeue operations
+const double rate_enqueue = 0.2; // Rate at which items arrive
+const double rate_dequeue = 0.3; // Rate at which items are processed
+
+// Rewards structure to track the queue length
+rewards "queue_length"
+  true : count; // The reward is the current number of items in the queue
+endrewards
+            </code></pre>
+            <h4 class="text-lg font-medium text-gray-700 mt-4 mb-2">Example CTMC Properties for Enqueue/Dequeue System</h4>
+            <pre><code class="language-clike">
+// enqueue_dequeue_properties.csl
+// Properties to verify on the CTMC model
+
+// P=? [ S=50 ] (count=MAX_CAPACITY)
+// Probability that the queue reaches its maximum capacity (MAX_CAPACITY) within 50 time units.
+P=? [ S=50 ] (count=MAX_CAPACITY)
+
+// R{"queue_length"}=? [ S=100 ]
+// Expected cumulative reward (total queue length over time) within 100 time units.
+R{"queue_length"}=? [ S=100 ]
+
+// R{"time"}=? [ F (count=MAX_CAPACITY) ]
+// Expected time until the queue first reaches its maximum capacity.
+R{"time"}=? [ F (count=MAX_CAPACITY) ]
+
+// S=? [ count=0 ]
+// Steady-state probability that the queue is empty.
+S=? [ count=0 ]
+
+// R{"queue_length"}=? [ S ]
+// Expected steady-state value of the queue length.
+R{"queue_length"}=? [ S ]
+            </code></pre>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- Updated Hypothermia Stages Section -->
+      <section id="hypothermia-stages" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">
+          <i class="fas fa-thermometer-half mr-3 text-sky-600"></i>
+          Hypothermia Stages and Clinical Signs
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Core Temp (°C)</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consciousness</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shivering</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Voluntary movement</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Probability of voluntary arm use (WEP)</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">HT I</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-thermometer-three-quarters text-red-500 mr-2"></i>35–32</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-brain text-green-600 mr-2"></i>Alert and conscious</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-snowflake text-blue-500 mr-2 animate-pulse"></i>Vigorous shivering</td>
+                <td class="px-6 py-4 text-sm text-gray-600"><i class="fas fa-person-walking text-green-600 mr-2"></i>Coordinated movement possible</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-700"><i class="fas fa-check-circle text-green-700 mr-2"></i>Very likely</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">HT II</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-thermometer-half text-orange-500 mr-2"></i>&lt;32–28</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-head-side-cough text-yellow-600 mr-2"></i>Drowsy or confused</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">± Shivering may cease</td>
+                <td class="px-6 py-4 text-sm text-gray-600"><i class="fas fa-person-falling text-yellow-600 mr-2"></i>Uncoordinated or absent movement</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-yellow-700"><i class="fas fa-question-circle text-yellow-700 mr-2"></i>Probable</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">HT III</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-thermometer-quarter text-blue-500 mr-2"></i>&lt;28–24</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-bed text-orange-600 mr-2"></i>Unconscious, unresponsive</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-ban text-gray-500 mr-2"></i>Shivering absent</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-ban text-orange-600 mr-2"></i>No voluntary movement</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-orange-700"><i class="fas fa-minus-circle text-orange-700 mr-2"></i>Almost Certainly Not</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">HT IV</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-thermometer-empty text-indigo-600 mr-2"></i>&lt;24</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-skull-crossbones text-red-700 mr-2"></i>Coma / asystole (apparent death)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-ban text-gray-500 mr-2"></i>Shivering absent</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i class="fas fa-bed text-red-700 mr-2"></i>No movement</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-700"><i class="fas fa-times-circle text-red-700 mr-2"></i>Nearly impossible</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4 text-sm italic text-gray-600">
+          Caption: Estimated probability of voluntary arm use by hypothermia stage, based on clinical signs and mapped using Words of Estimative Probability (WEP).
+        </p>
+        <h3 class="text-xl font-medium text-gray-800 mt-6 mb-2">References for Hypothermia Stages:</h3>
+        <ol class="list-decimal list-outside space-y-3 text-gray-700 pl-6">
+          <li class="mb-2 p-2 rounded-md transition-colors duration-200 hover:bg-gray-50">
+            Cleveland Clinic. (n.d.). <em>Hypothermia (Low Body Temperature)</em>. Retrieved July 11, 2025, from <a href="https://my.clevelandclinic.org/health/diseases/21164-hypothermia-low-body-temperature" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://my.clevelandclinic.org/health/diseases/21164-hypothermia-low-body-temperature</a>
+          </li>
+          <li class="mb-2 p-2 rounded-md transition-colors duration-200 hover:bg-gray-50">
+            Benezet-Mazuecos, J., Ibanez, B., & Farre, J. (2006). Severe hypothermia showing Osborn waves associated with transient atrial fibrillation and ST segment depression. <em>Heart</em>, 92(11), 1666. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1861236/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://pmc.ncbi.nlm.nih.gov/articles/PMC1861236/</a>
+          </li>
+          <li class="mb-2 p-2 rounded-md transition-colors duration-200 hover:bg-gray-50">
+            Stocks, J. M., Taylor, N. A. S., Tipton, M. J., & Greenleaf, J. E. (2004). Human physiological responses to cold exposure. <em>Aviation, Space, and Environmental Medicine</em>, 75(5), 444–457. <a href="https://pubmed.ncbi.nlm.nih.gov/15152898/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://pubmed.ncbi.nlm.nih.gov/15152898/</a>
+          </li>
+          <li class="mb-2 p-2 rounded-md transition-colors duration-200 hover:bg-gray-50">
+            Deslarzes, T., Rousson, V., Yersin, B., Durrer, B., & Pasquier, M. (2016). An evaluation of the Swiss staging model for hypothermia using case reports from the literature. <em>Scandinavian Journal of Trauma, Resuscitation and Emergency Medicine</em>, 24(1), 16. <a href="https://doi.org/10.1186/s13049-016-0210-y" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 hover:underline">https://doi.org/10.1186/s13049-016-0210-y</a>
+          </li>
+        </ol>
+      </section>
+
+      <!-- SAR Galileo Parameters Section -->
+      <section id="galileo-parameters" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">
+          <i class="fas fa-satellite-dish mr-3 text-sky-600"></i>
+          Galileo System Parameters and Degradation Rates
+        </h2>
+        <h3 class="text-xl font-medium text-gray-800 mb-4">SAR Galileo System Parameters</h3>
+        <div class="overflow-x-auto mb-8">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+            <thead>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Parameter</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Value</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Rate Type</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Computed Rate (1/min)</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Satellite Reliability over 12 years</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$88\%$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Failure Rate $\lambda_s$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$2.03 \times 10^{-8}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthy Signal Availability</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$99.22\%$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Failure Rate $\lambda_{HS}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$8.7 \times 10^{-6}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Service Recovery Time ($T_{\text{rec,HS}}$)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$15$ hours</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Recovery Rate $\mu_{HS}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.11 \times 10^{-3}$</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="mt-4 text-sm italic text-gray-600 text-center">
+            Caption: Extracted Parameters and Computed Rates for Galileo SAR System
+          </p>
+        </div>
+
+        <h3 class="text-xl font-medium text-gray-800 mb-4 mt-8">Forward Link Service (FLS) Degradation States</h3>
+        <div class="overflow-x-auto mb-8">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+            <thead>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">State</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-5/12">Condition Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Threshold</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Degradation Rate </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Repair Rate </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Nominal</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Normal operation</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td rowspan="5" class="px-6 py-4 text-sm font-medium text-gray-900 align-top">Degraded</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Non-operational for less than 24 hours continuously</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&lt; 24 h continuous</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$6.94 \times 10^{-4}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.39 \times 10^{-3}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">Less than 48 hours cumulatively per month</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&lt; 48 h per month</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$3.47 \times 10^{-4}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.39 \times 10^{-3}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">Communication loss with 1–2 LUTs for more than 1 day</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&gt; 1 day (LUTs)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$6.94 \times 10^{-4}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.00 \times 10^{-3}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">Only 1 REFBE is nominal</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$6.94 \times 10^{-4}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">No REFBE operational for less than 5 days</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&lt; 5 days (REFBE)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.39 \times 10^{-5}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$2.78 \times 10^{-4}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td rowspan="3" class="px-6 py-4 text-sm font-medium text-gray-900 align-top">Severely Degraded</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Non-operational for more than 24 hours continuously</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&gt; 24 h continuous</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$6.94 \times 10^{-4}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.39 \times 10^{-3}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">More than 48 hours cumulatively per month</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&gt; 48 h per month</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$3.47 \times 10^{-4}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$6.94 \times 10^{-4}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">Communication loss with all 3 LUTs and MCCs for more than 4 hours</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&gt; 4 h (full comm loss)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$4.17 \times 10^{-3}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.39 \times 10^{-3}$</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="mt-4 text-sm italic text-gray-600 text-center">
+            Caption: Forward Link Service Degradation states with condition-by-condition thresholds and corresponding degradation rates $\lambda_d$ and repair rates $\mu_r$ (1/min).
+          </p>
+        </div>
+
+        <h3 class="text-xl font-medium text-gray-800 mb-4 mt-8">Return Link Service (RLS) Degradation States</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+            <thead>
+              <tr class="bg-gray-50">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">State</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-4/12">Condition Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Threshold</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Degradation Rate </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Repair Rate </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Nominal</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Normal operation</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td rowspan="2" class="px-6 py-4 text-sm font-medium text-gray-900 align-top">Degraded</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Non-operational for less than 7 hours continuously</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&lt; 7 h continuous</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$2.38 \times 10^{-3}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$4.52 \times 10^{-2}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600">RLM compliance with MPL rate</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$8.33 \times 10^{-6}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$1.67 \times 10^{-2}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td rowspan="2" class="px-6 py-4 text-sm font-medium text-gray-900 align-top">Severely Degraded</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Non-operational for more than 7 hours continuously</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">&gt; 7 h continuous</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$2.08 \times 10^{-3}$</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$3.95 \times 10^{-2}$</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-600"></td> <!-- Empty description as per user's LaTeX -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">—</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="mt-4 text-sm italic text-gray-600 text-center">
+            Caption: Return Link Service Degradation states with condition-by-condition thresholds and corresponding degradation rates $\lambda_d$ and repair rates $\mu_r$ (1/min).
+          </p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8 mt-auto">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0 text-center md:text-left">
+            <p class="text-sm">&copy; IoT 2025 - PRISM Models. All rights reserved.</p>
+            <p class="text-xs mt-1"><em>This page was developed for the ICO HERMES-Design project.</em></p>
+            <p class="text-xs"><em>Contact: abaouya@acm.org</em></p>
+          </div>
+          <div class="flex items-center space-x-6">
+            <!-- Placeholder for ICO Occitanie Logo -->
+            <a href="https://www.ico-occitanie.fr/" target="_blank" rel="noopener noreferrer" class="hover:opacity-75 transition-opacity">
+              <img src="logo1.png" alt="ICO Occitanie Logo" width="180" height="100" onerror="this.onerror=null;this.src='https://placehold.co/180x100/ffffff/333333?text=Logo+1';">
+            </a>
+            <!-- Placeholder for IRIT Logo -->
+            <a href="https://www.irit.fr/" target="_blank" rel="noopener noreferrer" class="hover:opacity-75 transition-opacity">
+              <img src="logo2.png" alt="IRIT Logo" width="180" height="100" onerror="this.onerror=null;this.src='https://placehold.co/180x100/ffffff/333333?text=Logo+2';">
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Prism.js Core & CLike language -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Prism.js for syntax highlighting
+      Prism.highlightAll();
+
+      // Mobile menu toggle
+      const menuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcons = menuButton.querySelectorAll('svg');
+
+      menuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+        const isExpanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
+        menuButton.setAttribute('aria-expanded', !isExpanded);
+      });
+
+      // Smooth scroll and active link highlighting for navigation
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('main section[id]');
+
+      function updateActiveLink() {
+        let currentSectionId = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          // Adjust for sticky header height (approx 64px or 4rem)
+          if (window.scrollY >= sectionTop - 80) { 
+            currentSectionId = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('nav-link-active');
+          // Check if the link's href matches the current section ID
+          if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('nav-link-active');
+          }
+        });
+      }
+      
+      // Call on load and on scroll
+      updateActiveLink();
+      window.addEventListener('scroll', updateActiveLink);
+
+      // Close mobile menu when a link is clicked
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          menuIcons.forEach(icon => icon.classList.toggle('hidden'));
+          menuButton.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+    });
+  </script>
+</body>
+</html>
+
