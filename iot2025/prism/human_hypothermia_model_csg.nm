@@ -1,0 +1,101 @@
+
+// Model type: Concurrent Stochastic Game (CSG).
+// Actions not explicitly assigned to a player are controlled by Nature (Player 0).
+
+csg
+player p1  Hypothermia_Human_Degradation endplayer
+player p2  Sattelite endplayer
+
+// System state constants for human hypothermia stages and intervention outcomes.
+// States are ordered from most critical (0) to normal (5) for clarity in variable 's' range.
+const int Rescued_State        = 0;  // Represents a successful rescue and full recovery to a safe state.
+const int Hypothermia_STAGE_IV = 1;  // Represents profound hypothermia (the most critical stage before rescue or death).
+const int Hypothermia_STAGE_III= 2;  // Represents severe hypothermia.
+const int Hypothermia_STAGE_II = 3;  // Represents moderate hypothermia.
+const int Hypothermia_STAGE_I  = 4;  // Represents mild hypothermia.
+const int Normal               = 5;  // Represents the normal body temperature state.
+
+// Constants for Satellite operational status.
+const int Satellite_Operational = 0; // Satellite is fully functional and ready for tasks.
+const int Satellite_Failed      = 1; // Satellite has failed and is non-operational.
+
+// Probabilities of degrading to the next hypothermia stage per discrete time step.
+// These are transition probabilities, indicating the likelihood of progression in one step.
+const double p_h1=0.93; // Probability of degrading human from Normal to Hypothermia_STAGE_I.
+const double p_h2=0.75; // Probability of degrading human from Hypothermia_STAGE_I to Hypothermia_STAGE_II.
+const double p_h3=0.07; // Probability of degrading human from Hypothermia_STAGE_II to Hypothermia_STAGE_III.
+
+// Satellite reliability: Probability of the satellite *remaining operational* per time step.
+const double r; // Probability that the satellite does NOT degrade in a given time step.
+
+const double e_h1; //Rescue operation winning probability in case of hypotermia stage 1
+const double e_h2; //Rescue operation winning probability in case of hypotermia stage 2
+const double e_h3; //Rescue operation winning probability in case of hypotermia stage 3
+
+module Hypothermia_Human_Degradation
+
+  // State variable 's' representing the current hypothermia stage of the human.
+  // Initialized to 'Normal' (state 5), indicating a healthy starting condition.
+  s : [0..5] init Hypothermia_STAGE_I;
+
+  // Degradation transitions for the human's hypothermia.
+  [degrade_to_h1]     s=Hypothermia_STAGE_I  -> (1-p_h1) : (s'=Hypothermia_STAGE_II)  + (p_h1) : (s'=Hypothermia_STAGE_I);
+  [degrade_to_h2]     s=Hypothermia_STAGE_II -> (1-p_h2) : (s'=Hypothermia_STAGE_III) + (p_h2) : (s'=Hypothermia_STAGE_II);
+  [degrade_to_h3]     s=Hypothermia_STAGE_III-> (1-p_h3) : (s'=Hypothermia_STAGE_IV)  + (p_h3) : (s'=Hypothermia_STAGE_III);
+
+endmodule
+
+module RescueOperation
+  // State variable 'rescue' to indicate the outcome of a rescue attempt (0: failure, 1: success).
+  rescue : [0..1] init 0;
+
+  // These transitions define the outcome of a rescue attempt *triggered by synchronized events*.
+  // The module takes this transition ONLY if both a human degradation event (e.g., degrade_to_h1)
+  // AND a satellite degradation event (degrade_sattelite) occur simultaneously.
+
+  // Rescue outcome when human degrades to Stage I AND satellite also attempts to degrade (but is operational).
+  [degrade_to_h1,degrade_sattelite] s=Hypothermia_STAGE_I & Sattelite_s=Satellite_Operational -> e_h1:(rescue'=1)+(1-e_h1):(rescue'=0);
+
+  // Rescue outcome when human degrades to Stage II AND satellite also attempts to degrade (but is operational).
+  [degrade_to_h2,degrade_sattelite] s=Hypothermia_STAGE_II & Sattelite_s=Satellite_Operational -> e_h2:(rescue'=1)+(1-e_h2):(rescue'=0);
+
+  // Rescue outcome when human degrades to Stage III AND satellite also attempts to degrade (but is operational).
+  [degrade_to_h3,degrade_sattelite] s=Hypothermia_STAGE_III & Sattelite_s=Satellite_Operational -> e_h3:(rescue'=1)+(1-e_h3):(rescue'=0);
+
+
+endmodule
+
+
+
+module Sattelite
+
+  // State variable 'Sattelite_s' representing the satellite's operational status.
+  // Initialized to 'Satellite_Operational' (state 0), indicating it starts functional.
+  Sattelite_s : [0..1] init Satellite_Operational;
+
+  // Degradation transition for the satellite. This is typically controlled by Nature.
+  // With probability (1-r), the satellite degrades to 'Satellite_Failed'.
+  // With probability 'r' (its reliability), it remains 'Satellite_Operational'.
+  [degrade_sattelite]     Sattelite_s=Satellite_Operational -> (1-r) : (Sattelite_s'=Satellite_Failed)   + r : (Sattelite_s'=Satellite_Operational);
+
+  [rapair]     Sattelite_s=Satellite_Failed ->  (Sattelite_s'=Satellite_Operational) ;
+
+endmodule
+
+
+
+const k; // number of rounds
+
+// module to count the rounds
+module rounds
+
+	rounds : [0..k+1];
+	
+	[] rounds<=k -> (rounds'=rounds+1);
+	[] rounds=k+1 -> true;
+
+endmodule
+
+rewards "rescue"
+	 rescue=1     : 1; 
+endrewards

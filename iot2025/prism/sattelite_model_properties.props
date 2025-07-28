@@ -1,0 +1,32 @@
+const int k;
+
+// Type: Global safety/liveness property
+// Description: What is the probability that it is ALWAYS true that if the system is
+// fully operational, it will EVENTUALLY transition out of the fully operational state?
+// This essentially checks if the system is guaranteed to eventually degrade or change state
+// from being fully operational (i.e., it doesn't stay fully operational indefinitely).
+P=? [ G ("System_Fully_Operational"=>(F !"System_Fully_Operational")) ]
+
+// Type: Bounded until probability
+// Description: What is the probability that the system remains "System_Fully_Operational"
+// UNTIL it reaches the "System_Degraded" state, within time k?
+// This evaluates the likelihood of general system degradation occurring within a specific timeframe,
+// starting from a fully operational state.
+P=? [ ("System_Fully_Operational") U<=k ("System_Degraded") ]
+
+// Type: Bounded until probability
+// Description: What is the probability that the system remains "System_Fully_Operational"
+// UNTIL it reaches the "System_Severely_Degraded" state, within time k?
+// This specifically evaluates the likelihood of severe system degradation occurring within
+// a specific timeframe, starting from a fully operational state.
+P=? [ ("System_Fully_Operational") U<=k ("System_Severely_Degraded") ]
+
+// Type: Cumulative reward over a time bound
+// Description: What is the expected cumulative reward accumulated by the "rescue_availability"
+// rewards structure up to time k?
+// This property is used to quantify the total expected "value" or "duration" of
+// the conditions defined in the "rescue_availability" reward block within the time limit k.
+R{"rescue_availability"}=? [ C<=k ]/k
+
+P=? [ F<=k ("System_Degraded") ]
+

@@ -1,0 +1,364 @@
+//Author: Abdelhakim Baouya
+//Usage is licenced
+
+ctmc // Declares the model as a Continuous-Time Markov Chain (CTMC).
+     // In a CTMC, transitions occur at rates (following an exponential distribution for time spent in a state),
+     // rather than discrete steps or fixed probabilities.
+
+// System state constants for the satellite's operational status.
+// Using constants improves readability and makes the code easier to modify.
+const int Operational = 2;         // Represents the fully operational state of the orbital component.
+const int Degraded    = 1;         // Represents a degraded (but still functional, requiring recovery) status of the component.
+const int Severely_Degraded = 0;   
+
+// Degradation and recovery rates of sattelite.
+// These rates represent the inverse of the mean time for a transition to occur.
+const double lambda = 2.03e-8;      
+const double mu     = 4.04e-6;      
+
+// Degradation and recovery rates of the healthy sattelite.
+const double lambda_hs = 8.7e-8;     
+const double mu_hs     = 1.11e-3; 
+
+
+
+
+// FLS signal degradation and recovery rates.
+// Scenario identifiers for FLS general degradation states.
+const int FLS_DEG_SCENARIO_0 = 0; // Represents <24h continuous non-operational.
+const int FLS_DEG_SCENARIO_1 = 1; // Represents <48h cumulative monthly downtime.
+const int FLS_DEG_SCENARIO_2 = 2; // Represents Comm loss (1-2 LUTs) >1 day.
+const int FLS_DEG_SCENARIO_3 = 3; // Represents Only 1 REFBE nominal.
+const int FLS_DEG_SCENARIO_4 = 4; // Represents No REFBE operational <5 days.
+// Scenario selector for degradation rates.
+const int fls_source_d;
+
+// Degradation rates based on FLS performance scenarios (inverse of mean time).
+const double fls_lambda_d0 = 6.94e-4;    // 0: <24h continuous non-operational.
+const double fls_lambda_d1 = 3.47e-4; // 1: <48h cumulative monthly downtime.
+const double fls_lambda_d2 = 6.94e-4; // 2: Comm loss (1-2 LUTs) >1 day.
+const double fls_lambda_d3 = 1.39e-5; // 3: Only 1 REFBE nominal.
+const double fls_lambda_d4 = 1.39e-5; // 4: No REFBE operational <5 days.
+
+// Selected degradation rate based on 'source' scenario.
+// Defaults to 0 if 'source' is out of range (0-4).
+const double fls_lambda_degraded =
+  (fls_source_d = FLS_DEG_SCENARIO_0) ? fls_lambda_d0 :
+  (fls_source_d = FLS_DEG_SCENARIO_1) ? fls_lambda_d1 :
+  (fls_source_d = FLS_DEG_SCENARIO_2) ? fls_lambda_d2 :
+  (fls_source_d = FLS_DEG_SCENARIO_3) ? fls_lambda_d3 :
+  (fls_source_d = FLS_DEG_SCENARIO_4) ? fls_lambda_d4 :
+  fls_lambda_d0;
+
+// Alias for the selected degradation rate for simpler use in modules.
+const double fls_lambda_d = fls_lambda_degraded;
+ 
+
+const double fls_mu_d0 = 1.39e-3; // 0: Recovery rate from minor (less than 24h) non-operational state.
+const double fls_mu_d1 = 1.39e-3; // 1: Recovery rate from moderate (less than 48h cumulative) downtime.
+const double fls_mu_d2 = 1.00e-3; // 2: Recovery rate from partial comm loss (1-2 LUTs).
+const double fls_mu_d3 = 6.94e-4; // 3: Recovery rate from critical (only 1 REFBE nominal) state.
+const double fls_mu_d4 = 2.78e-4; // 4: Recovery rate from severe (no REFBEs <5 days) operational state.
+
+// Selected recovery rate based on 'fls_source_d' scenario.
+// Defaults to 'fls_mu_d0' if 'fls_source_d' is out of range (0-4).
+const double fls_mu_degraded =
+  (fls_source_d = FLS_DEG_SCENARIO_0) ? fls_mu_d0 : // If source_d is 0, use mu_d0
+  (fls_source_d = FLS_DEG_SCENARIO_1) ? fls_mu_d1 : // Else if source_d is 1, use mu_d1
+  (fls_source_d = FLS_DEG_SCENARIO_2) ? fls_mu_d2 : // Else if source_d is 2, use mu_d2
+  (fls_source_d = FLS_DEG_SCENARIO_3) ? fls_mu_d3 : // Else if source_d is 3, use mu_d3
+  (fls_source_d = FLS_DEG_SCENARIO_4) ? fls_mu_d4 : // Else if source_d is 4, use mu_d4
+  fls_mu_d0;                                     // Else (if source_d is not 0, 1, 2, 3, or 4), use mu_d0 as default.
+
+// Alias for the selected degradation recovery rate for simpler use.
+const double fls_mu_d = fls_mu_degraded;
+
+
+// Scenario identifiers for FLS severe degradation states.
+const int FLS_SEVDEG_SCENARIO_0 = 0; // Represents >24h continuous non-operational.
+const int FLS_SEVDEG_SCENARIO_1 = 1; // Represents >48h cumulative monthly downtime.
+const int FLS_SEVDEG_SCENARIO_2 = 2; // Represents Comm loss (all 3 LUTs/MCCs) >4h.
+
+
+// Selector for severe degradation scenarios.
+const int fls_source_sd;
+
+// Severe degradation rates for FLS (inverse of mean time).
+const double fls_lambda_sd0 = 6.94e-4; // 0: >24h continuous non-operational.
+const double fls_lambda_sd1 = 3.47e-4; // 1: >48h cumulative monthly downtime.
+const double fls_lambda_sd2 = 4.17e-3; // 2: Comm loss (all 3 LUTs/MCCs) >4h.
+
+// Computed severe degradation rate based on 'source_sd'.
+// Defaults to lambda_sd0 if 'source_sd' is not 0, 1, or 2.
+const double fls_lambda_sever_degraded =
+  (fls_source_sd = FLS_SEVDEG_SCENARIO_0) ? fls_lambda_sd0 : // If source_sd is 0, use lambda_sd0
+  (fls_source_sd = FLS_SEVDEG_SCENARIO_1) ? fls_lambda_sd1 : // Else if source_sd is 1, use lambda_sd1
+  (fls_source_sd = FLS_SEVDEG_SCENARIO_2) ? fls_lambda_sd2 : // Else if source_sd is 2, use lambda_sd2
+  fls_lambda_sd0;                                            // Else (e.g., source_sd > 2), use lambda_sd0 as default.
+                    						// Else (e.g., source_sd > 2), use lambda_sd0 as default.
+
+// Alias for the selected severe degradation rate.
+const double fls_lambda_sd = fls_lambda_sever_degraded;
+
+const double fls_mu_sd0 = 1.39e-3; // 0: Recovery rate from >24h continuous non-operational state.
+const double fls_mu_sd1 = 6.94e-4; // 1: Recovery rate from >48h cumulative monthly downtime.
+const double fls_mu_sd2 = 1.39e-3; // 2: Recovery rate from comm loss (all 3 LUTs/MCCs) >4h.
+
+// Selected severe degradation recovery rate based on 'source_sd' scenario.
+// Defaults to 'mu_sd0' if 'source_sd' is out of range (0, 1, or 2).
+const double fls_mu_sever_degraded =
+  (fls_source_sd = FLS_SEVDEG_SCENARIO_0) ? fls_mu_sd0 : // If source_sd is 0, use mu_sd0
+  (fls_source_sd = FLS_SEVDEG_SCENARIO_1) ? fls_mu_sd1 : // Else if source_sd is 1, use mu_sd1
+  (fls_source_sd = FLS_SEVDEG_SCENARIO_2) ? fls_mu_sd2 : // Else if source_sd is 2, use mu_sd2
+  fls_mu_sd0;                                          // Else (e.g., source_sd > 2), use mu_sd0 as default.
+
+// Alias for the selected severe degradation recovery rate.
+const double fls_mu_sd = fls_mu_sever_degraded;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// RLS degradation/recovery rates.
+
+// Scenario identifiers for RLS general degradation states.
+const int RLS_DEG_SCENARIO_0 = 0; // Represents <7h continuous non-operational.
+const int RLS_DEG_SCENARIO_1 = 1; // Represents RLM non-compliance.
+
+// Scenario selector.
+const int rls_source_d;
+
+// RLS degradation rates (inverse of mean time).
+const double rls_lambda_d0 = 2.38e-3; // RLS_DEG_SCENARIO_0: <7h continuous non-operational.
+const double rls_lambda_d1 = 8.33e-6; // RLS_DEG_SCENARIO_1: RLM non-compliance.
+
+// Selected degradation rate based on 'rls_source_d'.
+// Default to rls_lambda_d0.
+const double rls_lambda_degraded =
+  (rls_source_d = RLS_DEG_SCENARIO_0) ? rls_lambda_d0 :
+  (rls_source_d = RLS_DEG_SCENARIO_1) ? rls_lambda_d1 :
+  rls_lambda_d0;
+
+// Alias for selected degradation rate.
+const double rls_lambda_d = rls_lambda_degraded;
+
+
+// RLS recovery rates (inverse of mean time).
+const double rls_mu_d0 = 4.52e-2;  // RLS_DEG_SCENARIO_0: Recovery from <7h non-op.
+const double rls_mu_d1 = 1.67e-2;  // RLS_DEG_SCENARIO_1: Recovery from RLM non-compliance.
+
+// Selected recovery rate based on 'rls_source_d'.
+// Default to rls_mu_d0.
+const double rls_mu_degraded =
+  (rls_source_d = RLS_DEG_SCENARIO_0) ? rls_mu_d0 :
+  (rls_source_d = RLS_DEG_SCENARIO_1) ? rls_mu_d1 :
+  rls_mu_d0;
+
+// Alias for selected degradation recovery rate.
+const double rls_mu_d = rls_mu_degraded;
+
+
+// Severe degradation rate alias.
+const double rls_lambda_sd=2.00e-4;
+
+// Severe recovery rate alias.
+const double rls_mu_sd=3.95e-2;
+
+
+
+// hypothermia state constants
+const int Normal                 = 5;         // Represents the normal body temperature state.
+const int Hypothermia_STAGE_I    = 4;         // Represents mild hypothermia.
+const int Hypothermia_STAGE_II   = 3;         // Represents moderate hypothermia.
+const int Hypothermia_STAGE_III  = 2;         // Represents severe hypothermia.
+const int Hypothermia_STAGE_IV   = 1;         // Represents profound hypothermia (most critical state before rescue/death).
+const int S5                     = 0;         // Represents the rescued state (or terminal state where intervention was successful).
+const int STAGE                  ;         
+
+// Degradation rates (Mean Time Between Stages)
+const double lambda_h1=0.04; // Rate of degrading from Normal to Hypothermia_STAGE_I.
+const double lambda_h2=0.1167; // Rate of degrading from Hypothermia_STAGE_I to Hypothermia_STAGE_II.
+const double lambda_h3=0.0875; // Rate of degrading from Hypothermia_STAGE_II to Hypothermia_STAGE_III.
+const double lambda_h4=0.0875; // Rate of degrading from Hypothermia_STAGE_III to Hypothermia_STAGE_IV.
+
+// Movement/recovery rates (based on MTS)
+const double mu_h1=1.5503; // Rate of rescue/recovery from Hypothermia_STAGE_I.
+const double mu_h2=0.2625; // Rate of rescue/recovery from Hypothermia_STAGE_II.
+const double mu_h3=0.0066; // Rate of rescue/recovery from Hypothermia_STAGE_III.
+
+
+
+
+//Modules definitions
+
+module SatteliteOnOrbit
+  // Models a satellite transitioning between Operational and Degraded states.
+  // Uses 'lambda' for degradation rate and 'mu' for recovery rate.
+
+  // Satellite status: 2 (Operational) or 1 (Degraded). Starts Operational.
+  SatteliteOnOrbit_s : [1..2] init Operational;
+
+  // Satellite degrades from Operational to Degraded state.
+  [SatteliteOnOrbit_to_fail] SatteliteOnOrbit_s=Operational -> lambda : (SatteliteOnOrbit_s'=Degraded);
+
+  // Satellite recovers from Degraded to Operational state.
+  [SatteliteOnOrbit_full_recovery] SatteliteOnOrbit_s=Degraded -> mu : (SatteliteOnOrbit_s'=Operational);
+
+endmodule
+
+
+
+module HealthySatteliteSignal
+  // Models the health status of a satellite signal.
+  // Tracks transitions between an Operational and a Degraded signal state.
+
+  // Signal status: 2 (Operational) or 1 (Degraded). Starts Operational.
+  HealthySatteliteSignal_s : [1..2] init Operational;
+
+  // Signal degrades from Operational to Degraded state.
+  [HealthySatteliteSignal_to_fail] HealthySatteliteSignal_s=Operational -> lambda_hs : (HealthySatteliteSignal_s'=Degraded);
+
+  // Signal recovers from Degraded to Operational state.
+  [HealthySatteliteSignal_full_recovery] HealthySatteliteSignal_s=Degraded -> mu_hs : (HealthySatteliteSignal_s'=Operational);
+
+endmodule
+
+module FLSSatteliteSignal
+  // Models the status of an FLS satellite signal with three operational levels.
+  // Tracks transitions between Operational, Degraded, and Severely Degraded states.
+
+  // Signal status: 2 (Operational), 1 (Degraded), or 0 (Severely_Degraded). Starts Operational.
+  FLSSatteliteSignal_s : [0..2] init Operational;
+
+  // Signal degrades from Operational to Degraded.
+  [FLSSatteliteSignal_to_fail] FLSSatteliteSignal_s=Operational -> fls_lambda_d : (FLSSatteliteSignal_s'=Degraded);
+
+  // Signal degrades directly from Operational to Severely Degraded.
+  [FLSSatteliteSignal_sever_to_fail] FLSSatteliteSignal_s=Operational -> fls_lambda_sd : (FLSSatteliteSignal_s'=Severely_Degraded);
+
+  // Signal recovers from Degraded to Operational.
+  [FLSSatteliteSignal_full_recovery] FLSSatteliteSignal_s=Degraded -> fls_mu_d : (FLSSatteliteSignal_s'=Operational);
+
+  // Signal recovers from Severely Degraded to Operational.
+  [FLSSatteliteSignal_sever_full_recovery] FLSSatteliteSignal_s=Severely_Degraded -> fls_mu_sd : (FLSSatteliteSignal_s'=Operational);
+endmodule
+
+
+
+module RLSSatteliteSignal
+  // Models the status of an RLS satellite signal with three operational levels:
+  // Operational, Degraded, and Severely Degraded.
+
+  // Signal status variable: 2 (Operational), 1 (Degraded), or 0 (Severely_Degraded).
+  // Initial state is Operational.
+  RLSSatteliteSignal_s : [0..2] init Operational;
+
+  // Signal degrades from Operational to Degraded.
+  [RLSSatteliteSignal_to_fail] RLSSatteliteSignal_s=Operational -> rls_lambda_d : (RLSSatteliteSignal_s'=Degraded);
+
+  // Signal degrades directly from Operational to Severely Degraded.
+  [RLSSatteliteSignal_sever_to_fail] RLSSatteliteSignal_s=Operational -> rls_lambda_sd : (RLSSatteliteSignal_s'=Severely_Degraded);
+
+  // Signal recovers from Degraded to Operational.
+  [RLSSatteliteSignal_full_recovery] RLSSatteliteSignal_s=Degraded -> rls_mu_d : (RLSSatteliteSignal_s'=Operational);
+
+  // Signal recovers from Severely Degraded to Operational.
+  [RLSSatteliteSignal_sever_full_recovery] RLSSatteliteSignal_s=Severely_Degraded -> rls_mu_sd : (RLSSatteliteSignal_s'=Operational);
+endmodule
+
+// Formula to define when the main satellite orbital component is 'up'.
+formula SatteliteOnOrbit_up = (SatteliteOnOrbit_s = Operational);
+
+// Formula to define when the healthy satellite signal is 'up'.
+formula HealthySatteliteSignal_up = (HealthySatteliteSignal_s = Operational);
+
+// Formula to define when the FLS satellite signal is 'up'.
+formula FLSSatteliteSignal_up = (FLSSatteliteSignal_s = Operational);
+
+// Formula to define when the RLS satellite signal is 'up'.
+formula RLSSatteliteSignal_up = (RLSSatteliteSignal_s = Operational);
+
+//A formula for the entire "satellite system" being up (all components operational).
+formula Overall_Satellite_System_Up =
+  (SatteliteOnOrbit_s = Operational) &
+  (HealthySatteliteSignal_s = Operational) &
+  (FLSSatteliteSignal_s = Operational) &
+  (RLSSatteliteSignal_s = Operational);
+
+// Label for the overall satellite system being fully operational.
+label "System_Fully_Operational" = Overall_Satellite_System_Up;
+
+
+// Formula for the system being in a severely degraded mode.
+// This occurs if either the FLS or RLS signal is in a Severely_Degraded state.
+// Note: SatteliteOnOrbit and HealthySatteliteSignal modules do not have a Severely_Degraded state.
+formula System_In_Severely_Degraded_Mode =
+  (FLSSatteliteSignal_s = Severely_Degraded) |
+  (RLSSatteliteSignal_s = Severely_Degraded);
+
+// Formula for the system being in a general degraded mode.
+// This means the system is NOT fully operational, AND NOT in a severely degraded mode.
+formula System_In_Degraded_Mode =
+  !Overall_Satellite_System_Up &        // System is NOT fully operational
+  !System_In_Severely_Degraded_Mode;    // AND NOT in a severely degraded state
+
+// Labels for the new formulas
+label "System_Severely_Degraded" = System_In_Severely_Degraded_Mode;
+label "System_Degraded" = System_In_Degraded_Mode;
+
+
+
+// Rewards: Measures satellite system availability for rescue operations.
+rewards "rescue_availability"
+  // Accumulate 1 unit of reward per unit time when the system is fully operational.
+  Overall_Satellite_System_Up : 1;
+endrewards
+
+
+module Hypothermia_Human_Degradation
+
+  s : [0..5] init Normal; // State variable 'S' representing the current hypothermia stage, initialized to Normal.
+
+  [to_stage1]   s=Normal                -> lambda_h1 : (s'=Hypothermia_STAGE_I);     // Transition from Normal to Hypothermia_STAGE_I with rate lambda_h1.
+  [to_stage2]   s=Hypothermia_STAGE_I   -> lambda_h2 : (s'=Hypothermia_STAGE_II);    // Transition from Hypothermia_STAGE_I to Hypothermia_STAGE_II with rate lambda_h2.
+  [rescue1]     s=Hypothermia_STAGE_I   -> mu_h1     : (s'=S5);                      // Transition from Hypothermia_STAGE_I to S5 (rescued) with rate mu_h1.
+
+  [to_stage3]   s=Hypothermia_STAGE_II -> lambda_h3 : (s'=Hypothermia_STAGE_III);   // Transition from Hypothermia_STAGE_II to Hypothermia_STAGE_III with rate lambda_h3.
+  [rescue2]     s=Hypothermia_STAGE_II -> mu_h2     : (s'=S5);                      // Transition from Hypothermia_STAGE_II to S5 (rescued) with rate mu_h2.
+
+  [to_stage4]   s=Hypothermia_STAGE_III -> lambda_h4 : (s'=Hypothermia_STAGE_IV);  // Transition from Hypothermia_STAGE_III to Hypothermia_STAGE_IV with rate lambda_h4.
+  [rescue3]     s=Hypothermia_STAGE_III -> mu_h3     : (s'=S5);                      // Transition from Hypothermia_STAGE_III to S5 (rescued) with rate mu_h3.
+
+  [full_recovery] s=S5 -> (s'=Normal); // This transition represents a full recovery from a state where S=5, which is 'Normal'.
+
+endmodule
+
+// --- Human Status Formula and Label ---
+// Definition: True when the human's hypothermia state 's' (from Hypothermia_Human_Degradation module)
+//             is equal to the S5 state, representing a successful rescue or full recovery.
+formula Human_Status_Is_Recovered = (s=S5);
+
+// Label: "Human_Fully_Recovered"
+// Alias for the Human_Status_Is_Recovered formula.
+label "Human_Fully_Recovered" = Human_Status_Is_Recovered;
+
+
+label "System_Severely_Degraded_With_Unrecovered_Human" = System_In_Severely_Degraded_Mode  & (s = STAGE);
+
+
+label "System_Degraded_With_Unrecovered_Human" = System_In_Degraded_Mode & (s = STAGE);
+
+
+// --- Rewards Module: rescue_metrics ---
+// This reward defines metrics related to both system availability and human rescue.
+rewards "rescue_metrics"
+  // Reward Component 1: System Operational Time
+
+  Overall_Satellite_System_Up & (s = STAGE) : 1;
+endrewards
+
+
+
+
+
+
+
+
+

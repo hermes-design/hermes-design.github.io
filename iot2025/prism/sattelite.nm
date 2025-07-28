@@ -1,0 +1,88 @@
+ctmc // Declares the model as a Continuous-Time Markov Chain (CTMC).
+     // In a CTMC, transitions occur at rates (following an exponential distribution for time spent in a state),
+     // rather than discrete steps or fixed probabilities.
+
+// System state constants for the satellite's operational status.
+// Using constants improves readability and makes the code easier to modify.
+const int Operational = 2;         // Represents the fully operational state of the orbital component.
+const int Degraded    = 1;         // Represents a degraded (but still functional, requiring recovery) status of the component.
+const int Severely_Degraded = 0;   
+
+// Degradation and recovery rates of sattelite.
+// These rates represent the inverse of the mean time for a transition to occur.
+const double lambda = 2.03e-8;      
+const double mu     = 4.04e-6;      
+
+// Degradation and recovery rates of the healthy sattelite.
+const double lambda_hs = 8.7e-8;     
+const double mu_hs     = 1.11e-3; 
+
+
+
+
+// FLS signal degradation and recovery rates.
+
+// Scenario selector for degradation rates.
+const int source;
+
+// Degradation rates based on FLS performance scenarios (inverse of mean time).
+const double lambda_d0; // 0: <24h continuous non-operational.
+const double lambda_d1; // 1: <48h cumulative monthly downtime.
+const double lambda_d2; // 2: Comm loss (1-2 LUTs) >1 day.
+const double lambda_d3; // 3: Only 1 REFBE nominal.
+const double lambda_d4; // 4: No REFBE operational <5 days.
+
+// Selected degradation rate based on 'source' scenario.
+// Defaults to 0 if 'source' is out of range (0-4).
+const double lambda_degraded =
+  (source = 0) ? lambda_d0 :
+  (source = 1) ? lambda_d1 :
+  (source = 2) ? lambda_d2 :
+  (source = 3) ? lambda_d3 :
+  (source = 4) ? lambda_d4 :
+  lambda_d0;
+
+// Alias for the selected degradation rate for simpler use in modules.
+const double lambda_d = lambda_degraded;
+ 
+const double lambda_sd = 8.7e-8; 
+const double mu_d    = 1.11e-3;    
+const double mu_sd    = 1.11e-3; 
+
+
+module SatteliteOnOrbit
+
+  SatteliteOnOrbit_s : [1..2] init Operational;
+
+  [SatteliteOnOrbit_to_fail] SatteliteOnOrbit_s=Operational -> lambda : (SatteliteOnOrbit_s'=Degraded);
+
+  [SatteliteOnOrbit_full_recovery] SatteliteOnOrbit_s=Degraded -> mu : (SatteliteOnOrbit_s'=Operational);
+
+endmodule
+
+
+
+module HealthySatteliteSignal
+
+  HealthySatteliteSignal_s : [1..2] init Operational;
+
+  [HealthySatteliteSignal_to_fail] HealthySatteliteSignal_s=Operational -> lambda_hs : (HealthySatteliteSignal_s'=Degraded);
+
+  [HealthySatteliteSignal_full_recovery] HealthySatteliteSignal_s=Degraded -> mu_hs : (HealthySatteliteSignal_s'=Operational);
+
+endmodule
+
+
+module FLSSatteliteSignal
+
+  FLSSatteliteSignal_s : [0..2] init Operational;
+
+  [FLSSatteliteSignal_to_fail] FLSSatteliteSignal_s=Operational -> lambda_d : (FLSSatteliteSignal_s'=Degraded);
+
+  [FLSSatteliteSignal_sever_to_fail] FLSSatteliteSignal_s=Operational -> mu_sd : (FLSSatteliteSignal_s'=Severely_Degraded);
+
+  [FLSSatteliteSignal_full_recovery] FLSSatteliteSignal_s=Degraded -> mu_d : (FLSSatteliteSignal_s'=Operational);
+
+  [FLSSatteliteSignal_sever_full_recovery] FLSSatteliteSignal_s=Severely_Degraded -> mu_sd : (FLSSatteliteSignal_s'=Operational);
+endmodule
+

@@ -1,0 +1,38 @@
+ctmc
+
+// System state constants
+const int Normal                 = 5;         // Represents the normal body temperature state.
+const int Hypothermia_STAGE_I    = 4;         // Represents mild hypothermia.
+const int Hypothermia_STAGE_II   = 3;         // Represents moderate hypothermia.
+const int Hypothermia_STAGE_III  = 2;         // Represents severe hypothermia.
+const int Hypothermia_STAGE_IV   = 1;         // Represents profound hypothermia (most critical state before rescue/death).
+const int S5                     = 0;         // Represents the rescued state (or terminal state where intervention was successful).
+
+// Degradation rates (Mean Time Between Stages)
+const double lambda_h1=0.04; // Rate of degrading from Normal to Hypothermia_STAGE_I.
+const double lambda_h2=0.1167; // Rate of degrading from Hypothermia_STAGE_I to Hypothermia_STAGE_II.
+const double lambda_h3=0.0875; // Rate of degrading from Hypothermia_STAGE_II to Hypothermia_STAGE_III.
+const double lambda_h4=0.0875; // Rate of degrading from Hypothermia_STAGE_III to Hypothermia_STAGE_IV.
+
+// Movement/recovery rates (based on MTS)
+const double mu_h1=1.5503; // Rate of rescue/recovery from Hypothermia_STAGE_I.
+const double mu_h2=0.2625; // Rate of rescue/recovery from Hypothermia_STAGE_II.
+const double mu_h3=0.0066; // Rate of rescue/recovery from Hypothermia_STAGE_III.
+
+module Hypothermia_Human_Degradation
+
+  s : [0..5] init Normal; // State variable 'S' representing the current hypothermia stage, initialized to Normal.
+
+  [to_stage1]   s=Normal                -> lambda_h1 : (s'=Hypothermia_STAGE_I);     // Transition from Normal to Hypothermia_STAGE_I with rate lambda_h1.
+  [to_stage2]   s=Hypothermia_STAGE_I   -> lambda_h2 : (s'=Hypothermia_STAGE_II);    // Transition from Hypothermia_STAGE_I to Hypothermia_STAGE_II with rate lambda_h2.
+  [rescue1]     s=Hypothermia_STAGE_I   -> mu_h1     : (s'=S5);                      // Transition from Hypothermia_STAGE_I to S5 (rescued) with rate mu_h1.
+
+  [to_stage3]   s=Hypothermia_STAGE_II -> lambda_h3 : (s'=Hypothermia_STAGE_III);   // Transition from Hypothermia_STAGE_II to Hypothermia_STAGE_III with rate lambda_h3.
+  [rescue2]     s=Hypothermia_STAGE_II -> mu_h2     : (s'=S5);                      // Transition from Hypothermia_STAGE_II to S5 (rescued) with rate mu_h2.
+
+  [to_stage4]   s=Hypothermia_STAGE_III -> lambda_h4 : (s'=Hypothermia_STAGE_IV);  // Transition from Hypothermia_STAGE_III to Hypothermia_STAGE_IV with rate lambda_h4.
+  [rescue3]     s=Hypothermia_STAGE_III -> mu_h3     : (s'=S5);                      // Transition from Hypothermia_STAGE_III to S5 (rescued) with rate mu_h3.
+
+  [full_recovery] s=5 -> 1.0 : (s'=Normal); // This transition represents a full recovery from a state where S=5, which is 'Normal'.
+
+endmodule

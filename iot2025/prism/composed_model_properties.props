@@ -1,0 +1,20 @@
+const int k;
+
+// Type: Cumulative reward over a time bound
+// Description: What is the expected total reward accumulated by the "rescue_metrics"
+// rewards structure up to time 'k'?
+// Purpose: This quantifies the overall expected "value" or "benefit" accumulated over time 'k',
+// considering both the satellite system's operational availability and the duration
+// for which the human is in a recovered state.
+R{"rescue_metrics"}=? [ C<=k ]/k
+
+P=? [ F<=k ("System_Degraded_With_Unrecovered_Human") ]
+
+P=? [ ("System_Fully_Operational") U<=k ("System_Degraded") ]
+
+P=? [ F<=k (s=STAGE) ]
+
+P=? [ ("System_Fully_Operational") U<=k ("System_Severely_Degraded_With_Unrecovered_Human") ]
+
+P=? [ ("System_Fully_Operational") U<=k ("System_Degraded_With_Unrecovered_Human") ]
+

@@ -1,0 +1,11 @@
+const int T;
+
+// probaibility to to rescue
+<<p1,p2>>Pmax=? [ F ((rescue=1)&rounds<=k) ]
+
+<<p1,p2>>R{"rescue"}max=? [ F (rounds=k) ]
+
+<<p1,p2>>Pmin=? [ F ((rescue=1)&rounds<=k) ]
+
+<<p1,p2>>R{"rescue"}min=? [ F (rounds=k) ]
+
