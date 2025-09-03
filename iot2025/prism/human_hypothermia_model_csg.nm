@@ -1,6 +1,5 @@
 
 // Model type: Concurrent Stochastic Game (CSG).
-// Actions not explicitly assigned to a player are controlled by Nature (Player 0).
 
 csg
 player p1  Hypothermia_Human_Degradation endplayer
@@ -25,7 +24,7 @@ const double p_h1=0.93; // Probability of degrading human from Normal to Hypothe
 const double p_h2=0.75; // Probability of degrading human from Hypothermia_STAGE_I to Hypothermia_STAGE_II.
 const double p_h3=0.07; // Probability of degrading human from Hypothermia_STAGE_II to Hypothermia_STAGE_III.
 
-// Satellite reliability: Probability of the satellite *remaining operational* per time step.
+// Satellite reliability: Probability of the satellite remaining operational per time step.
 const double r; // Probability that the satellite does NOT degrade in a given time step.
 
 const double e_h1; //Rescue operation winning probability in case of hypotermia stage 1
@@ -75,7 +74,7 @@ module Sattelite
 
   // Degradation transition for the satellite. This is typically controlled by Nature.
   // With probability (1-r), the satellite degrades to 'Satellite_Failed'.
-  // With probability 'r' (its reliability), it remains 'Satellite_Operational'.
+  // With probability r (its reliability), it remains 'Satellite_Operational'.
   [degrade_sattelite]     Sattelite_s=Satellite_Operational -> (1-r) : (Sattelite_s'=Satellite_Failed)   + r : (Sattelite_s'=Satellite_Operational);
 
   [rapair]     Sattelite_s=Satellite_Failed ->  (Sattelite_s'=Satellite_Operational) ;

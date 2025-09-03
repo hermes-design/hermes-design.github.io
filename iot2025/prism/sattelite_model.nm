@@ -1,6 +1,4 @@
-ctmc // Declares the model as a Continuous-Time Markov Chain (CTMC).
-     // In a CTMC, transitions occur at rates (following an exponential distribution for time spent in a state),
-     // rather than discrete steps or fixed probabilities.
+ctmc // Declares the model as a Continuous-Time Markov Chain (CTMC)
 
 // System state constants for the satellite's operational status.
 // Using constants improves readability and makes the code easier to modify.
@@ -261,7 +259,7 @@ label "System_Fully_Operational" = Overall_Satellite_System_Up;
 
 // Formula for the system being in a severely degraded mode.
 // This occurs if either the FLS or RLS signal is in a Severely_Degraded state.
-// Note: SatteliteOnOrbit and HealthySatteliteSignal modules do not have a Severely_Degraded state.
+// SatteliteOnOrbit and HealthySatteliteSignal modules do not have a Severely_Degraded state.
 formula System_In_Severely_Degraded_Mode =
   (FLSSatteliteSignal_s = Severely_Degraded) |
   (RLSSatteliteSignal_s = Severely_Degraded);

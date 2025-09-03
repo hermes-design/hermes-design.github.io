@@ -1,6 +1,4 @@
 ctmc // Declares the model as a Continuous-Time Markov Chain (CTMC).
-     // In a CTMC, transitions occur at rates (following an exponential distribution for time spent in a state),
-     // rather than discrete steps or fixed probabilities.
 
 // System state constants for the satellite's operational status.
 // Using constants improves readability and makes the code easier to modify.
