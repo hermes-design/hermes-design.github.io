@@ -1,348 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HERMES-Design Project Page">
-  <title>HERMES-Design Project</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Prism.js CSS (Tomorrow Night theme) - included for consistency, though no code blocks yet -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  <!-- Custom Styles - copied from jss2025_z.html for consistent look -->
-  <style>
-    /* Inter Font */
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    /* Custom scrollbar for webkit browsers */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
-    /* Active Nav Link Style */
-    .nav-link-active {
-      @apply bg-sky-700 text-white;
-    }
-    /* Ensure content pushes footer down */
-    .page-wrapper {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    .content-wrapper {
-      flex-grow: 1;
-    }
-    /* Styling for code elements not in pre blocks */
-    code:not(pre > code) {
-      @apply bg-gray-200 text-gray-800 px-1 py-0.5 rounded-md text-sm;
-    }
-    /* Styling for pre blocks (Prism.js will also apply styles) */
-    pre[class*="language-"] {
-      @apply rounded-lg shadow-md my-6;
-    }
-  </style>
-  <!-- FontAwesome for Icons - included for consistency -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HERMES-Design Project</title>
+    <meta name="description" content="Human-Centric Collaborative Architectural Decision-Making for Secure System Design" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              slate: {
+                850: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+              sky: {
+                450: '#38bdf8',
+                950: '#082f49',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .glass-nav {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-CjrgGIa8.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 leading-relaxed">
-
-  <div class="page-wrapper">
-    <!-- Header & Navigation (Copied from jss2025_z.html for consistent top bar) -->
-    <header class="bg-sky-600 text-white shadow-lg sticky top-0 z-50">
-      <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <div class="flex items-center">
-            <!-- Changed "JSS 2025" to "HERMES-Design" for context -->
-            <a href="#" class="text-2xl font-bold">HERMES-Design</a>
-          </div>
-          <div class="hidden md:block">
-            <div class="ml-10 flex items-baseline space-x-4">
-              <!-- Adjusted navigation links to match new page content structure -->
-              <a href="#project-summary" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Summary</a>
-              <a href="#team" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Team</a>
-              <a href="#deliverables" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Deliverables</a>
-              <a href="#publications" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 transition-colors">Publications</a>
-            </div>
-          </div>
-          <!-- Mobile Menu Button -->
-          <div class="md:hidden">
-            <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-sky-200 hover:text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-              <span class="sr-only">Open main menu</span>
-              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-              <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </nav>
-      <!-- Mobile Menu -->
-      <div class="md:hidden hidden" id="mobile-menu">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a href="#project-summary" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Summary</a>
-          <a href="#team" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Team</a>
-          <a href="#deliverables" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Deliverables</a>
-          <a href="#publications" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-sky-700 transition-colors">Publications</a>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="content-wrapper container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Project Summary Section -->
-      <section id="project-summary" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-        <header class="mb-4 border-b pb-2">
-          <div class="flex items-center">
-            <!-- Original logo from local folder with controlled size -->
-            <img src="1704997992104.png" alt="HERMES-Design Logo" class="mr-4 rounded-md w-24 h-24">
-            <h1 class="text-2xl font-semibold text-blue-700">HERMES-Design: Human-Centric Collaborative Architectural Decision-Making for Secure System Design</h1>
-          </div>
-        </header>
-        <article class="text-gray-700">
-          <p class="text-lg font-medium"><u>Summary</u>: <em>The current state of tools and methods for collaborative architectural decision-making mainly emphasizes knowledge sharing, reuse, compromises, and seeking consensus among diverse stakeholders. However, our observation reveals a significant oversight in considering the decision-making constraints of various stakeholders in relation to human factors during the development process. For example, when dealing with the design of secure systems, it becomes essential to thoroughly comprehend the benefits and limitations of potential solutions like cryptography, authentication, access control, auditing, and more. The project aims to develop a formal modeling framework that takes into account human factors in architectural decision-making, particularly those related to the expertise and experience of team members involved in collaborative decision-making processes. More broadly, this research will enhance our understanding of how collaborative decisions are made and provide better traceability of decisions impacting system security. Consequently, it will increase confidence in the decisions made by a diverse team of members.</em></p>
-          <p class="mt-4 italic">The project is funded by the Institut de Cybersécurité d'Occitanie (ICO).</p>
-        </article>
-      </section>
-
-      <!-- Team Section -->
-      <section id="team" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">Team</h2>
-        <!-- Changed to flexbox for a more linear layout, allowing wrapping on smaller screens -->
-        <div class="flex flex-wrap justify-center gap-8 text-gray-700">
-          <!-- Project Leader Card -->
-          <div class="bg-gray-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300">
-            <img src="https://hbaouya.github.io/images/profile.jpg" alt="Abdelhakim Baouya" class="rounded-full w-32 h-32 object-cover mb-4 ring-2 ring-sky-500 ring-offset-2">
-            <h3 class="text-xl font-semibold text-gray-900">Abdelhakim Baouya</h3>
-            <p class="text-sky-700 text-lg mb-2">Project Leader</p>
-            <p class="text-sm italic">ACM Member</p>
-            <a href="mailto:abaouya@acm.org" class="text-sky-600 hover:text-sky-800 hover:underline mt-2">
-              <i class="fas fa-envelope mr-1"></i> abaouya@acm.org
-            </a>
-          </div>
-
-          <!-- Advisor Card: Brahim Hamid -->
-          <div class="bg-gray-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300">
-            <img src="https://placehold.co/128x128/9CA3AF/FFFFFF?text=BH" alt="Brahim Hamid" class="rounded-full w-32 h-32 object-cover mb-4 ring-2 ring-sky-500 ring-offset-2">
-            <h3 class="text-xl font-semibold text-gray-900">Professor Brahim Hamid</h3>
-            <p class="text-sky-700 text-lg mb-2">Project Member</p>
-            <a href="mailto:brahim.hamid@irit.fr" class="text-sky-600 hover:text-sky-800 hover:underline mt-2">
-              <i class="fas fa-envelope mr-1"></i> brahim.hamid@irit.fr
-            </a>
-          </div>
-
-          <!-- Advisor Card: Otmane Ait Mohamed -->
-          <div class="bg-gray-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300">
-            <img src="https://placehold.co/128x128/9CA3AF/FFFFFF?text=OAM" alt="Otmane Ait Mohamed" class="rounded-full w-32 h-32 object-cover mb-4 ring-2 ring-sky-500 ring-offset-2">
-            <h3 class="text-xl font-semibold text-gray-900">Professor Otmane Ait Mohamed</h3>
-            <p class="text-sky-700 text-lg mb-2">Advisor</p>
-            <a href="mailto:otmane.aitmohamed@concordia.ca" class="text-sky-600 hover:text-sky-800 hover:underline mt-2">
-              <i class="fas fa-envelope mr-1"></i> otmane.aitmohamed@concordia.ca
-            </a>
-          </div>
-
-          <!-- Advisor Card: Saddek Bensalem -->
-          <div class="bg-gray-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300">
-            <img src="https://placehold.co/128x128/9CA3AF/FFFFFF?text=SB" alt="Saddek Bensalem" class="rounded-full w-32 h-32 object-cover mb-4 ring-2 ring-sky-500 ring-offset-2">
-            <h3 class="text-xl font-semibold text-gray-900">Professor Saddek Bensalem</h3>
-            <p class="text-sky-700 text-lg mb-2">Advisor</p>
-            <a href="mailto:saddek.bensalem@univ-grenoble-alpes.fr" class="text-sky-600 hover:text-sky-800 hover:underline mt-2">
-              <i class="fas fa-envelope mr-1"></i> saddek.bensalem@univ-grenoble-alpes.fr
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Deliverables Section -->
-      <section id="deliverables" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">Deliverables</h2>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 rounded-lg">
-            <thead>
-              <tr>
-                <th scope="col" colspan="4" class="px-6 py-3 text-left text-m font-medium text-white uppercase tracking-wider bg-blue-500">Deliverables</th>
-              </tr>
-              <tr class="bg-gray-50">
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Download</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            
-                                        <tr class="even:bg-gray-50"> <!-- Added even:bg-gray-50 for alternating row colors -->
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">D2</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">October 2025</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ICO Research Project</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <a href="2025ICO_Project_HERMES_Baouya.pdf" download class="text-sky-600 hover:text-sky-800 hover:underline">Download <i class="fas fa-download ml-1"></i></a>
-                </td>
-              </tr>
-              
-              <tr class="even:bg-gray-50"> <!-- Added even:bg-gray-50 for alternating row colors -->
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">D1</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">October 2023</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ICO Research Project</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <a href="2023ICO_Project_HERMES_Baouya.pdf" download class="text-sky-600 hover:text-sky-800 hover:underline">Download <i class="fas fa-download ml-1"></i></a>
-                </td>
-              </tr>
-              
-
-              
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Publications Section -->
-      <section id="publications" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-sky-700 mb-6 border-b pb-2">Publications</h2>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 rounded-lg">
-            <thead>
-              <tr>
-                <th scope="col" colspan="4" class="px-6 py-3 text-left text-m font-medium text-white uppercase tracking-wider bg-blue-500">Publications</th>
-              </tr>
-              <tr class="bg-gray-50">
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            
-                           <tr class="even:bg-gray-50"> <!-- Added even:bg-gray-50 for alternating row colors -->
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">J1</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">January 2026</td>
-                <td class="px-6 py-4 text-sm text-gray-500">
-                  Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.
-                  <span class="text-red-600 font-semibold">Model-based dependability and performance analysis for satellite systems with collaborative maintenance maneuvers via stochastic games</span>.
-                  In <em>Elsevier Journal of Systems and Software </em>, January 2026.
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <a href="jss2025.html" class="text-sky-600 hover:text-sky-800 hover:underline">Link <i class="fas fa-link ml-1"></i></a>
-                </td>
-              </tr>
-              
-              
-              <tr class="even:bg-gray-50"> <!-- Added even:bg-gray-50 for alternating row colors -->
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C1</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">June 2024</td>
-                <td class="px-6 py-4 text-sm text-gray-500">
-                  Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem.
-                  <span class="text-red-600 font-semibold">Model-Based Reliability, Availability, and Maintainability Analysis for Satellite Systems with Collaborative Maneuvers via Stochastic Games</span>.
-                  In <em>The 50th Euromicro Conference Series on Software Engineering and Advanced Applications (SEAA) </em>, 2024.
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <a href="seaa2024.html" class="text-sky-600 hover:text-sky-800 hover:underline">Link <i class="fas fa-link ml-1"></i></a>
-                </td>
-              </tr>
-              
-
-              
-              
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer (Copied and adapted from jss2025_z.html) -->
-    <footer class="bg-gray-800 text-gray-300 py-8 mt-auto">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="mb-4 md:mb-0 text-center md:text-left">
-            <p class="text-sm">&copy; HERMES-Design Project. All rights reserved.</p>
-            <p class="text-xs mt-1"><em>This page was developed for the ICO <a href="https://hermes-design.github.io/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:underline">HERMES-Design project</a>.</em></p>
-            <p class="text-xs"><em>Contact: <a href="mailto:abaouya@acm.org" class="text-sky-400 hover:underline">abaouya@acm.org</a></em></p>
-          </div>
-          <div class="flex items-center space-x-6">
-            <!-- ICO Occitanie Logo from local folder with controlled size -->
-            <a href="https://www.ico-occitanie.fr/" target="_blank" rel="noopener noreferrer" class="hover:opacity-75 transition-opacity">
-              <img src="logo2.png" alt="ICO Occitanie Logo" width="180" height="100" class="rounded-md">
-            </a>
-            <!-- IRIT Logo from local folder with controlled size -->
-            <a href="https://www.irit.fr/" target="_blank" rel="noopener noreferrer" class="hover:opacity-75 transition-opacity">
-              <img src="logo1.png" alt="IRIT Logo" width="180" height="100" class="rounded-md">
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </div>
-
-  <!-- JavaScript for mobile menu and active link highlighting -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Mobile menu toggle
-      const menuButton = document.getElementById('mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
-      const menuIcons = menuButton.querySelectorAll('svg');
-
-      if (menuButton) {
-        menuButton.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-          menuIcons.forEach(icon => icon.classList.toggle('hidden'));
-          const isExpanded = menuButton.getAttribute('aria-expanded') === 'true' || false;
-          menuButton.setAttribute('aria-expanded', !isExpanded);
-        });
-      }
-
-      // Smooth scroll and active link highlighting for navigation
-      const navLinks = document.querySelectorAll('.nav-link');
-      const sections = document.querySelectorAll('main section[id]');
-
-      function updateActiveLink() {
-        let currentSectionId = '';
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop;
-          // Adjust for sticky header height (approx 64px or 4rem)
-          if (window.scrollY >= sectionTop - 80) {
-            currentSectionId = section.getAttribute('id');
-          }
-        });
-
-        navLinks.forEach(link => {
-          link.classList.remove('nav-link-active');
-          // Check if the link's href matches the current section ID
-          if (link.getAttribute('href') === `#${currentSectionId}`) {
-            link.classList.add('nav-link-active');
-          }
-        });
-      }
-      
-      // Call on load and on scroll
-      updateActiveLink();
-      window.addEventListener('scroll', updateActiveLink);
-
-      // Close mobile menu when a link is clicked
-      if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            menuIcons.forEach(icon => icon.classList.toggle('hidden'));
-            menuButton.setAttribute('aria-expanded', 'false');
-          });
-        });
-      }
-    });
-  </script>
+  <body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
 </body>
 </html>
-
