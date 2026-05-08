@@ -1,0 +1,110 @@
+ctmc
+
+// ==================================================
+// System state constants
+// ==================================================
+const int OPERATIONAL = 2;    // Component is fully functional
+const int DEGRADED    = 1;    // Component has failed 
+
+// Specific states for Attack/Defense context
+const int NO_ATTACK   = 2;    // No jamming detected
+const int JAMMED      = 1;    // System is under jamming attack
+
+const int DEF_IDLE    = 2;    // Defense is ready
+const int NULLING     = 1;    // Defense is active (countering the attack)
+
+// ==================================================
+// Degradation rates (failures per time unit)
+// ==================================================
+
+// Satellite rates
+const double lambda = 3.37566e-10;
+const double mu     = 6.71757e-08; 
+
+// Signal rates
+const double lambda_signal = 1.45580e-07;
+const double mu_signal     = 1.85185e-05; 
+
+// Attack and Defense rates
+const double MTTA; // Mean time to perform an attack
+const double lambda_jam  = 1/MTTA;     // Rate of jamming occurrence
+
+const double MTTRA=2; // Mean time to recover from an attack
+const double mu_jam      = 1/MTTRA;    // Rate of recovery from jamming
+
+// Defense activation and recovery rates
+const double alpha; // Scaling factor relating defense speed to attack speed
+
+const double MTTD = MTTA / alpha; // Mean time to deploy the defense
+const double lambda_null = 1 / MTTD;     // Rate of defense activation
+
+const double MTTRD = 2; // Mean time to recover from active defense
+const double mu_null     = 1 / MTTRD;    // Rate of defense reset
+// ==================================================
+// Satellite Degradation Module
+// ==================================================
+module Satellite_Degradation
+    SAT : [0..2] init OPERATIONAL;
+
+    // Transition from Operational to Degraded
+    [sat_degradation] SAT > 0 -> lambda : (SAT' = DEGRADED); 
+    // Recovery process
+    [sat_recovery] SAT = DEGRADED -> mu : (SAT' = OPERATIONAL); 
+endmodule
+
+// ==================================================
+// Signal Degradation Module
+// ==================================================
+module Signal_Degradation
+    SIG : [0..2] init OPERATIONAL;
+
+    [sig_degradation] SIG > 0 -> lambda_signal : (SIG' = DEGRADED); 
+    [sig_recovery] SIG = DEGRADED -> mu_signal : (SIG' = OPERATIONAL); 
+endmodule
+
+// ==================================================
+// Attack Module (Jamming scenario)
+// ==================================================
+module Attack
+    ATT : [0..2] init NO_ATTACK;
+
+    // Jamming attack starts
+    [jamming] ATT > 0 -> lambda_jam : (ATT' = JAMMED); 
+    // Jamming attack ends
+    [jamming_rec] ATT = JAMMED -> mu_jam : (ATT' = NO_ATTACK); 
+
+endmodule
+
+// ==================================================
+// Defense Module (Nulling)
+// ==================================================
+module Defence
+    DEF : [0..2] init DEF_IDLE;
+
+    // Defense mechanism activates (Nulling)
+    [nulling] DEF > 0 -> lambda_null : (DEF' = NULLING); 
+    
+    // Defense resets or recovers
+    [nulling_rec] DEF = NULLING -> mu_null : (DEF' = DEF_IDLE); 
+
+endmodule
+
+// ==================================================
+// System Availability Logic (The "UP" State)
+// ==================================================
+
+// The system is UP if:
+// 1. Satellite is OK
+// 2. Signal is OK
+// 3. AND (There is no Attack OR The Defense is successfully Nulling)
+formula system_up = (SAT = OPERATIONAL) & (SIG = OPERATIONAL) & ( (ATT = NO_ATTACK) | (ATT = JAMMED & DEF = NULLING) );
+label "up" =  system_up;
+
+rewards "up"
+    system_up : 1;
+endrewards
+
+
+rewards "down"
+    !system_up : 1;
+endrewards

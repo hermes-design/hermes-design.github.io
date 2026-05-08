@@ -1,0 +1,508 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: attackerv
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Attacker with Periodic Cycle
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 20.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: chip_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 1.023e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 20.0]
+    rotation: 0
+    state: enabled
+- name: control_rate
+  id: variable
+  parameters:
+    comment: Low sample rate for logic
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [712, 100.0]
+    rotation: 0
+    state: enabled
+- name: jammer_freq_offset
+  id: variable
+  parameters:
+    comment: ''
+    value: '5000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 20.0]
+    rotation: 0
+    state: true
+- name: jammer_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 20.0]
+    rotation: 0
+    state: true
+- name: mtti_min
+  id: variable_qtgui_range
+  parameters:
+    comment: Time to initiate attack
+    gui_hint: ''
+    label: MTTI (Minutes)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.01'
+    step: '0.01'
+    stop: '200'
+    value: '100'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 140.0]
+    rotation: 0
+    state: true
+- name: mttr_min
+  id: variable_qtgui_range
+  parameters:
+    comment: Recovery time
+    gui_hint: ''
+    label: MTTR (Minutes)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.01'
+    step: '0.01'
+    stop: '20'
+    value: '2'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 308.0]
+    rotation: 0
+    state: true
+- name: on_time_min
+  id: variable
+  parameters:
+    comment: ''
+    value: mttr_min
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 100.0]
+    rotation: 0
+    state: enabled
+- name: period_total_min
+  id: variable
+  parameters:
+    comment: ''
+    value: mtti_min + mttr_min
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 100.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 20.0]
+    rotation: 0
+    state: enabled
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 20.0]
+    rotation: 0
+    state: enabled
+- name: blocks_stream_to_vector_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 364.0]
+    rotation: 0
+    state: true
+- name: control_sawtooth
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: Generates slow ramp
+    freq: 1.0 / (period_total_min * 60.0)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: control_rate
+    type: float
+    waveform: analog.GR_SAW_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 724.0]
+    rotation: 0
+    state: true
+- name: decimate_clean
+  id: blocks_keep_one_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: int(sample_rate / 10)
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 128.0]
+    rotation: 0
+    state: true
+- name: decimate_jammed
+  id: blocks_keep_one_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: int(sample_rate / 10)
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 296.0]
+    rotation: 0
+    state: true
+- name: file_clean
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: signal_propre.bin
+    type: float
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1056, 36.0]
+    rotation: 0
+    state: true
+- name: file_jammed
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: signal_brouille.bin
+    type: float
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 228.0]
+    rotation: 0
+    state: true
+- name: float_to_complex
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 768.0]
+    rotation: 0
+    state: true
+- name: interpolator
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Upscale logic to RF
+    interp: int(sample_rate / control_rate)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 764.0]
+    rotation: 0
+    state: true
+- name: mag_sq_clean
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 168.0]
+    rotation: 0
+    state: true
+- name: mag_sq_jammed
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 248.0]
+    rotation: 0
+    state: true
+- name: mixer
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 312.0]
+    rotation: 0
+    state: true
+- name: on_off_switch
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Multiplies RF by Time Control
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [904, 496.0]
+    rotation: 0
+    state: true
+- name: power_scale
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: jammer_power
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 428.0]
+    rotation: 0
+    state: true
+- name: rf_source
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: ''
+    freq: jammer_freq_offset
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: sample_rate
+    type: complex
+    waveform: analog.GR_COS_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 452.0]
+    rotation: 0
+    state: true
+- name: time_slicer
+  id: blocks_threshold_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Output 1 only during the top fraction
+    high: 1.0 - (2.0 * (on_time_min / period_total_min)) + 0.01
+    init: '0'
+    low: 1.0 - (2.0 * (on_time_min / period_total_min)) - 0.01
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 748.0]
+    rotation: 0
+    state: true
+- name: zeromq_pub_sink_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://*:5556
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '0'
+    key: ''
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1256, 364.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5555
+    affinity: ''
+    alias: zeromq_sub_source
+    comment: ''
+    hwm: '0'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 260.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_stream_to_vector_0, '0', zeromq_pub_sink_0, '0']
+- [control_sawtooth, '0', time_slicer, '0']
+- [decimate_clean, '0', file_clean, '0']
+- [decimate_jammed, '0', file_jammed, '0']
+- [float_to_complex, '0', on_off_switch, '1']
+- [interpolator, '0', float_to_complex, '0']
+- [mag_sq_clean, '0', decimate_clean, '0']
+- [mag_sq_jammed, '0', decimate_jammed, '0']
+- [mixer, '0', blocks_stream_to_vector_0, '0']
+- [mixer, '0', mag_sq_jammed, '0']
+- [on_off_switch, '0', power_scale, '0']
+- [power_scale, '0', mixer, '1']
+- [rf_source, '0', on_off_switch, '0']
+- [time_slicer, '0', interpolator, '0']
+- [zeromq_sub_source_0, '0', mag_sq_clean, '0']
+- [zeromq_sub_source_0, '0', mixer, '0']
+
+metadata:
+  file_format: 1

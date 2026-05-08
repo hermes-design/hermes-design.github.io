@@ -1,0 +1,8 @@
+const int T;
+
+P=? [ G ("up"=>(F !"up")) ]
+
+P=? [ "up" U<=T !"up" ]
+
+R{"up"}=?[C<=T]
+
