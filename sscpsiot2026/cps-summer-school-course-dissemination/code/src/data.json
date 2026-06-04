@@ -1,0 +1,111 @@
+{
+  "event": "7th Annual Summer School on Cyber Physical Systems and Internet of Things",
+  "eventLink": "https://mecoconference.me/ss-cpsiot2026/#aboutsscpsiot",
+  "presentation": {
+    "title": "Secure and Resilient Engineering of Cyber Physical Systems (CPS) via Stochastic Games",
+    "authors": [
+      {
+        "name": "Abdelhakim Baouya",
+        "link": "mailto:abdelhakim.baouya@irit.fr",
+        "isPresenter": true,
+        "role": "Speaker / Presenter",
+        "university": "Université de Toulouse, CNRS, France",
+        "department": "Institut de Recherche en Informatique de Toulouse (IRIT)"
+      },
+      {
+        "name": "Brahim Hamid",
+        "link": "mailto:brahim.hamid@irit.fr",
+        "isPresenter": false,
+        "role": "Professor",
+        "university": "Université de Toulouse, France",
+        "department": "IRIT"
+      },
+      {
+        "name": "Otmane Ait Mohamed",
+        "link": "mailto:otmane.aitmohamed@concordia.ca",
+        "isPresenter": false,
+        "role": "Professor",
+        "university": "Concordia University, Canada",
+        "department": "Department of Electrical and Computer Engineering"
+      },
+      {
+        "name": "Saddek Bensalem",
+        "link": "mailto:saddek.bensalem@univ-grenoble-alpes.fr",
+        "isPresenter": false,
+        "role": "Professor",
+        "university": "Université Grenoble Alpes, France",
+        "department": "VERIMAG"
+      }
+    ],
+    "slidesLink": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/Summer_School_2026_SS_CPCIoT-14.pdf"
+  },
+  "sections": {
+    "codeResources": {
+      "title": "Code Resources",
+      "items": [
+        {
+          "name": "Reader Writer on a bus",
+          "links": [
+            {
+              "label": "CPC Code",
+              "url": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/read_write.json"
+            },
+            {
+              "label": "PRISM Code",
+              "url": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/read_write.prism"
+            },
+            {
+              "label": "PRISM Properties",
+              "url": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/properties.props"
+            }
+          ]
+        }
+      ]
+    },
+    "caseStudies": {
+      "title": "Case Studies",
+      "items": [
+        {
+          "name": "Satellite Collaborative Maintenance",
+          "links": [
+            {
+              "label": "CPC Code",
+              "url": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/sattelite.json"
+            },
+            {
+              "label": "PRISM Code",
+              "url": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/sattelite.prism"
+            },
+            {
+              "label": "PRISM Properties",
+              "url": "https://scout.univ-toulouse.fr/pub/docs/ut2.abdelhakim.baouya/web/cpsiot/properties_sat.props"
+            }
+          ]
+        }
+      ]
+    },
+    "tools": {
+      "title": "Tools",
+      "items": [
+        {
+          "name": "CPC Modeler",
+          "url": "https://hermes-design.github.io/cpcmodeler.html",
+          "description": "Use this tool to model Concurrent Stochastic Games (CSG) using a component based approach for system architecture diagrams."
+        }
+      ]
+    },
+    "relatedProjects": {
+      "title": "Related Projects",
+      "items": [
+        {
+          "name": "Hermes Design",
+          "url": "https://hermes-design.github.io/"
+        },
+        {
+          "name": "ACIS IoT",
+          "url": "https://acis-iot.github.io/"
+        }
+      ]
+    }
+  }
+}
