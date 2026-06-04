@@ -1,0 +1,8 @@
+{
+  "name": "CPS Summer School Course Dissemination",
+  "description": "Course dissemination website for Secure and Resilient Engineering of Cyber Physical Systems via Stochastic Games.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
