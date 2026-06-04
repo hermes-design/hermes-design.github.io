@@ -1,0 +1,119 @@
+{
+  "projectInfo": {
+    "title": "HERMES-Design",
+    "subtitle": "Human-Centric Collaborative Architectural Decision-Making for Secure System Design",
+    "funding": "Funded by the Institut de Cybersécurité d'Occitanie (ICO).",
+    "summary": "The current state of tools and methods for collaborative architectural decision-making mainly emphasizes knowledge sharing, reuse, compromises, and seeking consensus among diverse stakeholders. However, our observation reveals a significant oversight in considering the decision-making constraints of various stakeholders in relation to human factors during the development process.\n\nFor example, when dealing with the design of secure systems, it becomes essential to thoroughly comprehend the benefits and limitations of potential solutions like cryptography, authentication, access control, and auditing, while balancing their trade-offs with system performance and dependability.\n\nThe project aims to develop a formal modeling framework that takes into account human factors in architectural decision-making, particularly those related to the expertise and experience of team members involved in collaborative decision-making processes. More broadly, this research will enhance our understanding of how collaborative decisions are made and provide better traceability of decisions impacting system security, performance, and dependability. Consequently, it will increase confidence in the decisions made by a diverse team of members."
+  },
+  "teamMembers": [
+    {
+      "id": "t1",
+      "name": "Abdelhakim Baouya",
+      "role": "Project Leader",
+      "affiliation": "ACM Member",
+      "email": "abaouya@acm.org",
+      "initials": "AB",
+      "imageUrl": "https://hbaouya.github.io/images/profile.jpg"
+    },
+    {
+      "id": "t2",
+      "name": "Prof. Brahim Hamid",
+      "role": "Project Member",
+      "affiliation": "IRIT, University of Toulouse",
+      "email": "brahim.hamid@irit.fr",
+      "initials": "BH",
+      "imageUrl": "https://placehold.co/128x128/9CA3AF/FFFFFF?text=BH"
+    },
+    {
+      "id": "t3",
+      "name": "Prof. Otmane Ait Mohamed",
+      "role": "Advisor",
+      "affiliation": "Concordia University",
+      "email": "otmane.aitmohamed@concordia.ca",
+      "initials": "OA",
+      "imageUrl": "https://placehold.co/128x128/9CA3AF/FFFFFF?text=OAM"
+    },
+    {
+      "id": "t4",
+      "name": "Prof. Saddek Bensalem",
+      "role": "Advisor",
+      "affiliation": "Université Grenoble Alpes",
+      "email": "saddek.bensalem@univ-grenoble-alpes.fr",
+      "initials": "SB",
+      "imageUrl": "https://placehold.co/128x128/9CA3AF/FFFFFF?text=SB"
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D2",
+      "date": "October 2025",
+      "title": "ICO Research Project",
+      "filename": "2025ICO_Project_HERMES_Baouya.pdf",
+      "downloadLink": "2025ICO_Project_HERMES_Baouya.pdf"
+    },
+    {
+      "id": "D1",
+      "date": "October 2023",
+      "title": "ICO Research Project",
+      "filename": "2023ICO_Project_HERMES_Baouya.pdf",
+      "downloadLink": "2023ICO_Project_HERMES_Baouya.pdf"
+    }
+  ],
+  "publications": [
+    {
+      "id": "C2",
+      "date": "June 2026",
+      "title": "Quantitative Assessment of Galileo SAR Satellite System Resilience to Jamming Attacks",
+      "authors": "Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem",
+      "venue": "24th IEEE NEWCAS Conference 2026",
+      "link": "https://doi.org/10.1109/SEAA64295.2024.00014",
+      "artefactLink": "newcas2026.html",
+      "highlighted": true
+    },
+    {
+      "id": "J1",
+      "date": "January 2026",
+      "title": "Model-based dependability and performance analysis for satellite systems with collaborative maintenance maneuvers via stochastic games",
+      "authors": "Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem",
+      "venue": "Elsevier Journal of Systems and Software",
+      "link": "https://doi.org/10.1016/j.jss.2025.112610",
+      "artefactLink": "jss2025.html",
+      "highlighted": true
+    },
+    {
+      "id": "C1",
+      "date": "June 2024",
+      "title": "Model-Based Reliability, Availability, and Maintainability Analysis for Satellite Systems with Collaborative Maneuvers via Stochastic Games",
+      "authors": "Abdelhakim Baouya, Brahim Hamid, Otmane Ait Mohamed and Saddek Bensalem",
+      "venue": "The 50th Euromicro Conference Series on Software Engineering and Advanced Applications (SEAA)",
+      "link": "https://doi.org/10.1109/SEAA64295.2024.00014",
+      "artefactLink": "seaa2024.html",
+      "highlighted": true
+    }
+  ],
+  "invitedTalks": [
+            {
+      "id": "T3",
+      "date": "June 2026",
+      "title": "Secure and Resilient Engineering of Cyber-Physical Systems (CPS) via Stochastic Games",
+      "event": "7th Annual Summer School on Cyber Physical Systems and Internet of Things",
+      "location": "09-13 June 2026, Budva , Montenegro",
+      "link": "https://hermes-design.github.io/sscpsiot2026.html" 
+    },
+        {
+      "id": "T2",
+      "date": "December 2025",
+      "title": "Final Outcomes: Human Factors in Secure System Design",
+      "event": "HERMES-Design Closing Workshop",
+      "location": "Toulouse, France"
+    },
+    {
+      "id": "T1",
+      "date": "May 2024",
+      "title": "Project Progress and Early Insights",
+      "event": "ICO Research Seminar",
+      "location": "Montpellier, France"
+    }
+
+  ]
+}
