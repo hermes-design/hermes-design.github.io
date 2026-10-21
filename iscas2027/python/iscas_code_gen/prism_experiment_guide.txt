@@ -1,0 +1,56 @@
+GUIDE D'UTILISATION DANS PRISM
+================================
+
+FICHIERS :
+  - defense_global.prism        : modele avec taux moyens (resultat principal)
+  - defense_parametrique.prism  : modele par zone (analyse fine)
+  - defense_properties.csl      : proprietes a verifier
+  - rates_table.txt             : correspondance zone <-> (angle, puissance)
+
+------------------------------------------------------------
+A. RESULTAT PRINCIPAL (modele global)
+------------------------------------------------------------
+1. Ouvrir defense_global.prism + defense_properties.csl dans PRISM.
+2. Verifier S=? ["compromised"]  -> proba de compromis en regime stationnaire.
+3. Verifier S=? ["service_ok"]   -> disponibilite du service global.
+
+FRONTIERE DE ROBUSTESSE (figure cle du papier) :
+4. Menu Experiments -> nouvelle experience sur la constante sigma_adapt.
+   Plage : 0 a 20, pas 1. Propriete : S=? ["compromised"].
+   -> Courbe P(compromis) vs vitesse d'adaptation adverse.
+
+IMPACT DE LA LATENCE IA (2e figure cle) :
+5. Experiment sur mu_react (plage 1 a 20, pas 1). Propriete S=? ["compromised"].
+   Rappel : mu_react = 1/T_react, donc mu eleve = IA rapide.
+   -> Montre que reduire la latence IA reduit la proba de compromis.
+
+------------------------------------------------------------
+B. ANALYSE PAR ZONE (modele parametrique)
+------------------------------------------------------------
+1. Ouvrir defense_parametrique.prism.
+2. Experiment sur la constante 'zone' : plage 0 a 53, pas 1.
+   Propriete : S=? ["compromised"].
+   -> Fiabilite par zone d'attaque. Croiser avec rates_table.txt pour
+      identifier les zones fragiles (typiquement angle proche de 0 = boresight,
+      ou le nulling detruit le signal utile).
+3. Pour une carte 2D (angle x puissance), exporter les resultats et tracer.
+
+------------------------------------------------------------
+C. COMPOSITION : DEFENSE x SATELLITE x SIGNAL
+------------------------------------------------------------
+Les deux modeles incluent TROIS entites independantes :
+  - defense  : etats SAFE/UNDER_ATTACK/DEFENDED/COMPROMISED (taux mesures banc)
+  - satellite: OPERATIONNEL/EN_PANNE  (lambda_sat, mu_sat : fiab 88%/12ans + dispo 99.5%)
+  - signal   : SAIN/DEGRADE           (lambda_sig, mu_sig : dispo 99.22% + recup 15h)
+
+Le label "service_ok" = (d=0|d=2) & sat=0 & sig=0 compose les trois par ET :
+le service n'est assure que si la defense protege ET le satellite est
+operationnel ET le signal est sain.
+
+Taux satellite derives rigoureusement :
+  lambda_sat = -ln(0.88)/(12 ans)      (depuis la FIABILITE)
+  mu_sat     = lambda_sat*0.995/0.005   (depuis la DISPONIBILITE 99.5%)
+  -> reproduit EXACTEMENT fiabilite 88% ET disponibilite 99.5%.
+
+Pour etudier l'impact de chaque entite : faire varier lambda_sat/mu_sat
+(satellite) ou lambda_sig/mu_sig (signal) et observer S=? ["service_ok"].

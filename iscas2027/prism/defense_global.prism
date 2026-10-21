@@ -1,0 +1,64 @@
+// ============================================================
+//  CTMC GLOBAL de la defense IA -- taux MOYENS mesures sur le banc
+//  
+//
+//  mu_react   = 368.3295 s^-1   (moyenne ponderee, 1/T_react)
+//  delta_fail = 28.1398 s^-1   (moyenne ponderee)
+//  p_success  = 0.9685
+// ============================================================
+
+ctmc
+
+// ---- Taux MESURES sur le banc ----
+const double mu_react   = 368.3295;
+const double delta_fail = 28.1398;
+
+// ---- Parametres de scenario (a balayer en Experiment) ----
+const double lambda_att  = 0.1;
+const double gamma_reset = 2.0;
+const double rho_recover = 0.5;
+const double sigma_adapt = 3.0;    // adversaire adaptatif
+
+// ---- ENTITE 2 : SATELLITE (plateforme) ----
+// Derivation rigoureuse : lambda depuis la FIABILITE R(12ans)=88%,
+// mu depuis la DISPONIBILITE A=99.5%. Reproduit les DEUX chiffres.
+const double lambda_sat = 3.378e-10;  // panne satellite (MTBF ~94 ans)
+const double mu_sat     = 6.722e-8;   // restauration (MTTR ~172 j : redondance/rechange)
+
+// ---- ENTITE 3 : SIGNAL (sante du signal emis) ----
+// depuis dispo signal 99.22% + recuperation 15 h.
+const double lambda_sig = 1.456e-7;   // indispo signal (MTBF ~1908 h)
+const double mu_sig     = 1.852e-5;   // recuperation signal (15 h)
+
+module defense
+    d : [0..3] init 0;   // 0=SAFE 1=UNDER_ATTACK 2=DEFENDED 3=COMPROMISED
+    [] d=0 -> lambda_att  : (d'=1);
+    [] d=1 -> mu_react    : (d'=2);
+    [] d=1 -> delta_fail  : (d'=3);
+    [] d=2 -> gamma_reset : (d'=0);
+    [] d=2 -> sigma_adapt : (d'=1);
+    [] d=3 -> rho_recover : (d'=0);
+endmodule
+
+module satellite
+    sat : [0..1] init 0;   // 0=OPERATIONNEL 1=EN_PANNE
+    [] sat=0 -> lambda_sat : (sat'=1);
+    [] sat=1 -> mu_sat     : (sat'=0);
+endmodule
+
+module signal
+    sig : [0..1] init 0;   // 0=SAIN 1=DEGRADE
+    [] sig=0 -> lambda_sig : (sig'=1);
+    [] sig=1 -> mu_sig     : (sig'=0);
+endmodule
+
+// Composition ET : defense protege ET satellite op ET signal sain
+label "service_ok"  = (d=0 | d=2) & sat=0 & sig=0;
+label "compromised" = d=3;
+label "sat_down"    = sat=1;
+label "signal_lost" = sig=1;
+label "system_down" = (d=3) | (sat=1) | (sig=1);
+
+rewards "time_compromised" d=3 : 1; endrewards
+rewards "time_defended"    d=2 : 1; endrewards
+rewards "time_service_ok"  (d=0 | d=2) & sat=0 & sig=0 : 1; endrewards

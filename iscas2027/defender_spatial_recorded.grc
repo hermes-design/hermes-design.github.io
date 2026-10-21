@@ -1,0 +1,749 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: defender_spatial_recorded
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Defender Recorded (Repair Rate Test)
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: delta_phi
+  id: variable
+  parameters:
+    comment: ''
+    value: math.pi * math.sin(math.radians(jam_angle))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 20.0]
+    rotation: 0
+    state: 'true'
+- name: jam_angle
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 20.0]
+    rotation: 0
+    state: 'true'
+- name: rssi_alpha
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 20.0]
+    rotation: 0
+    state: 'true'
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '1023000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [750, 20.0]
+    rotation: 0
+    state: 'true'
+- name: w1_i
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 20.0]
+    rotation: 0
+    state: 'true'
+- name: w1_r
+  id: variable
+  parameters:
+    comment: ''
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 20.0]
+    rotation: 0
+    state: 'true'
+- name: w2_i
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 20.0]
+    rotation: 0
+    state: 'true'
+- name: w2_r
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 20.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_add_out
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [820, 300.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_add_sum
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [660, 560.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_add_x1
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 264.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_add_x2
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [460, 380.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_complex_to_mag_squared_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [860, 560.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: complex(w1_r, w1_i)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 240.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_multiply_const_vxx_1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: complex(w2_r, w2_i)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 380.0]
+    rotation: 0
+    state: 'true'
+- name: blocks_multiply_const_vxx_2
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: cmath.exp(1j * delta_phi)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 460.0]
+    rotation: 0
+    state: 'true'
+- name: digital_constellation_decoder_cb_0
+  id: digital_constellation_decoder_cb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.qpsk_constellation()
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1020, 300.0]
+    rotation: 0
+    state: 'true'
+- name: fec_ber_bf_0
+  id: fec_ber_bf
+  parameters:
+    affinity: ''
+    alias: ''
+    berlimit: '-7.0'
+    berminerrors: '10000'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    test_mode: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1288, 272.0]
+    rotation: 0
+    state: 'true'
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math, cmath
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 28.0]
+    rotation: 0
+    state: 'true'
+- name: logpwrfft_x_0
+  id: logpwrfft_x
+  parameters:
+    affinity: ''
+    alias: ''
+    average: 'False'
+    avg_alpha: '1.0'
+    comment: ''
+    fft_size: '16'
+    frame_rate: '30'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ref_scale: '2'
+    sample_rate: samp_rate
+    shift: 'False'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [860, 660.0]
+    rotation: 0
+    state: 'true'
+- name: probe_ber
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1420, 420.0]
+    rotation: 0
+    state: 'true'
+- name: probe_psd
+  id: blocks_probe_signal_vx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+    vlen: '16'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 660.0]
+    rotation: 0
+    state: 'true'
+- name: probe_rssi
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1220, 560.0]
+    rotation: 0
+    state: 'true'
+- name: probe_sinr_jam
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1180, 920.0]
+    rotation: 0
+    state: 'true'
+- name: probe_sinr_sig
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 820.0]
+    rotation: 0
+    state: 'true'
+- name: single_pole_iir_filter_xx_0
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: rssi_alpha
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 560.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_jam_add
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 920.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_jam_iir
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: rssi_alpha
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 920.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_jam_mag2
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [820, 920.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_jam_phase
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: cmath.exp(1j * delta_phi)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 892.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_jam_w1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: complex(w1_r, w1_i)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 900.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_jam_w2
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: complex(w2_r, w2_i)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 980.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_sig_add
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 808.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_sig_iir
+  id: single_pole_iir_filter_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: rssi_alpha
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 820.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_sig_mag2
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 824.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_sig_w1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: complex(w1_r, w1_i)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 652.0]
+    rotation: 0
+    state: 'true'
+- name: sinr_sig_w2
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: complex(w2_r, w2_i)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 716.0]
+    rotation: 0
+    state: 'true'
+- name: snippet_sinr
+  id: snippet
+  parameters:
+    alias: ''
+    code: def get_measured_sinr_db(self):\n    import math\n    p_sig = self.probe_sinr_sig.level()\n    p_jam
+      = self.probe_sinr_jam.level()\n    eps = 1e-20\n    return 10.0 * math.log10((p_sig
+      + eps) / (p_jam + eps))\ntype(self).get_measured_sinr_db = get_measured_sinr_db\n
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [460, 1080.0]
+    rotation: 0
+    state: 'true'
+- name: zeromq_sub_source
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5555
+    affinity: ''
+    alias: Satelitte
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 240.0]
+    rotation: 0
+    state: 'true'
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5556
+    affinity: ''
+    alias: Attacker
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 380.0]
+    rotation: 0
+    state: 'true'
+- name: zeromq_sub_source_1
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5557
+    affinity: ''
+    alias: Satelitte_def
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 236.0]
+    rotation: 0
+    state: 'true'
+
+connections:
+- [blocks_add_out, '0', digital_constellation_decoder_cb_0, '0']
+- [blocks_add_sum, '0', blocks_complex_to_mag_squared_0, '0']
+- [blocks_add_sum, '0', logpwrfft_x_0, '0']
+- [blocks_add_x1, '0', blocks_add_sum, '0']
+- [blocks_add_x1, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_add_x2, '0', blocks_add_sum, '1']
+- [blocks_add_x2, '0', blocks_multiply_const_vxx_1, '0']
+- [blocks_complex_to_mag_squared_0, '0', single_pole_iir_filter_xx_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_add_out, '0']
+- [blocks_multiply_const_vxx_1, '0', blocks_add_out, '1']
+- [blocks_multiply_const_vxx_2, '0', blocks_add_x2, '1']
+- [digital_constellation_decoder_cb_0, '0', fec_ber_bf_0, '1']
+- [fec_ber_bf_0, '0', probe_ber, '0']
+- [logpwrfft_x_0, '0', probe_psd, '0']
+- [single_pole_iir_filter_xx_0, '0', probe_rssi, '0']
+- [sinr_jam_add, '0', sinr_jam_mag2, '0']
+- [sinr_jam_iir, '0', probe_sinr_jam, '0']
+- [sinr_jam_mag2, '0', sinr_jam_iir, '0']
+- [sinr_jam_phase, '0', sinr_jam_w2, '0']
+- [sinr_jam_w1, '0', sinr_jam_add, '0']
+- [sinr_jam_w2, '0', sinr_jam_add, '1']
+- [sinr_sig_add, '0', sinr_sig_mag2, '0']
+- [sinr_sig_iir, '0', probe_sinr_sig, '0']
+- [sinr_sig_mag2, '0', sinr_sig_iir, '0']
+- [sinr_sig_w1, '0', sinr_sig_add, '0']
+- [sinr_sig_w2, '0', sinr_sig_add, '1']
+- [zeromq_sub_source, '0', blocks_add_x1, '0']
+- [zeromq_sub_source, '0', blocks_add_x2, '0']
+- [zeromq_sub_source, '0', sinr_sig_w1, '0']
+- [zeromq_sub_source, '0', sinr_sig_w2, '0']
+- [zeromq_sub_source_0, '0', blocks_add_x1, '1']
+- [zeromq_sub_source_0, '0', blocks_multiply_const_vxx_2, '0']
+- [zeromq_sub_source_0, '0', sinr_jam_phase, '0']
+- [zeromq_sub_source_0, '0', sinr_jam_w1, '0']
+- [zeromq_sub_source_1, '0', fec_ber_bf_0, '0']
+
+metadata:
+  file_format: 1

@@ -1,0 +1,98 @@
+// ============================================================
+//  Proprietes CSL pour le CTMC a TROIS entites
+//  (defense IA x satellite x signal) -- defense_ctmc.prism
+//  ou defense_global.prism / defense_parametrique.prism
+//
+//  A verifier avec PRISM. Chaque propriete repond a une question
+//  de fiabilite / securite pour l'article ISCAS.
+// ============================================================
+
+// ============================================================
+//  A. DISPONIBILITE DU SERVICE GLOBAL (composition des 3 entites)
+// ============================================================
+
+// Disponibilite en regime stationnaire : defense protege ET satellite
+// operationnel ET signal sain. C'est LE chiffre de fiabilite systeme.
+S=? [ "service_ok" ]
+
+// Probabilite stationnaire d'echec de bout en bout (au moins une entite KO).
+S=? [ "system_down" ]
+
+// ============================================================
+//  B. CONTRIBUTION DE CHAQUE ENTITE A L'INDISPONIBILITE
+//  (permet d'attribuer les pertes de service : defense ? sat ? signal ?)
+// ============================================================
+
+// Fraction de temps en etat compromis (defaillance de la DEFENSE).
+S=? [ "compromised" ]
+
+// Fraction de temps satellite en panne.
+S=? [ "sat_down" ]
+
+// Fraction de temps signal degrade.
+S=? [ "signal_lost" ]
+
+// ============================================================
+//  C. ROBUSTESSE TRANSITOIRE
+// ============================================================
+
+// Probabilite d'etre compromis a t=10 s (defense), partant de l'etat initial.
+P=? [ F[10,10] "compromised" ]
+
+// Probabilite qu'une compromission de la defense survienne dans les 5 s.
+P=? [ F[0,5] "compromised" ]
+
+// Probabilite que le service soit indisponible a t=10 s (toutes causes).
+P=? [ F[10,10] "system_down" ]
+
+// ============================================================
+//  D. FRONTIERE DE ROBUSTESSE (resultat cle : adversaire adaptatif)
+//  Balayer sigma_adapt en Experiment PRISM, observer P(compromised).
+//  Le point ou la proba franchit un seuil acceptable definit la
+//  vitesse d'adaptation adverse maximale toleree.
+// ============================================================
+S=? [ "compromised" ]
+
+// Garantie probabiliste : le systeme tient-il P(compromised) < 5% ?
+S<0.05 [ "compromised" ]
+
+// Garantie de service : disponibilite globale > 90% ?
+S>0.90 [ "service_ok" ]
+
+// ============================================================
+//  E. IMPACT DE LA LATENCE IA
+//  Balayer mu_react en Experiment (mu = 1/T_react ; mu eleve = IA rapide).
+//  Montre que reduire la latence IA ameliore la disponibilite du service.
+// ============================================================
+S=? [ "service_ok" ]
+
+// ============================================================
+//  F. RECOMPENSES : temps moyen dans chaque situation (long terme)
+// ============================================================
+
+// Fraction de temps en service assure.
+R{"time_service_ok"}=? [ S ]
+
+// Fraction de temps compromis (defense).
+R{"time_compromised"}=? [ S ]
+
+// Fraction de temps en defense reussie active.
+R{"time_defended"}=? [ S ]
+
+// ============================================================
+//  G. DELAI AVANT PREMIERE COMPROMISSION (resilience)
+//  Temps moyen (depuis l'etat initial) avant d'atteindre l'etat compromis.
+// ============================================================
+R{"time_compromised"}=? [ F "compromised" ]
+
+// ============================================================
+//  NOTES POUR LES EXPERIMENTS PRISM
+//  - Frontiere de robustesse : Experiment sur sigma_adapt (0..20, pas 1),
+//    propriete S=? ["compromised"] (section D).
+//  - Impact latence IA : Experiment sur mu_react (1..20, pas 1),
+//    propriete S=? ["service_ok"] (section E).
+//  - Analyse par zone : modele defense_parametrique.prism, Experiment sur
+//    la constante 'zone' (0..N-1), croiser avec rates_table.txt.
+//  - Sensibilite satellite/signal : Experiment sur lambda_sat ou lambda_sig,
+//    observer S=? ["service_ok"] pour isoler la contribution de chaque entite.
+// ============================================================

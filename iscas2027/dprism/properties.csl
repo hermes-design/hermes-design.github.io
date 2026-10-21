@@ -1,0 +1,45 @@
+// Disponibilite en regime stationnaire : defense protege ET satellite
+S=? [ "service_ok" ]
+
+// Probabilite stationnaire d'echec de bout en bout (au moins une entite KO).
+S=? [ "system_down" ]
+
+// Fraction de temps en etat compromis (defaillance de la DEFENSE).
+S=? [ "compromised" ]
+
+// Fraction de temps satellite en panne.
+S=? [ "sat_down" ]
+
+// Fraction de temps signal degrade.
+S=? [ "signal_lost" ]
+
+// Probabilite d'etre compromis a t=10 s (defense), partant de l'etat initial.
+P=? [ F[10,10] "compromised" ]
+
+// Probabilite qu'une compromission de la defense survienne dans les 5 s.
+P=? [ F[0,5] "compromised" ]
+
+// Probabilite que le service soit indisponible a t=10 s (toutes causes).
+P=? [ F[10,10] "system_down" ]
+
+S=? [ "compromised" ]
+
+// Garantie probabiliste : le systeme tient-il P(compromised) < 5% ?
+S<0.05 [ "compromised" ]
+
+// Garantie de service : disponibilite globale > 90% ?
+S>0.90 [ "service_ok" ]
+
+S=? [ "service_ok" ]
+
+// Fraction de temps en service assure.
+R{"time_service_ok"}=? [ S ]
+
+// Fraction de temps compromis (defense).
+R{"time_compromised"}=? [ S ]
+
+// Fraction de temps en defense reussie active.
+R{"time_defended"}=? [ S ]
+
+R{"time_compromised"}=? [ F "compromised" ]
+

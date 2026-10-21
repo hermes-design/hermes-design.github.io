@@ -1,0 +1,168 @@
+// ============================================================
+//  CTMC PARAMETRIQUE de la defense IA -- taux PAR ZONE (angle,puissance)
+//  (genere depuis ctmc_rates_grid.csv)
+//
+//  La constante 'zone' selectionne l'etat d'attaque (0..53).
+//  En Experiment PRISM : balayer zone de 0 a 53 pour obtenir
+//  la fiabilite par zone d'attaque.
+//
+//  Correspondance zone -> (angle, puissance) : voir rates_table.txt
+// ============================================================
+
+ctmc
+
+// Selecteur de zone d'attaque (a balayer en Experiment : 0..53)
+const int zone;
+
+// Taux mesures, selectionnes par zone via formules :
+formula mu_react =
+    (zone=0 ? 142.4153 : 0) +
+    (zone=1 ? 112.7817 : 0) +
+    (zone=2 ? 202.2078 : 0) +
+    (zone=3 ? 112.9683 : 0) +
+    (zone=4 ? 144.8879 : 0) +
+    (zone=5 ? 205.1638 : 0) +
+    (zone=6 ? 203.7535 : 0) +
+    (zone=7 ? 208.1621 : 0) +
+    (zone=8 ? 207.6723 : 0) +
+    (zone=9 ? 143.6331 : 0) +
+    (zone=10 ? 143.0938 : 0) +
+    (zone=11 ? 334.7109 : 0) +
+    (zone=12 ? 1063.8905 : 0) +
+    (zone=13 ? 961.0358 : 0) +
+    (zone=14 ? 1235.7904 : 0) +
+    (zone=15 ? 1123.9725 : 0) +
+    (zone=16 ? 1133.0481 : 0) +
+    (zone=17 ? 1102.8695 : 0) +
+    (zone=18 ? 1288.3920 : 0) +
+    (zone=19 ? 59.2429 : 0) +
+    (zone=20 ? 67.0573 : 0) +
+    (zone=21 ? 8.5085 : 0) +
+    (zone=22 ? 1149.7977 : 0) +
+    (zone=23 ? 320.8759 : 0) +
+    (zone=24 ? 2.1187 : 0) +
+    (zone=25 ? 10.0589 : 0) +
+    (zone=26 ? 331.1198 : 0) +
+    (zone=27 ? 975.2996 : 0) +
+    (zone=28 ? 6.9459 : 0) +
+    (zone=29 ? 1215.6917 : 0) +
+    (zone=30 ? 344.1495 : 0) +
+    (zone=31 ? 203.8499 : 0) +
+    (zone=32 ? 32.2126 : 0) +
+    (zone=33 ? 20.5402 : 0) +
+    (zone=34 ? 12.2874 : 0) +
+    (zone=35 ? 27.4045 : 0) +
+    (zone=36 ? 1010.2635 : 0) +
+    (zone=37 ? 1205.7077 : 0) +
+    (zone=38 ? 66.7826 : 0) +
+    (zone=39 ? 15.3487 : 0) +
+    (zone=40 ? 10.0615 : 0) +
+    (zone=41 ? 21.9738 : 0) +
+    (zone=42 ? 6.7629 : 0) +
+    (zone=43 ? 25.6202 : 0) +
+    (zone=44 ? 1125.3524 : 0) +
+    (zone=45 ? 1080.3034 : 0) +
+    (zone=46 ? 47.5644 : 0) +
+    (zone=47 ? 37.0797 : 0) +
+    (zone=48 ? 47.8504 : 0) +
+    (zone=49 ? 47.6110 : 0) +
+    (zone=50 ? 47.6758 : 0) +
+    (zone=51 ? 47.6187 : 0) +
+    (zone=52 ? 43.6171 : 0) +
+    (zone=53 ? 144.9893 : 0);
+
+formula delta_fail =
+    (zone=0 ? 0.0000 : 0) +
+    (zone=1 ? 0.0000 : 0) +
+    (zone=2 ? 0.0000 : 0) +
+    (zone=3 ? 0.0000 : 0) +
+    (zone=4 ? 0.0000 : 0) +
+    (zone=5 ? 0.0000 : 0) +
+    (zone=6 ? 0.0000 : 0) +
+    (zone=7 ? 0.0000 : 0) +
+    (zone=8 ? 0.0000 : 0) +
+    (zone=9 ? 0.0000 : 0) +
+    (zone=10 ? 0.0000 : 0) +
+    (zone=11 ? 0.0000 : 0) +
+    (zone=12 ? 0.0000 : 0) +
+    (zone=13 ? 0.0000 : 0) +
+    (zone=14 ? 0.0000 : 0) +
+    (zone=15 ? 0.0000 : 0) +
+    (zone=16 ? 0.0000 : 0) +
+    (zone=17 ? 0.0000 : 0) +
+    (zone=18 ? 0.0000 : 0) +
+    (zone=19 ? 0.0000 : 0) +
+    (zone=20 ? 0.0000 : 0) +
+    (zone=21 ? 0.0000 : 0) +
+    (zone=22 ? 0.0000 : 0) +
+    (zone=23 ? 35.6529 : 0) +
+    (zone=24 ? 0.9080 : 0) +
+    (zone=25 ? 0.0000 : 0) +
+    (zone=26 ? 0.0000 : 0) +
+    (zone=27 ? 1462.9493 : 0) +
+    (zone=28 ? 0.0000 : 0) +
+    (zone=29 ? 0.0000 : 0) +
+    (zone=30 ? 0.0000 : 0) +
+    (zone=31 ? 0.0000 : 0) +
+    (zone=32 ? 8.0531 : 0) +
+    (zone=33 ? 5.1350 : 0) +
+    (zone=34 ? 1.3653 : 0) +
+    (zone=35 ? 3.0449 : 0) +
+    (zone=36 ? 0.0000 : 0) +
+    (zone=37 ? 0.0000 : 0) +
+    (zone=38 ? 0.0000 : 0) +
+    (zone=39 ? 0.0000 : 0) +
+    (zone=40 ? 0.0000 : 0) +
+    (zone=41 ? 2.4415 : 0) +
+    (zone=42 ? 0.0000 : 0) +
+    (zone=43 ? 0.0000 : 0) +
+    (zone=44 ? 0.0000 : 0) +
+    (zone=45 ? 0.0000 : 0) +
+    (zone=46 ? 0.0000 : 0) +
+    (zone=47 ? 0.0000 : 0) +
+    (zone=48 ? 0.0000 : 0) +
+    (zone=49 ? 0.0000 : 0) +
+    (zone=50 ? 0.0000 : 0) +
+    (zone=51 ? 0.0000 : 0) +
+    (zone=52 ? 0.0000 : 0) +
+    (zone=53 ? 0.0000 : 0);
+
+// Parametres de scenario
+const double lambda_att  = 0.1;
+const double gamma_reset = 2.0;
+const double rho_recover = 0.5;
+const double sigma_adapt = 3.0;
+
+// ENTITE 2 : SATELLITE (fiab 88%/12ans + dispo 99.5%)
+const double lambda_sat = 3.378e-10;
+const double mu_sat     = 6.722e-8;
+// ENTITE 3 : SIGNAL (dispo 99.22% + recuperation 15 h)
+const double lambda_sig = 1.456e-7;
+const double mu_sig     = 1.852e-5;
+
+module defense
+    d : [0..3] init 0;
+    [] d=0 -> lambda_att  : (d'=1);
+    [] d=1 -> mu_react    : (d'=2);
+    [] d=1 -> delta_fail  : (d'=3);
+    [] d=2 -> gamma_reset : (d'=0);
+    [] d=2 -> sigma_adapt : (d'=1);
+    [] d=3 -> rho_recover : (d'=0);
+endmodule
+
+module satellite
+    sat : [0..1] init 0;
+    [] sat=0 -> lambda_sat : (sat'=1);
+    [] sat=1 -> mu_sat     : (sat'=0);
+endmodule
+
+module signal
+    sig : [0..1] init 0;
+    [] sig=0 -> lambda_sig : (sig'=1);
+    [] sig=1 -> mu_sig     : (sig'=0);
+endmodule
+
+label "service_ok"  = (d=0 | d=2) & sat=0 & sig=0;
+label "compromised" = d=3;
+
+rewards "time_compromised" d=3 : 1; endrewards
