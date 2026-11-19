@@ -1,0 +1,426 @@
+{
+  "id": "radiation-ctmc-primer",
+  "title": "Radiation upsets and operator response",
+  "chapter": "Part 1 — Context: radiation effects seen from the mission",
+  "chapterOrder": 1,
+  "formalism": "ctmc",
+  "tool": "PRISM 4.x (or PRISM-games)",
+  "prismOptions": "-gaussseidel",
+  "slides": "Slides 5, 19",
+  "summary": "A first CTMC: an on-board computer hit by SEUs (scrubbed automatically) and SEFIs (reset by a human operator who is not always on duty).",
+  "description": [
+    "The on-board computer (OBC) is NOMINAL, suffers a Single Event Upset (SEU) that EDAC/scrubbing corrects, or a Single Event Functional Interrupt (SEFI) that needs a reset command.",
+    "The reset is a synchronised action between the OBC and the Operator module: it can only happen while an operator is ON_DUTY. This is the right-hand side of the chain on slide 5: a device effect becomes an outage only if nobody repairs it in time.",
+    "Rates follow slide 19: λ = 1/MTBF and μ = 1/MTTR. The default values are teaching values (hours) — replace them with SEE rates from radiation testing."
+  ],
+  "objectives": [
+    "Translate MTBF / MTTR figures into CTMC rates.",
+    "Understand synchronisation of rates in a CTMC (rate of [reset] = 1 × mu_reset).",
+    "Read steady-state (S) and time-bounded (P, R with C<=T) CSL properties."
+  ],
+  "exercises": [
+    "Halve MTTR_reset: how much does the steady-state availability improve?",
+    "Set the operator always on duty (MTTF_shift very large): what is the gain? What does it cost in staff?",
+    "Plot P=? [ F<=T \"sefi\" ] for T from 24 h to 8760 h (Experiments in PRISM)."
+  ],
+  "parameters": [
+    {
+      "name": "MTBF_SEU",
+      "label": "MTBF between SEUs",
+      "value": "48",
+      "unit": "h",
+      "description": "Mean time between two single event upsets on the OBC memory",
+      "source": "Teaching value — use SEE rate σ·Φ from testing"
+    },
+    {
+      "name": "MTTR_scrub",
+      "label": "Scrubbing time",
+      "value": "0.1",
+      "unit": "h",
+      "description": "Mean time for EDAC / scrubbing to correct an SEU",
+      "source": "Teaching value"
+    },
+    {
+      "name": "MTBF_SEFI",
+      "label": "MTBF between SEFIs",
+      "value": "2000",
+      "unit": "h",
+      "description": "Mean time between functional interrupts",
+      "source": "Teaching value"
+    },
+    {
+      "name": "MTTR_reset",
+      "label": "Operator reset time",
+      "value": "4",
+      "unit": "h",
+      "description": "Mean time for the operator to diagnose and reset",
+      "source": "Teaching value"
+    },
+    {
+      "name": "MTTF_shift",
+      "label": "Mean on-duty period",
+      "value": "8",
+      "unit": "h",
+      "description": "Mean time an operator stays on duty",
+      "source": "Teaching value"
+    },
+    {
+      "name": "MTTR_shift",
+      "label": "Mean off-duty period",
+      "value": "16",
+      "unit": "h",
+      "description": "Mean time without operator",
+      "source": "Teaching value"
+    },
+    {
+      "name": "T",
+      "label": "Mission time bound",
+      "value": "720",
+      "unit": "h",
+      "description": "Time bound of the transient properties (720 h = 1 month)"
+    }
+  ],
+  "model": {
+    "modelType": "ctmc",
+    "components": [
+      {
+        "id": "b6e9e97e-ce27-4b54-8e7b-71c83946db88",
+        "type": "SATELLITE",
+        "name": "OBC",
+        "x": 160,
+        "y": 140,
+        "width": 190,
+        "height": 120,
+        "ports": [
+          {
+            "id": "e40d375b-44a9-47df-8506-760970ffc5e8",
+            "name": "reset",
+            "type": "INPUT",
+            "side": "RIGHT",
+            "offset": 60,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "b8cab543-4337-4667-8fe8-08f5300b497c",
+              "name": "NOMINAL",
+              "variableName": "obc",
+              "value": 0,
+              "x": 120,
+              "y": 200
+            },
+            {
+              "id": "59a89fe3-4d06-4926-b4c0-a5ca59cb46ac",
+              "name": "SEU",
+              "variableName": "obc",
+              "value": 1,
+              "x": 380,
+              "y": 80
+            },
+            {
+              "id": "c7ebcab8-17b2-4411-8fae-61d429b45199",
+              "name": "SEFI",
+              "variableName": "obc",
+              "value": 2,
+              "x": 380,
+              "y": 320
+            }
+          ],
+          "transitions": [
+            {
+              "id": "c28bebf3-8402-46c2-843a-cd57530dca0a",
+              "sourceStateId": "b8cab543-4337-4667-8fe8-08f5300b497c",
+              "targetStateId": "59a89fe3-4d06-4926-b4c0-a5ca59cb46ac",
+              "updates": [
+                {
+                  "probability": "lambda_seu",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "ad54eb92-1e91-4c84-b321-4cfeebbffb68",
+              "sourceStateId": "59a89fe3-4d06-4926-b4c0-a5ca59cb46ac",
+              "targetStateId": "b8cab543-4337-4667-8fe8-08f5300b497c",
+              "updates": [
+                {
+                  "probability": "mu_scrub",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "8612dc14-00e7-48dc-9840-edbb053d1cd6",
+              "sourceStateId": "b8cab543-4337-4667-8fe8-08f5300b497c",
+              "targetStateId": "c7ebcab8-17b2-4411-8fae-61d429b45199",
+              "updates": [
+                {
+                  "probability": "lambda_sefi",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "c57f122b-cdfb-40ed-9208-c4d089cd24f1",
+              "sourceStateId": "c7ebcab8-17b2-4411-8fae-61d429b45199",
+              "targetStateId": "b8cab543-4337-4667-8fe8-08f5300b497c",
+              "action": "reset",
+              "updates": [
+                {
+                  "probability": "mu_reset",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "62f01f94-7cc3-469e-896c-15db3e97d8a7",
+        "type": "STATION",
+        "name": "Operator",
+        "x": 520,
+        "y": 140,
+        "width": 190,
+        "height": 120,
+        "ports": [
+          {
+            "id": "dfa4b9d8-a4b7-47b1-aea5-bcac5a713b13",
+            "name": "reset",
+            "type": "OUTPUT",
+            "side": "LEFT",
+            "offset": 60,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "b8f810a0-da68-48a4-937f-094b47613ff9",
+              "name": "ON_DUTY",
+              "variableName": "op",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "dbc63bba-1b96-4841-8c95-e66530f1c952",
+              "name": "OFF_DUTY",
+              "variableName": "op",
+              "value": 1,
+              "x": 420,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "c15437c3-46be-4aba-a635-ad8384f0aef3",
+              "sourceStateId": "b8f810a0-da68-48a4-937f-094b47613ff9",
+              "targetStateId": "dbc63bba-1b96-4841-8c95-e66530f1c952",
+              "updates": [
+                {
+                  "probability": "lambda_off",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "f957c931-047d-4120-8b3c-aaf7f99e6401",
+              "sourceStateId": "dbc63bba-1b96-4841-8c95-e66530f1c952",
+              "targetStateId": "b8f810a0-da68-48a4-937f-094b47613ff9",
+              "updates": [
+                {
+                  "probability": "mu_on",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "cc5fce21-7853-405e-af17-17c6680eb343",
+              "sourceStateId": "b8f810a0-da68-48a4-937f-094b47613ff9",
+              "targetStateId": "b8f810a0-da68-48a4-937f-094b47613ff9",
+              "action": "reset",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "id": "2d04f21b-7238-43b3-b6a3-21fd277bdd07",
+        "sourceComponentId": "62f01f94-7cc3-469e-896c-15db3e97d8a7",
+        "sourcePortId": "dfa4b9d8-a4b7-47b1-aea5-bcac5a713b13",
+        "targetComponentId": "b6e9e97e-ce27-4b54-8e7b-71c83946db88",
+        "targetPortId": "e40d375b-44a9-47df-8506-760970ffc5e8",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "33ef76e0-2178-4a14-869d-cb40866a0c3d",
+        "name": "MTBF_SEU",
+        "type": "double",
+        "value": "48"
+      },
+      {
+        "id": "93078e53-3fe1-4725-8147-c5ef84e20ebb",
+        "name": "MTTR_scrub",
+        "type": "double",
+        "value": "0.1"
+      },
+      {
+        "id": "72c65439-ce69-4e39-846f-8c7b7c70a09d",
+        "name": "MTBF_SEFI",
+        "type": "double",
+        "value": "2000"
+      },
+      {
+        "id": "c121b4b4-3b41-4ce2-82cb-9c5f692c3997",
+        "name": "MTTR_reset",
+        "type": "double",
+        "value": "4"
+      },
+      {
+        "id": "0de2cdb0-447b-4b24-8bec-8bfc61559c84",
+        "name": "MTTF_shift",
+        "type": "double",
+        "value": "8"
+      },
+      {
+        "id": "0baf3d09-d75b-43f4-92aa-cf9528e14fba",
+        "name": "MTTR_shift",
+        "type": "double",
+        "value": "16"
+      },
+      {
+        "id": "231d96a8-eec6-43c4-9898-287629bb00d0",
+        "name": "T",
+        "type": "double",
+        "value": "720"
+      },
+      {
+        "id": "fcfd5f66-feb8-4a41-a662-218a0582feed",
+        "name": "lambda_seu",
+        "type": "double",
+        "value": "1/MTBF_SEU"
+      },
+      {
+        "id": "bbf9c6cb-dc09-47a5-89da-7679ff1de864",
+        "name": "mu_scrub",
+        "type": "double",
+        "value": "1/MTTR_scrub"
+      },
+      {
+        "id": "08661799-50ae-466f-b3ff-c0668fe18563",
+        "name": "lambda_sefi",
+        "type": "double",
+        "value": "1/MTBF_SEFI"
+      },
+      {
+        "id": "584dcd1e-1276-44e7-b979-7c15449e56a4",
+        "name": "mu_reset",
+        "type": "double",
+        "value": "1/MTTR_reset"
+      },
+      {
+        "id": "a767e711-4e6a-4b3a-9427-b4284ac4db58",
+        "name": "lambda_off",
+        "type": "double",
+        "value": "1/MTTF_shift"
+      },
+      {
+        "id": "2c242b3e-c0b8-4575-b4e7-d48de5512cda",
+        "name": "mu_on",
+        "type": "double",
+        "value": "1/MTTR_shift"
+      }
+    ],
+    "formulas": [],
+    "labels": [
+      {
+        "id": "1a1cdfc7-4339-4fc4-9280-d56f7f5369bd",
+        "name": "up",
+        "expression": "obc=0"
+      },
+      {
+        "id": "edb04fb0-4923-47fc-ae2c-ecd4d001d5e3",
+        "name": "seu",
+        "expression": "obc=1"
+      },
+      {
+        "id": "bdd149c8-65e3-464d-8ac0-1e809787a733",
+        "name": "sefi",
+        "expression": "obc=2"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "1c7a6398-1d86-4056-a183-629e31634687",
+        "name": "downtime",
+        "items": [
+          {
+            "id": "b432e0fb-9c22-4be1-a2a3-380b1cbd9675",
+            "guard": "obc>0",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "36f34c2c-26ee-477b-9f48-e93fd2421e5f",
+        "name": "resets",
+        "items": [
+          {
+            "id": "5879d92b-0eba-4b0e-94d4-fce796f26cae",
+            "action": "reset",
+            "guard": "true",
+            "reward": "1"
+          }
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "95ba6a44-11e7-48ec-bace-631fd67d8b28",
+        "name": "Availability",
+        "formula": "S=? [ \"up\" ]",
+        "description": "long-run probability that the OBC is nominal"
+      },
+      {
+        "id": "9f4572f7-1555-4f35-aec3-608febe74b31",
+        "name": "SEFI within T",
+        "formula": "P=? [ F<=T \"sefi\" ]",
+        "description": "probability of at least one SEFI within T"
+      },
+      {
+        "id": "c11386a7-93a0-4db0-a9cb-7690c0114949",
+        "name": "Expected downtime",
+        "formula": "R{\"downtime\"}=? [ C<=T ]",
+        "description": "expected time (h) without service up to T"
+      },
+      {
+        "id": "161eacaa-7158-4d82-b492-5b1de29f9b98",
+        "name": "Expected resets",
+        "formula": "R{\"resets\"}=? [ C<=T ]",
+        "description": "expected number of operator resets up to T"
+      },
+      {
+        "id": "dee757e7-bdfe-47f7-88e8-3ecf6961daad",
+        "name": "Long-run downtime rate",
+        "formula": "R{\"downtime\"}=? [ S ]",
+        "description": "fraction of time without service"
+      }
+    ]
+  }
+}
