@@ -1,0 +1,511 @@
+{
+  "id": "galileo-sar-jamming",
+  "title": "Galileo SAR link under jamming (CTMC)",
+  "chapter": "Part 5 — Case study 2: Galileo SAR under jamming",
+  "chapterOrder": 5,
+  "formalism": "ctmc",
+  "tool": "PRISM 4.x (or PRISM-games)",
+  "slides": "Slides 39–42",
+  "summary": "Four CTMC modules (Satellite, Signal, Attack, Defence) and one service formula. The jammer (SPARTA EX-0016) is countered by antenna nulling (CM0083) at rate λnull = α·λjam.",
+  "description": [
+    "Each module alternates between two states with exponential rates (slide 40): Satellite and Signal fail and recover; the Attack module switches between NO_ATTACK and JAMMED with λjam = 1/MTTA and μjam = 1/2; the Defence module activates nulling at λnull = α·λjam and stops at μnull = 1/2.",
+    "The service is up when satellite and signal are healthy and either no attack is active, or nulling is active during the attack: formula system_up.",
+    "α scales the defence rate relative to the attack rate (α = 1: same rate; α > 1: faster defence). REACTIVE = false keeps the four modules independent as on slide 40; REACTIVE = true lets nulling start only while the link is jammed.",
+    "Nobody decides in this model (fixed attack and defence rates), which is why a CTMC is enough (slide 13).",
+    "Rates span ten orders of magnitude (10⁻⁸ … 1): iterative steady-state solvers do not converge, so the properties use transient (U<=T, F<=T) and cumulative (C<=T) analysis."
+  ],
+  "objectives": [
+    "Build a CTMC from rates (λ = 1/MTBF, μ = 1/MTTR) and a service formula.",
+    "Write CSL properties: time-bounded until, steady state, cumulative rewards.",
+    "Study the effect of α and of the attack frequency (MTTA) on resilience."
+  ],
+  "exercises": [
+    "Run P=? [ \"up\" U<=T !\"up\" ] for α = 1, 2, 5, 10: are the curves parallel when α = 1?",
+    "Increase MTTA (rarer attacks): how fast does the effect of jamming fade?",
+    "Compare the expected defence reward with the 5.85 % defended/total signals of the GNU Radio simulation (slide 42).",
+    "Set REACTIVE = true: what changes, and why?",
+    "Check the long-run signal availability μsig / (λsig + μsig) with the slide-40 rates against the 99.22 % of slide 39. What do you conclude?"
+  ],
+  "parameters": [
+    {
+      "name": "lambda_sat",
+      "label": "Satellite failure rate λ",
+      "value": "2.03e-8",
+      "source": "Slide 40"
+    },
+    {
+      "name": "mu_sat",
+      "label": "Satellite recovery rate μ",
+      "value": "4.03e-6",
+      "source": "Slide 40"
+    },
+    {
+      "name": "lambda_sig",
+      "label": "Signal degradation rate λsig",
+      "value": "1e-3",
+      "source": "Slide 40"
+    },
+    {
+      "name": "mu_sig",
+      "label": "Signal recovery rate μsig",
+      "value": "8.7e-6",
+      "source": "Slide 40"
+    },
+    {
+      "name": "MTTA",
+      "label": "Mean time to attack (MTTA)",
+      "value": "10",
+      "description": "λjam = 1/MTTA",
+      "source": "Teaching value"
+    },
+    {
+      "name": "mu_jam",
+      "label": "Jamming end rate μjam",
+      "value": "0.5",
+      "source": "Slide 40 (1/2)"
+    },
+    {
+      "name": "alpha",
+      "label": "Defence/attack rate ratio α",
+      "value": "10",
+      "source": "Slides 40, 42"
+    },
+    {
+      "name": "mu_null",
+      "label": "Nulling end rate μnull",
+      "value": "0.5",
+      "source": "Slide 40 (1/2)"
+    },
+    {
+      "name": "REACTIVE",
+      "label": "Reactive defence",
+      "value": "false",
+      "description": "true: nulling only starts while jammed"
+    },
+    {
+      "name": "T",
+      "label": "Time bound T",
+      "value": "100",
+      "description": "Same time unit as the rates"
+    }
+  ],
+  "model": {
+    "modelType": "ctmc",
+    "components": [
+      {
+        "id": "0a7bf3cb-b86f-4000-9b66-88e6b4d1596b",
+        "type": "SATELLITE",
+        "name": "Satellite",
+        "x": 120,
+        "y": 60,
+        "width": 170,
+        "height": 110,
+        "ports": [],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "22c1392f-27dd-4da6-98ca-c71b02d2ec6c",
+              "name": "OPERATIONAL",
+              "variableName": "SAT",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "c60606ed-cc9d-4b23-a933-eefd6425a216",
+              "name": "DEGRADED",
+              "variableName": "SAT",
+              "value": 1,
+              "x": 450,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "6086cbe0-e7fc-4c35-b298-62dfc1d12048",
+              "sourceStateId": "22c1392f-27dd-4da6-98ca-c71b02d2ec6c",
+              "targetStateId": "c60606ed-cc9d-4b23-a933-eefd6425a216",
+              "updates": [
+                {
+                  "probability": "lambda_sat",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "e6137a47-28b4-4140-aac2-207b460a257c",
+              "sourceStateId": "c60606ed-cc9d-4b23-a933-eefd6425a216",
+              "targetStateId": "22c1392f-27dd-4da6-98ca-c71b02d2ec6c",
+              "updates": [
+                {
+                  "probability": "mu_sat",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "8469a76e-5ffd-420d-9696-d87d6179d6ae",
+        "type": "BASIC",
+        "name": "Signal",
+        "x": 380,
+        "y": 60,
+        "width": 170,
+        "height": 110,
+        "ports": [],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "7168db92-2dc2-4f80-9bda-149519984de5",
+              "name": "OPERATIONAL",
+              "variableName": "SIG",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "1a2902bb-cec0-45d2-ae6e-607fb6382662",
+              "name": "DEGRADED",
+              "variableName": "SIG",
+              "value": 1,
+              "x": 450,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "41ccc9f1-9a6c-43e2-83cc-d4f7b3477930",
+              "sourceStateId": "7168db92-2dc2-4f80-9bda-149519984de5",
+              "targetStateId": "1a2902bb-cec0-45d2-ae6e-607fb6382662",
+              "updates": [
+                {
+                  "probability": "lambda_sig",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "41c5dbae-528f-48ea-a1ff-8ef73ad57e21",
+              "sourceStateId": "1a2902bb-cec0-45d2-ae6e-607fb6382662",
+              "targetStateId": "7168db92-2dc2-4f80-9bda-149519984de5",
+              "updates": [
+                {
+                  "probability": "mu_sig",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "5fcb61c1-9267-4611-87af-2721d81c2f3d",
+        "type": "ATTACKER",
+        "name": "Attack",
+        "x": 120,
+        "y": 260,
+        "width": 170,
+        "height": 110,
+        "ports": [],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "0f8f732e-ccc4-4eba-93c1-f27fdb178500",
+              "name": "NO_ATTACK",
+              "variableName": "ATT",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "0e63dfef-cfec-40e1-acc8-78a7697bb112",
+              "name": "JAMMED",
+              "variableName": "ATT",
+              "value": 1,
+              "x": 450,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "0d245e5c-d43c-41a2-984f-2f57912a8312",
+              "sourceStateId": "0f8f732e-ccc4-4eba-93c1-f27fdb178500",
+              "targetStateId": "0e63dfef-cfec-40e1-acc8-78a7697bb112",
+              "updates": [
+                {
+                  "probability": "lambda_jam",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "23e0f02d-6292-4005-89cb-a7c41a04a375",
+              "sourceStateId": "0e63dfef-cfec-40e1-acc8-78a7697bb112",
+              "targetStateId": "0f8f732e-ccc4-4eba-93c1-f27fdb178500",
+              "updates": [
+                {
+                  "probability": "mu_jam",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "71597ab8-e82e-458c-a71d-ccc2a5c2cb7c",
+        "type": "GATEWAY",
+        "name": "Defence",
+        "x": 380,
+        "y": 260,
+        "width": 170,
+        "height": 110,
+        "ports": [],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "d4d5157d-4260-4b33-aabd-6f858c42ef30",
+              "name": "IDLE",
+              "variableName": "DEF",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "d45d1604-ea94-4f68-b4cf-63295329ddcc",
+              "name": "NULLING",
+              "variableName": "DEF",
+              "value": 1,
+              "x": 450,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "d7748c10-e25b-4eb5-962f-6e922361a52a",
+              "sourceStateId": "d4d5157d-4260-4b33-aabd-6f858c42ef30",
+              "targetStateId": "d45d1604-ea94-4f68-b4cf-63295329ddcc",
+              "guard": "!REACTIVE | ATT=JAMMED",
+              "updates": [
+                {
+                  "probability": "lambda_null",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "f0eb3d1b-78cc-411a-b8af-13638fc26579",
+              "sourceStateId": "d45d1604-ea94-4f68-b4cf-63295329ddcc",
+              "targetStateId": "d4d5157d-4260-4b33-aabd-6f858c42ef30",
+              "updates": [
+                {
+                  "probability": "mu_null",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [],
+    "constants": [
+      {
+        "id": "099a72d5-590e-4bbc-97ad-b57f862dd434",
+        "name": "OPERATIONAL",
+        "type": "int",
+        "value": "0"
+      },
+      {
+        "id": "ec37f88c-e81e-4b9f-bd7e-58d09edd2e09",
+        "name": "DEGRADED",
+        "type": "int",
+        "value": "1"
+      },
+      {
+        "id": "80ebba8e-3ef0-481a-8e6c-c41a3fb93a11",
+        "name": "NO_ATTACK",
+        "type": "int",
+        "value": "0"
+      },
+      {
+        "id": "3320c85f-fea2-4bc0-9453-60cd245a855f",
+        "name": "JAMMED",
+        "type": "int",
+        "value": "1"
+      },
+      {
+        "id": "8051cf96-56e5-4cee-8bfa-129d97574a0a",
+        "name": "IDLE",
+        "type": "int",
+        "value": "0"
+      },
+      {
+        "id": "4426da11-85fe-4d5e-b590-b884835670c2",
+        "name": "NULLING",
+        "type": "int",
+        "value": "1"
+      },
+      {
+        "id": "4e573618-8cf1-49c4-a105-709cb9174a2f",
+        "name": "lambda_sat",
+        "type": "double",
+        "value": "2.03e-8"
+      },
+      {
+        "id": "9982002c-e404-4ec0-b4b8-224baaca8c74",
+        "name": "mu_sat",
+        "type": "double",
+        "value": "4.03e-6"
+      },
+      {
+        "id": "fdc56257-81d6-4f45-84a5-bf6e74e87987",
+        "name": "lambda_sig",
+        "type": "double",
+        "value": "1e-3"
+      },
+      {
+        "id": "b5f6c53e-caf4-4421-97ed-9bdacdf0fa55",
+        "name": "mu_sig",
+        "type": "double",
+        "value": "8.7e-6"
+      },
+      {
+        "id": "40beabfb-0caa-4e5d-a4ff-672c9b4be9a1",
+        "name": "MTTA",
+        "type": "double",
+        "value": "10"
+      },
+      {
+        "id": "6485bed3-ffd4-4a73-aafb-422da9c847a2",
+        "name": "lambda_jam",
+        "type": "double",
+        "value": "1/MTTA"
+      },
+      {
+        "id": "2bb86877-6ba2-44b0-b19d-e85eefb465b3",
+        "name": "mu_jam",
+        "type": "double",
+        "value": "0.5"
+      },
+      {
+        "id": "8c0a9d6e-50e6-4d58-b7a6-e39e79fafab7",
+        "name": "alpha",
+        "type": "double",
+        "value": "10"
+      },
+      {
+        "id": "6a16e35a-1706-42a7-b795-3972793c0b3a",
+        "name": "lambda_null",
+        "type": "double",
+        "value": "alpha*lambda_jam"
+      },
+      {
+        "id": "a21c5861-85cf-4d27-b55d-778cf2afcd71",
+        "name": "mu_null",
+        "type": "double",
+        "value": "0.5"
+      },
+      {
+        "id": "0ef77f3d-6ecc-4d84-8e63-aa7c1741e705",
+        "name": "REACTIVE",
+        "type": "bool",
+        "value": "false"
+      },
+      {
+        "id": "c64d1cd9-9da4-4df0-b454-5c26d5dac402",
+        "name": "T",
+        "type": "double",
+        "value": "100"
+      }
+    ],
+    "formulas": [
+      {
+        "id": "bdc5dd9d-7c47-449a-bcc3-fbc400ed81c3",
+        "name": "system_up",
+        "expression": "(SAT=OPERATIONAL) & (SIG=OPERATIONAL) & ((ATT=NO_ATTACK) | (ATT=JAMMED & DEF=NULLING))"
+      }
+    ],
+    "labels": [
+      {
+        "id": "3b3d9e71-d05c-4282-86e9-f2e9dc413958",
+        "name": "up",
+        "expression": "system_up"
+      },
+      {
+        "id": "9849831b-663a-4297-a0cb-e730591e1827",
+        "name": "jammed",
+        "expression": "ATT=JAMMED"
+      },
+      {
+        "id": "9d5797c3-d4b4-4228-8b3f-ec27336b3387",
+        "name": "defended",
+        "expression": "ATT=JAMMED & DEF=NULLING"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "40405b50-82cb-4577-b53d-79e973a119d0",
+        "name": "defense",
+        "items": [
+          {
+            "id": "f2f21562-0dea-446d-914c-7b3170921090",
+            "guard": "ATT=JAMMED & DEF=NULLING",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "bc546ccb-3fb8-40ba-9865-7081c8910e35",
+        "name": "downtime",
+        "items": [
+          {
+            "id": "056f37fd-f52f-47de-8f33-163e5d6944e8",
+            "guard": "!system_up",
+            "reward": "1"
+          }
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "f9023a2e-9f51-4ef7-875a-0771b91b735a",
+        "name": "Degraded within T",
+        "formula": "P=? [ \"up\" U<=T !\"up\" ]",
+        "description": "slide 40 — probability that the service goes down within T"
+      },
+      {
+        "id": "c8226a7a-6e68-410e-b70b-8510e8dbdf65",
+        "name": "Jammed within T",
+        "formula": "P=? [ F<=T \"jammed\" ]"
+      },
+      {
+        "id": "f419e4bf-7c1f-4f9b-9791-1999bc689748",
+        "name": "Availability over [0,T]",
+        "formula": "1 - R{\"downtime\"}=? [ C<=T ] / T",
+        "description": "mean fraction of [0,T] with the service up"
+      },
+      {
+        "id": "5bba75fd-39cf-441b-a207-1657c320bc99",
+        "name": "Expected defence reward",
+        "formula": "R{\"defense\"}=? [ C<=T ] / T",
+        "description": "fraction of [0,T] spent jammed AND defended (compare with slide 42)"
+      },
+      {
+        "id": "ed578182-a762-4dc2-923f-d69568ac23f4",
+        "name": "Expected downtime",
+        "formula": "R{\"downtime\"}=? [ C<=T ]"
+      }
+    ]
+  }
+}

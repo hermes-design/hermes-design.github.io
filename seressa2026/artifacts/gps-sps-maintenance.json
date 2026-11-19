@@ -1,0 +1,1139 @@
+{
+  "id": "gps-sps-maintenance",
+  "title": "GPS SPS collaborative maintenance (reduced CSG)",
+  "chapter": "Part 4 — Case study 1: GPS SPS with humans in the loop",
+  "chapterOrder": 4,
+  "formalism": "csg",
+  "tool": "PRISM-games 3.x",
+  "slides": "Slides 23–31, 46",
+  "summary": "Reduced teaching version of the GPS game: Environment vs. on-orbit staff (Po) vs. on-ground staff (Pg), arbitrated by a non-player Monitor. Probabilities are generated from the GPS SPS parameters.",
+  "description": [
+    "Three players act concurrently each round: the Environment (env) tries a hazard — unscheduled interruption, short-term or long-term hard failure, soft failure; the on-orbit staff (o) and the on-ground staff (g) decide whether to take a failure and how to repair it.",
+    "Short-term hard failure: only Po can repair it, by switching to a redundant subsystem (success Pbeta). Long-term hard failure: if both teams take the task, the Monitor allocates it with OnGroundPriority (slide 30). Po switches to a redundant subsystem / sends software commands (success Pbeta, unless the satellite is at end of life, p_eol), then tries to move & replace a redundant satellite (Pbeta). If that fails, the task goes to Pg: check spare (pr_build), build + manufacture, launch (Pn).",
+    "Per-round failure probabilities are derived from the MTBFs with p_fail = 1 − e^(−t/MTBF) (slide 19), t being the duration of a round. Change t_round or an MTBF and the whole model is regenerated.",
+    "This is a reduced model written for the hands-on session (a few hundred states): it keeps the structure of the journal model but not its full detail (24 slots, O&M degradation, costs), so the numbers differ from the paper's figures."
+  ],
+  "objectives": [
+    "Model humans as strategic players, not as failure probabilities.",
+    "Isolate the contribution of each team by comparing the coalitions <<env,o>>, <<env,g>>, <<env,o,g>>.",
+    "Sweep a human priority (OnGroundPriority) and observe the trade-off."
+  ],
+  "exercises": [
+    "Compare PRO5, PRO6 and PRO7: which team reaches the reliability target first?",
+    "Sweep OnGroundPriority from 0 to 1 (PRISM Experiments) and compare <<env,o>> R{\"replace\"} with <<env,g>> R{\"manufacture\"}.",
+    "Lower Pbeta to 0.5: how does the load move to the on-ground staff?",
+    "Bonus: duplicate OnOrbitStaff into a second on-orbit player and watch the state space grow (slide 37)."
+  ],
+  "parameters": [
+    {
+      "name": "k",
+      "label": "Number of rounds",
+      "value": "30",
+      "description": "Horizon of the properties (slides use k = 1 … 30)"
+    },
+    {
+      "name": "t_round",
+      "label": "Duration of a round",
+      "value": "0.5",
+      "unit": "years",
+      "description": "30 rounds × 0.5 y = 15-year design life",
+      "source": "Teaching choice"
+    },
+    {
+      "name": "MTBF_ST",
+      "label": "Short-term hard failure MTBF",
+      "value": "0.5",
+      "unit": "years",
+      "description": "Handled by the on-orbit staff only (switch to a redundant subsystem)",
+      "source": "GPS SPS PS — slide 26"
+    },
+    {
+      "name": "MTBF_LT",
+      "label": "Long-term hard failure MTBF",
+      "value": "15",
+      "unit": "years",
+      "source": "GPS SPS PS — slide 26"
+    },
+    {
+      "name": "MTBF_SOFT",
+      "label": "Soft failure MTBF",
+      "value": "7.5",
+      "unit": "years",
+      "source": "GPS SPS PS — slide 26"
+    },
+    {
+      "name": "pr_uns",
+      "label": "P(unscheduled interruption) per round",
+      "value": "0.1",
+      "description": "Radiation-induced, self-correcting interruption",
+      "source": "Teaching value"
+    },
+    {
+      "name": "p_umsi",
+      "label": "P(soft failure not alerted in time)",
+      "value": "1e-5",
+      "description": "Unalerted misleading signal information = loss of integrity",
+      "source": "Slide 26 (NTE without timely alert)"
+    },
+    {
+      "name": "p_eol",
+      "label": "End-of-life probability",
+      "value": "0.6",
+      "source": "Slide 26"
+    },
+    {
+      "name": "Pbeta",
+      "label": "On-orbit repair success (pβ)",
+      "value": "0.8",
+      "source": "Slide 26"
+    },
+    {
+      "name": "pr_build",
+      "label": "P(spare available on ground)",
+      "value": "0.9",
+      "source": "Teaching value"
+    },
+    {
+      "name": "Pn",
+      "label": "Launch success (pn)",
+      "value": "0.9",
+      "source": "Slide 26"
+    },
+    {
+      "name": "OnGroundPriority",
+      "label": "On-ground priority",
+      "value": "0.5",
+      "description": "Probability that the ground team gets the task when both teams take it (swept from 0 to 1)",
+      "source": "Slide 30"
+    }
+  ],
+  "model": {
+    "modelType": "csg",
+    "components": [
+      {
+        "id": "e652dec5-3012-42f4-946b-599c32623f9a",
+        "type": "BASIC",
+        "name": "Environment",
+        "x": 120,
+        "y": 60,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "b98e9be7-e0da-4ab6-b631-62a59a5cda1b",
+            "name": "mon",
+            "type": "OUTPUT",
+            "side": "BOTTOM",
+            "offset": 85,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "env"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "name": "ENV",
+              "variableName": "env_ready",
+              "value": 0,
+              "x": 280,
+              "y": 220
+            }
+          ],
+          "transitions": [
+            {
+              "id": "0b0beaf7-d278-4b60-8849-04ac832d772c",
+              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "action": "e_none",
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "0e0bdd74-9c74-42d7-9d82-a6f671b556a2",
+              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "action": "e_uns",
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "6819b14d-6746-491b-88e8-b88b1a623130",
+              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "action": "e_st",
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "cfdd7498-6354-4b25-9a94-52f4e1869be0",
+              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "action": "e_lt",
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "ec983463-9fb5-419a-9b27-12f63a6fa59a",
+              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "action": "e_soft",
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "5568e790-d1d9-4ffb-a7b4-2ca26cda9e9c",
+              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "action": "e_wait",
+              "guard": "sat>0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "e528b6f3-fde8-449d-8748-2f0e4f0b7587",
+        "type": "SATELLITE",
+        "name": "OnOrbitStaff",
+        "x": 410,
+        "y": 60,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "d8ee034e-dddf-4491-8595-81fd810f95c5",
+            "name": "mon",
+            "type": "OUTPUT",
+            "side": "BOTTOM",
+            "offset": 85,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "o"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "name": "PO",
+              "variableName": "o_ready",
+              "value": 0,
+              "x": 280,
+              "y": 220
+            }
+          ],
+          "transitions": [
+            {
+              "id": "1dae4cc6-803a-4105-8173-3dfa6e1b3325",
+              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "action": "o_stby",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "f7788e3d-bd70-4368-abe2-c3674adff6ff",
+              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "action": "o_take",
+              "guard": "sat=2",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "3fc69b26-37ae-4ff0-8a06-0b8583289aaf",
+              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "action": "o_switch",
+              "guard": "(sat=4 & ostage=0) | sat=7",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "ece6c1ad-ed82-45a2-941e-8df2dcb2412b",
+              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "action": "o_replace",
+              "guard": "sat=4 & ostage=1",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "311dee06-53ed-44ed-8a50-d123869ac8ae",
+        "type": "STATION",
+        "name": "OnGroundStaff",
+        "x": 700,
+        "y": 60,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "8d51ece1-ebf7-4e21-b885-d12bc93feb3a",
+            "name": "mon",
+            "type": "OUTPUT",
+            "side": "BOTTOM",
+            "offset": 85,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "g"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "name": "PG",
+              "variableName": "g_ready",
+              "value": 0,
+              "x": 280,
+              "y": 220
+            }
+          ],
+          "transitions": [
+            {
+              "id": "a3083de1-c66c-4dd7-9a5f-3972aa6da3c7",
+              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "action": "g_stby",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "8c23795b-eaa6-4af5-be5f-aa513881d3e5",
+              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "action": "g_take",
+              "guard": "sat=2",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "a93508c1-5422-42e9-85a6-3c8376cb3f5d",
+              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "action": "g_check",
+              "guard": "sat=5 & gstage=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "ee688afb-33aa-48e2-8fb5-14c84cd1f786",
+              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "action": "g_build",
+              "guard": "sat=5 & gstage=1",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "2ffdbfa4-4ebd-4c84-9f07-47badf14140d",
+              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "action": "g_launch",
+              "guard": "sat=5 & gstage=2",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
+        "type": "MONITOR",
+        "name": "Maintenance",
+        "x": 410,
+        "y": 280,
+        "width": 190,
+        "height": 110,
+        "ports": [
+          {
+            "id": "31b6aa17-942c-490a-a8ec-7015427fe8a3",
+            "name": "env",
+            "type": "INPUT",
+            "side": "TOP",
+            "offset": 30,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "1cef5c51-2bbb-49e1-b838-f9aad96d307e",
+            "name": "orbit",
+            "type": "INPUT",
+            "side": "TOP",
+            "offset": 95,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "545acbfe-1603-480b-9a17-cc418dccd1b0",
+            "name": "ground",
+            "type": "INPUT",
+            "side": "TOP",
+            "offset": 160,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "isPlayer": false
+        },
+        "monitorDefinition": {
+          "variables": [
+            {
+              "id": "e0cfbeb4-ae7b-4fe9-b226-033efcf41b7d",
+              "name": "sat",
+              "min": 0,
+              "max": 7,
+              "init": 0
+            },
+            {
+              "id": "f675baec-b724-4e32-ae6f-ad0f8e630229",
+              "name": "ostage",
+              "min": 0,
+              "max": 1,
+              "init": 0
+            },
+            {
+              "id": "2df3ff0d-3fcf-4070-b160-2ca289536d3c",
+              "name": "gstage",
+              "min": 0,
+              "max": 2,
+              "init": 0
+            },
+            {
+              "id": "dbd4327c-9f5f-4d71-8ab3-0fc742dfa7d7",
+              "name": "win",
+              "min": 0,
+              "max": 2,
+              "init": 0
+            },
+            {
+              "id": "3c74bfc7-cd9f-4901-8e51-7f69236bbc56",
+              "name": "last",
+              "min": 0,
+              "max": 2,
+              "init": 0
+            }
+          ],
+          "transitions": [
+            {
+              "id": "57746999-cffa-411a-83e6-fa500ac96ca4",
+              "actions": [
+                "e_none",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "last": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "63d32572-c4e7-4a62-b720-551d484b432e",
+              "actions": [
+                "e_uns",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": "pr_uns",
+                  "assignments": {
+                    "sat": "1",
+                    "last": "0"
+                  }
+                },
+                {
+                  "probability": "1-pr_uns",
+                  "assignments": {
+                    "last": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "af117eb2-9652-442c-ad85-dbce7a09433a",
+              "actions": [
+                "e_st",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": "pr_st",
+                  "assignments": {
+                    "sat": "7",
+                    "last": "0"
+                  }
+                },
+                {
+                  "probability": "1-pr_st",
+                  "assignments": {
+                    "last": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "9c56b491-e730-4e2f-a22c-3c3d7ba01f1c",
+              "actions": [
+                "e_lt",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": "pr_lt",
+                  "assignments": {
+                    "sat": "2",
+                    "last": "0"
+                  }
+                },
+                {
+                  "probability": "1-pr_lt",
+                  "assignments": {
+                    "last": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "9d62e023-6221-4a2b-8f1a-59be2cc7eb46",
+              "actions": [
+                "e_soft",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=0",
+              "updates": [
+                {
+                  "probability": "pr_soft",
+                  "assignments": {
+                    "sat": "3",
+                    "last": "0"
+                  }
+                },
+                {
+                  "probability": "1-pr_soft",
+                  "assignments": {
+                    "last": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "baa7c9a6-add3-4d16-94df-cc6e1aa9de60",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=1",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "sat": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "55e52551-77e0-4aca-978d-a569004a5895",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=3",
+              "updates": [
+                {
+                  "probability": "1-p_umsi",
+                  "assignments": {
+                    "sat": "0"
+                  }
+                },
+                {
+                  "probability": "p_umsi",
+                  "assignments": {
+                    "sat": "6"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ce3410ef-7f97-43db-8d71-4ed0b542c102",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_stby"
+              ],
+              "guard": "sat=6",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "sat": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ed3aa815-b7a5-4163-bd4e-6c10fe0fca5e",
+              "actions": [
+                "e_wait",
+                "o_take",
+                "g_stby"
+              ],
+              "guard": "sat=2",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "sat": "4",
+                    "win": "1",
+                    "ostage": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "19279bf3-e73e-4888-8312-c5a35905be85",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_take"
+              ],
+              "guard": "sat=2",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "sat": "5",
+                    "win": "2",
+                    "gstage": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "b6736ffd-4be0-4162-bda3-35d1e71ac19c",
+              "actions": [
+                "e_wait",
+                "o_take",
+                "g_take"
+              ],
+              "guard": "sat=2",
+              "updates": [
+                {
+                  "probability": "OnGroundPriority",
+                  "assignments": {
+                    "sat": "5",
+                    "win": "2",
+                    "gstage": "0"
+                  }
+                },
+                {
+                  "probability": "1-OnGroundPriority",
+                  "assignments": {
+                    "sat": "4",
+                    "win": "1",
+                    "ostage": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "3fb9d2a6-b3d5-49f3-9351-576c58eaea3a",
+              "actions": [
+                "e_wait",
+                "o_switch",
+                "g_stby"
+              ],
+              "guard": "sat=7",
+              "updates": [
+                {
+                  "probability": "Pbeta",
+                  "assignments": {
+                    "sat": "0",
+                    "last": "1"
+                  }
+                },
+                {
+                  "probability": "1-Pbeta",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "d18a7353-1f9a-49a1-8adf-d4a251a56e6f",
+              "actions": [
+                "e_wait",
+                "o_switch",
+                "g_stby"
+              ],
+              "guard": "sat=4 & ostage=0",
+              "updates": [
+                {
+                  "probability": "Pbeta*(1-p_eol)",
+                  "assignments": {
+                    "sat": "0",
+                    "win": "0",
+                    "last": "1"
+                  }
+                },
+                {
+                  "probability": "1-Pbeta*(1-p_eol)",
+                  "assignments": {
+                    "ostage": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "1484f1ee-a645-4fb7-882f-a319aba7c391",
+              "actions": [
+                "e_wait",
+                "o_replace",
+                "g_stby"
+              ],
+              "guard": "sat=4 & ostage=1",
+              "updates": [
+                {
+                  "probability": "Pbeta",
+                  "assignments": {
+                    "sat": "0",
+                    "win": "0",
+                    "ostage": "0",
+                    "last": "1"
+                  }
+                },
+                {
+                  "probability": "1-Pbeta",
+                  "assignments": {
+                    "sat": "5",
+                    "win": "2",
+                    "ostage": "0",
+                    "gstage": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "b8bc225c-506e-434a-b6b5-b6d946e54b61",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_check"
+              ],
+              "guard": "sat=5 & gstage=0",
+              "updates": [
+                {
+                  "probability": "pr_build",
+                  "assignments": {
+                    "gstage": "1"
+                  }
+                },
+                {
+                  "probability": "1-pr_build",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "6bea6048-84ec-427e-977d-73318accc52d",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_build"
+              ],
+              "guard": "sat=5 & gstage=1",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "gstage": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f3a92cb6-33ee-4781-a22b-18ab6abee575",
+              "actions": [
+                "e_wait",
+                "o_stby",
+                "g_launch"
+              ],
+              "guard": "sat=5 & gstage=2",
+              "updates": [
+                {
+                  "probability": "Pn",
+                  "assignments": {
+                    "sat": "0",
+                    "win": "0",
+                    "gstage": "0",
+                    "last": "2"
+                  }
+                },
+                {
+                  "probability": "1-Pn",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "id": "b1754308-c574-4de1-b3c7-9997eee0ed4a",
+        "sourceComponentId": "e652dec5-3012-42f4-946b-599c32623f9a",
+        "sourcePortId": "b98e9be7-e0da-4ab6-b631-62a59a5cda1b",
+        "targetComponentId": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
+        "targetPortId": "31b6aa17-942c-490a-a8ec-7015427fe8a3",
+        "type": "PUSH"
+      },
+      {
+        "id": "cfb50312-855d-4df2-861c-21fb57b206c2",
+        "sourceComponentId": "e528b6f3-fde8-449d-8748-2f0e4f0b7587",
+        "sourcePortId": "d8ee034e-dddf-4491-8595-81fd810f95c5",
+        "targetComponentId": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
+        "targetPortId": "1cef5c51-2bbb-49e1-b838-f9aad96d307e",
+        "type": "PUSH"
+      },
+      {
+        "id": "2a0e2c63-17a5-4898-83ac-22e43cd0aefc",
+        "sourceComponentId": "311dee06-53ed-44ed-8a50-d123869ac8ae",
+        "sourcePortId": "8d51ece1-ebf7-4e21-b885-d12bc93feb3a",
+        "targetComponentId": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
+        "targetPortId": "545acbfe-1603-480b-9a17-cc418dccd1b0",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "2480dd0e-a6f6-480c-9ec9-76340db69c66",
+        "name": "k",
+        "type": "int",
+        "value": "30"
+      },
+      {
+        "id": "f8a867b2-f134-46d6-8116-97af4a164815",
+        "name": "t_round",
+        "type": "double",
+        "value": "0.5"
+      },
+      {
+        "id": "cb645cd8-4e17-4131-b4f9-4fa2c3e450c0",
+        "name": "MTBF_ST",
+        "type": "double",
+        "value": "0.5"
+      },
+      {
+        "id": "a12a9975-1751-499d-a3e3-bdf5b81eddef",
+        "name": "MTBF_LT",
+        "type": "double",
+        "value": "15"
+      },
+      {
+        "id": "d59b7593-1a23-4b11-b29a-ad1885a1a460",
+        "name": "MTBF_SOFT",
+        "type": "double",
+        "value": "7.5"
+      },
+      {
+        "id": "9e97f100-3baf-4454-aa98-122413563239",
+        "name": "EULER",
+        "type": "double",
+        "value": "2.718281828459045"
+      },
+      {
+        "id": "0a084a13-9bc3-49af-bd56-7e74d27e17ca",
+        "name": "pr_st",
+        "type": "double",
+        "value": "1 - pow(EULER, -t_round/MTBF_ST)"
+      },
+      {
+        "id": "f20daceb-fb18-4213-8868-676a62b1d8f2",
+        "name": "pr_lt",
+        "type": "double",
+        "value": "1 - pow(EULER, -t_round/MTBF_LT)"
+      },
+      {
+        "id": "3dda6f89-793d-4828-8af7-5ecbf18c8b71",
+        "name": "pr_soft",
+        "type": "double",
+        "value": "1 - pow(EULER, -t_round/MTBF_SOFT)"
+      },
+      {
+        "id": "817bfbf0-aeca-4dfb-af98-681940f1879a",
+        "name": "pr_uns",
+        "type": "double",
+        "value": "0.1"
+      },
+      {
+        "id": "0df744ec-3fa9-431d-908a-adae343126c4",
+        "name": "p_umsi",
+        "type": "double",
+        "value": "1e-5"
+      },
+      {
+        "id": "8220205d-b1cc-42d6-97e4-244abb4f0315",
+        "name": "p_eol",
+        "type": "double",
+        "value": "0.6"
+      },
+      {
+        "id": "7d70b40a-f1da-4360-b544-0ff117a43a39",
+        "name": "Pbeta",
+        "type": "double",
+        "value": "0.8"
+      },
+      {
+        "id": "9d08ab56-8825-4a3d-973f-2ab6ce66e9b1",
+        "name": "pr_build",
+        "type": "double",
+        "value": "0.9"
+      },
+      {
+        "id": "d59ed8c4-3df5-4937-8578-d43b625b8171",
+        "name": "Pn",
+        "type": "double",
+        "value": "0.9"
+      },
+      {
+        "id": "79d8c311-bfd2-4beb-a99c-7b9a498aeb54",
+        "name": "OnGroundPriority",
+        "type": "double",
+        "value": "0.5"
+      }
+    ],
+    "formulas": [],
+    "labels": [
+      {
+        "id": "b26cf5a7-ad8f-4a1e-ab10-78508f375d38",
+        "name": "normal",
+        "expression": "sat=0"
+      },
+      {
+        "id": "59909e30-aead-44ac-b3f8-1ad49118ae97",
+        "name": "Loss_Continuity",
+        "expression": "sat=1 | sat=2 | sat=4 | sat=5 | sat=7"
+      },
+      {
+        "id": "e3dde31b-d33d-4341-b044-55ac900780e0",
+        "name": "Loss_Integrity",
+        "expression": "sat=6"
+      },
+      {
+        "id": "bd316ea3-3743-478b-8848-c9a3a8e0a905",
+        "name": "replace",
+        "expression": "last=1"
+      },
+      {
+        "id": "cb48b362-bd79-4155-af15-b80e1dabf081",
+        "name": "manufacture",
+        "expression": "last=2"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "7ce0fd3c-a7e5-4536-a6b4-a1707811343f",
+        "name": "Loss_Continuity",
+        "items": [
+          {
+            "id": "92065fa6-1097-41ac-945e-69933fb62421",
+            "guard": "sat=1 | sat=2 | sat=4 | sat=5 | sat=7",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "8c827a51-ecc4-4a32-938b-ca3eec42353d",
+        "name": "Loss_Integrity",
+        "items": [
+          {
+            "id": "d9e24a54-53f4-4caf-9f3c-e6e8269f33d7",
+            "guard": "sat=6",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "1fa19f3f-9081-43c0-8f0c-50217b1c71a5",
+        "name": "replace",
+        "items": [
+          {
+            "id": "4bad25b2-4e79-471b-bebb-69de9952e7f6",
+            "guard": "last=1",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "0e9c751d-299d-41cf-bb6a-1e7af8a92990",
+        "name": "manufacture",
+        "items": [
+          {
+            "id": "2b8b941f-0078-4c79-bdaa-9ccae543c134",
+            "guard": "last=2",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "bee08ba9-52aa-4a6d-aec4-de55da3eba9a",
+        "name": "replaceOrManufacture",
+        "items": [
+          {
+            "id": "faf0d44a-03f6-4f15-92eb-4639a2efab34",
+            "guard": "last>0",
+            "reward": "1"
+          }
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "d010460b-c096-4228-ab7f-918a4b68bde4",
+        "name": "PRO1 Continuity",
+        "formula": "<<env>> Pmax=? [ F (\"Loss_Continuity\" & rounds<=k) ]"
+      },
+      {
+        "id": "669aa352-9d47-488c-bf09-9213f2c0c7e8",
+        "name": "PRO2 Continuity (expected)",
+        "formula": "<<env>> R{\"Loss_Continuity\"}max=? [ F rounds=k ]",
+        "description": "expected rounds without service within k rounds"
+      },
+      {
+        "id": "0e631a58-95e8-4490-9235-422bbb2ffd4f",
+        "name": "PRO3 Integrity",
+        "formula": "<<env>> Pmax=? [ F (\"Loss_Integrity\" & rounds<=k) ]"
+      },
+      {
+        "id": "090411f1-963d-409f-aefb-f6840e6a390e",
+        "name": "PRO4 Integrity (expected)",
+        "formula": "<<env>> R{\"Loss_Integrity\"}max=? [ F rounds=k ]"
+      },
+      {
+        "id": "7d3c5881-8fdc-4427-9616-5f94100f01c8",
+        "name": "PRO5 Reliability, on-orbit staff",
+        "formula": "<<env,o>> Pmax=? [ F (\"replace\" & rounds<=k) ]"
+      },
+      {
+        "id": "d37b6599-e27e-453c-9648-2be71c4e321f",
+        "name": "PRO6 Reliability, on-ground staff",
+        "formula": "<<env,g>> Pmax=? [ F (\"manufacture\" & rounds<=k) ]"
+      },
+      {
+        "id": "3f1f8bf5-3082-49d2-bdf9-da5490dbd473",
+        "name": "PRO7 Reliability, both teams",
+        "formula": "<<env,o,g>> Pmax=? [ F ((\"replace\" | \"manufacture\") & rounds<=k) ]"
+      },
+      {
+        "id": "52239c7b-fdee-4184-b4d9-74a440d27bf1",
+        "name": "PRO8 Maintainability, on-orbit",
+        "formula": "<<env,o>> R{\"replace\"}max=? [ F rounds=k ]"
+      },
+      {
+        "id": "1fe4da64-0307-48c8-9f3a-8284cb7a96ca",
+        "name": "PRO8b Maintainability, on-ground",
+        "formula": "<<env,g>> R{\"manufacture\"}max=? [ F rounds=k ]"
+      },
+      {
+        "id": "79aacfef-853b-4ec7-8bb9-4d3cc6ec8072",
+        "name": "PRO9 Maintainability, both teams",
+        "formula": "<<env,o,g>> R{\"replaceOrManufacture\"}max=? [ F rounds=k ]"
+      },
+      {
+        "id": "416edd72-d55a-4109-b0e8-f96ac245a02e",
+        "name": "Humans vs. environment",
+        "formula": "<<o,g>> R{\"Loss_Continuity\"}min=? [ F rounds=k ]",
+        "description": "outage the two teams can guarantee against a worst-case environment — the same zero-sum game as PRO2, hence the same value"
+      }
+    ]
+  }
+}
