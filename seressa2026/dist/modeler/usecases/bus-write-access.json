@@ -1,0 +1,499 @@
+{
+  "id": "bus-write-access",
+  "title": "Bus write access (shared resource)",
+  "chapter": "Part 3 — Foundations: concurrent stochastic games",
+  "chapterOrder": 3,
+  "formalism": "csg",
+  "tool": "PRISM-games 3.x",
+  "slides": "Slides 17, 18, 46",
+  "summary": "Two players concurrently read or write a shared object (buffer of size 1). The writer who succeeds wins; same action at the same time: no winner.",
+  "description": [
+    "Each player chooses, at the same time and without knowing the other's choice, to write (w), read (r) or keep the bus unlocked (unlock). A non-player Monitor (CommunicationBus) records the outcome in win.",
+    "(w1, r2) gives the bus to player 1 (win = 1, +1 for player 1, −1 for player 2); (r1, w2) gives it to player 2; (w1, w2) and (r1, r2) end with no winner. (reset_1, reset_2) brings the game back to s = 0.",
+    "The rounds module counts the rounds; k bounds the horizon of the properties."
+  ],
+  "objectives": [
+    "Write concurrent joint actions [a1, a2] in a non-player module.",
+    "Use rPATL coalitions: what can a player guarantee alone, and with a partner?",
+    "Read action rewards as utilities."
+  ],
+  "exercises": [
+    "Predict first: which of <<p1>> Pmax=? [F win=1] and <<p1,p2>> Pmax=? [F win=1] is 0? Then check.",
+    "Compute the utility player 1 can guarantee over k rounds, then vary k.",
+    "Add a third player p3: how many monitor commands do you need? How does the state space grow?"
+  ],
+  "parameters": [
+    {
+      "name": "k",
+      "label": "Number of rounds",
+      "value": "10",
+      "description": "Horizon used by the rounds module and by the bounded properties"
+    }
+  ],
+  "model": {
+    "modelType": "csg",
+    "components": [
+      {
+        "id": "9be3364e-88f3-43d3-a3e7-a77f9ecddb7b",
+        "type": "BASIC",
+        "name": "Player1",
+        "x": 120,
+        "y": 80,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "d8467f91-2312-4b97-822d-a5e5030f40d9",
+            "name": "bus",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "p1"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "name": "READY",
+              "variableName": "ready1",
+              "value": 0,
+              "x": 250,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "5f534906-d02f-47e1-8f27-f7aebc95f165",
+              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "action": "w1",
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "10114601-6db4-4c36-b866-8f7e8c084cb4",
+              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "action": "r1",
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "092b4f04-05c3-4840-a3da-27a003341016",
+              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "action": "unlock_1",
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "73208449-23d5-4264-bcf3-e9dd2cac3af1",
+              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "action": "reset_1",
+              "guard": "s>0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "5753d530-8c76-4b65-b10b-fc45a55aa5d7",
+        "type": "MONITOR",
+        "name": "CommunicationBus",
+        "x": 400,
+        "y": 80,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "33cb4f0d-98d7-4759-8a71-7b3618ea91de",
+            "name": "in1",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "c04b88b5-321d-44da-911a-53ff403bd014",
+            "name": "in2",
+            "type": "INPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "isPlayer": false
+        },
+        "monitorDefinition": {
+          "variables": [
+            {
+              "id": "251b6581-9be5-4d52-9f8d-2dab28490f8a",
+              "name": "s",
+              "min": 0,
+              "max": 10,
+              "init": 0
+            },
+            {
+              "id": "1337e4a7-e219-4209-b5d0-90afffbe30f5",
+              "name": "win",
+              "min": 0,
+              "max": 2,
+              "init": 0
+            }
+          ],
+          "transitions": [
+            {
+              "id": "ec81013c-15f3-4d2d-aa3e-1a1d96e75843",
+              "actions": [
+                "unlock_1",
+                "unlock_2"
+              ],
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "s": "0",
+                    "win": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "32c35310-afdd-4553-9354-301a3ad3958b",
+              "actions": [
+                "w1",
+                "w2"
+              ],
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "s": "1",
+                    "win": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "27492917-fe17-4c28-9554-86a44aaad129",
+              "actions": [
+                "r1",
+                "r2"
+              ],
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "s": "1",
+                    "win": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "875b3b3a-31db-4541-840b-e780ddf05bff",
+              "actions": [
+                "w1",
+                "r2"
+              ],
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "s": "3",
+                    "win": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "adea11e3-9a50-404f-8a37-765cde31cb5f",
+              "actions": [
+                "r1",
+                "w2"
+              ],
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "s": "2",
+                    "win": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "6cb19294-e938-47a1-a5e2-ac9aab94e6f7",
+              "actions": [
+                "reset_1",
+                "reset_2"
+              ],
+              "guard": "s=1|s=2|s=3",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "s": "0",
+                    "win": "0"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "1413c5ef-1be3-4586-ade1-fe5f3ab3bb4a",
+        "type": "BASIC",
+        "name": "Player2",
+        "x": 700,
+        "y": 80,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "870ab47f-e8ea-4fce-92f4-fb2af6f33d2c",
+            "name": "bus",
+            "type": "OUTPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "p2"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "eace1281-8841-4b5a-b715-d9421760990a",
+              "name": "READY",
+              "variableName": "ready2",
+              "value": 0,
+              "x": 250,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "48486b0e-febb-43d8-ab25-fa08320cf285",
+              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "action": "w2",
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "feac11e4-6f7e-4bb4-b716-e07e248f7ed3",
+              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "action": "r2",
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "90d3b68e-c2ee-4368-802c-0fbca22666cf",
+              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "action": "unlock_2",
+              "guard": "s=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "33ee2c93-8b50-4b14-b825-337c2e3686ae",
+              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "action": "reset_2",
+              "guard": "s>0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "id": "c0a0b1cb-5c2b-4a7d-ac4d-f35e1e373395",
+        "sourceComponentId": "9be3364e-88f3-43d3-a3e7-a77f9ecddb7b",
+        "sourcePortId": "d8467f91-2312-4b97-822d-a5e5030f40d9",
+        "targetComponentId": "5753d530-8c76-4b65-b10b-fc45a55aa5d7",
+        "targetPortId": "33cb4f0d-98d7-4759-8a71-7b3618ea91de",
+        "type": "PUSH"
+      },
+      {
+        "id": "e8097394-75a6-48b0-9e01-ba307e3e3e0a",
+        "sourceComponentId": "1413c5ef-1be3-4586-ade1-fe5f3ab3bb4a",
+        "sourcePortId": "870ab47f-e8ea-4fce-92f4-fb2af6f33d2c",
+        "targetComponentId": "5753d530-8c76-4b65-b10b-fc45a55aa5d7",
+        "targetPortId": "c04b88b5-321d-44da-911a-53ff403bd014",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "1a633a0b-962f-44da-8550-c4ecf70f0b86",
+        "name": "k",
+        "type": "int",
+        "value": "10"
+      }
+    ],
+    "formulas": [],
+    "labels": [
+      {
+        "id": "c75ac05c-ec62-4bd1-b50e-c72504977c15",
+        "name": "win1",
+        "expression": "win=1"
+      },
+      {
+        "id": "30f52bcd-ea76-4d49-9f95-a48ec2d0b822",
+        "name": "win2",
+        "expression": "win=2"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "64a4d41e-a8d7-406e-9252-80c4508dabcb",
+        "name": "utility1",
+        "items": [
+          {
+            "id": "ae53f54f-5cf4-4466-85e7-aecc848f25eb",
+            "action": "r1,w2",
+            "reward": "-1"
+          },
+          {
+            "id": "b9304c96-6fa7-4b95-94d6-085700c554f4",
+            "action": "r1,r2",
+            "reward": "0"
+          },
+          {
+            "id": "db1e4558-4438-464e-891f-02e834fcd0b7",
+            "action": "w1,r2",
+            "reward": "1"
+          },
+          {
+            "id": "80f57fe3-22e8-43a6-ba02-1639daf67bf6",
+            "action": "w1,w2",
+            "reward": "0"
+          }
+        ]
+      },
+      {
+        "id": "e216a5db-9bfe-4306-9173-44f79ccfe7fe",
+        "name": "utility2",
+        "items": [
+          {
+            "id": "3bf6d35a-33e7-440c-b1ed-1fc8dfcf381c",
+            "action": "w1,r2",
+            "reward": "-1"
+          },
+          {
+            "id": "85a1c94d-1b71-4345-b0db-64bf7f9b1912",
+            "action": "r1,r2",
+            "reward": "0"
+          },
+          {
+            "id": "b21eda56-78f2-4a70-bf14-0315dd0e6a99",
+            "action": "r1,w2",
+            "reward": "1"
+          },
+          {
+            "id": "adddc943-a0e6-4976-a896-44f285c2c8cc",
+            "action": "w1,w2",
+            "reward": "0"
+          }
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "1cc4f7d1-723b-43a5-a518-c1c4ff072ea5",
+        "name": "P1 alone",
+        "formula": "<<p1>> Pmax=? [ F win=1 ]",
+        "description": "can player 1 force a win on its own? (expected: 0)"
+      },
+      {
+        "id": "0289171e-0528-475a-8904-8bf56a40fd06",
+        "name": "Coalition",
+        "formula": "<<p1,p2>> Pmax=? [ F win=1 ]",
+        "description": "can the coalition make player 1 win? (expected: 1)"
+      },
+      {
+        "id": "ad7d1f77-86a1-432a-bb4b-03119c74a052",
+        "name": "P1 alone, bounded",
+        "formula": "<<p1>> P>0.99 [ F win=1 ]",
+        "description": "slide 17 — Boolean query"
+      },
+      {
+        "id": "aaf5a97d-e0a0-45b6-a822-cd6a10e3e3b1",
+        "name": "Win within k rounds",
+        "formula": "<<p1,p2>> Pmax=? [ F (win=1 & rounds<=k) ]",
+        "description": ""
+      },
+      {
+        "id": "9880177a-46f2-4549-baab-89d89fdb90a8",
+        "name": "Guaranteed utility of P1",
+        "formula": "<<p1>> R{\"utility1\"}max=? [ F rounds=k ]",
+        "description": "what player 1 can guarantee within k rounds, whatever p2 does"
+      },
+      {
+        "id": "b386b5ec-e2c3-4b87-aa9f-b68e4ae54f2a",
+        "name": "Cooperative utility of P1",
+        "formula": "<<p1,p2>> R{\"utility1\"}max=? [ F rounds=k ]",
+        "description": ""
+      }
+    ]
+  }
+}

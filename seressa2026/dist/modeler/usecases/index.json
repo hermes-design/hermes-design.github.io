@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "usecases": [
+    {
+      "id": "radiation-ctmc-primer",
+      "file": "radiation-ctmc-primer.json"
+    },
+    {
+      "id": "bus-write-access",
+      "file": "bus-write-access.json"
+    },
+    {
+      "id": "gps-sps-maintenance",
+      "file": "gps-sps-maintenance.json"
+    },
+    {
+      "id": "galileo-sar-jamming",
+      "file": "galileo-sar-jamming.json"
+    }
+  ]
+}
