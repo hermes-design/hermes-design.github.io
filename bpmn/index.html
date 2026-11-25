@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPMN HITL Modeler Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js/dist/assets/diagram-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Simulation : éléments activés / exécutés */
+        .sim-enabled .djs-visual > :first-child { stroke: #10b981 !important; stroke-width: 3px !important; }
+        .sim-fired .djs-visual > :first-child { fill: #fde68a !important; stroke: #f59e0b !important; stroke-width: 4px !important; transition: fill .2s; }
+        .sim-failed .djs-visual > :first-child { fill: #fecaca !important; stroke: #dc2626 !important; stroke-width: 4px !important; }
+
+        .djs-palette {
+            top: 20px !important;
+            left: 20px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.4",
+    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^3.8.2",
+    "chart.js/auto": "https://aistudiocdn.com/chart.js@^4.4.2/auto",
+    "bpmn-js/": "https://aistudiocdn.com/bpmn-js@^18.9.1/",
+    "chart.js/": "https://aistudiocdn.com/chart.js@^4.5.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/main-p94XzJ56.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/niceExample-CCTT5o1A.js">
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
