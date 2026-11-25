@@ -1,0 +1,496 @@
+{
+  "id": "rabbitmq-mitm",
+  "title": "RabbitMQ broker under MITM attacks (reduced CSG)",
+  "chapter": "Use case 6 — RabbitMQ broker under attack",
+  "chapterOrder": 6,
+  "formalism": "csg",
+  "tool": "PRISM-games 3.x",
+  "summary": "An attacker (CAPEC-384, man in the middle) and the sensors play concurrently at the RabbitMQ southbound bridge. The attacker tampers with the payload or with the routing key; the attack frequency depends on the attack type (DoS, ARP spoofing, Mirai).",
+  "description": [
+    "Each round the sensors choose to send a message or stay idle, and the attacker chooses to tamper with the payload, tamper with the routing key, or wait. The non-player RabbitMQ_Broker module records the outcome in buf: 1 = delivered, 2 = payload tampered, 3 = message unrouted (wrong routing key, the target queue stays empty).",
+    "An attack succeeds with probability p_att = 1 − e^(−t_round / (MTBA · BAN)), where MTBA is the mean time between attacks of the chosen scenario (1 = DoS, 2 = ARP spoofing, 3 = Mirai). In the reference study, the MTBA is extracted from a Canadian Institute for Cybersecurity dataset.",
+    "Mitigation: banning the attacker (as recommended by RabbitMQ) lengthens the time between attacks. Set BAN > 1 to model it.",
+    "Reduced teaching model: the MTBA values are illustrative, chosen to reproduce the trend of the full study (ARP > Mirai > DoS, payload tampering close to 1 after 30 rounds). Exact figures require the full broker model."
+  ],
+  "objectives": [
+    "Turn an attack frequency measured on data into a per-round success probability.",
+    "Express tampering and message loss as rPATL properties with coalitions.",
+    "Assess a countermeasure by changing one parameter."
+  ],
+  "exercises": [
+    "Compare <<att>> and <<att,sen>> for the tampering property. Why is the attacker alone at 0?",
+    "Run the tampering property for SCENARIO = 1, 2, 3 and k = 1…30 (Experiment in PRISM). Which attack is the most harmful?",
+    "Set BAN = 10: how much does the expected number of unrouted messages drop over 30 rounds?"
+  ],
+  "parameters": [
+    {
+      "name": "k",
+      "label": "Number of rounds",
+      "value": "30",
+      "description": "Horizon of the bounded properties"
+    },
+    {
+      "name": "SCENARIO",
+      "label": "Attack scenario",
+      "value": "2",
+      "description": "1 = DoS, 2 = ARP spoofing, 3 = Mirai"
+    },
+    {
+      "name": "BAN",
+      "label": "Ban factor (mitigation)",
+      "value": "1",
+      "description": "1 = no mitigation; 10 = time between attacks ten times longer"
+    },
+    {
+      "name": "t_round",
+      "label": "Round duration",
+      "value": "1",
+      "unit": "time unit"
+    }
+  ],
+  "model": {
+    "modelType": "csg",
+    "includeRounds": true,
+    "components": [
+      {
+        "id": "ecf3c748-9a40-48f2-92f7-e1561e73b5f7",
+        "type": "SENSOR",
+        "name": "Sensors",
+        "x": 100,
+        "y": 80,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "b53aa464-db49-4cf1-ac9e-36e53e616137",
+            "name": "pub",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "sen"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "f2d02349-5245-4977-9f1c-96fe9bacf9cf",
+              "name": "SEN",
+              "variableName": "sen_ready",
+              "value": 0,
+              "x": 260,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "9cf128db-711b-4392-b4ef-221f469791b4",
+              "sourceStateId": "f2d02349-5245-4977-9f1c-96fe9bacf9cf",
+              "targetStateId": "f2d02349-5245-4977-9f1c-96fe9bacf9cf",
+              "action": "send",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "0ddba6d1-7ddc-4a17-8296-28a7f579a91c",
+              "sourceStateId": "f2d02349-5245-4977-9f1c-96fe9bacf9cf",
+              "targetStateId": "f2d02349-5245-4977-9f1c-96fe9bacf9cf",
+              "action": "idle",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "ebe3cabc-28f7-4c55-bdbd-9f7773bc3f31",
+        "type": "MONITOR",
+        "name": "RabbitMQ_Broker",
+        "x": 410,
+        "y": 80,
+        "width": 190,
+        "height": 110,
+        "ports": [
+          {
+            "id": "be490e8c-a0c1-44d5-8be7-8153da08b340",
+            "name": "in",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "7e332877-ec7b-4b52-b9bf-47875dfde0ec",
+            "name": "mitm",
+            "type": "INPUT",
+            "side": "BOTTOM",
+            "offset": 95,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "isPlayer": false
+        },
+        "monitorDefinition": {
+          "variables": [
+            {
+              "id": "06177925-7cdb-4cb2-8fd5-85dfeb7deda9",
+              "name": "buf",
+              "min": 0,
+              "max": 3,
+              "init": 0
+            }
+          ],
+          "transitions": [
+            {
+              "id": "e79aca42-415d-480f-901c-12dea7424d91",
+              "actions": [
+                "send",
+                "tamper_payload"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": "p_att",
+                  "assignments": {
+                    "buf": "2"
+                  }
+                },
+                {
+                  "probability": "1-p_att",
+                  "assignments": {
+                    "buf": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "1b23c6ef-eb4c-4e79-aea7-eda3ae24f2a3",
+              "actions": [
+                "send",
+                "tamper_key"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": "p_att",
+                  "assignments": {
+                    "buf": "3"
+                  }
+                },
+                {
+                  "probability": "1-p_att",
+                  "assignments": {
+                    "buf": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "00d5c625-26fd-4b0b-9eea-a6db8a60a8e4",
+              "actions": [
+                "send",
+                "wait"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "buf": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "b181157b-3337-44f9-84d4-e7d9f8fe3342",
+              "actions": [
+                "idle",
+                "tamper_payload"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "buf": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "87f84e77-4579-4f71-b930-92ca040bd22f",
+              "actions": [
+                "idle",
+                "tamper_key"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "buf": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "a4ec8e03-1370-42e4-bc22-6968398bc895",
+              "actions": [
+                "idle",
+                "wait"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "buf": "0"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "f38ae583-5c08-46c4-8578-c16afa92dbbe",
+        "type": "ATTACKER",
+        "name": "Attacker",
+        "x": 410,
+        "y": 280,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "c7d89b13-94b8-4cec-85d8-1ce9b4067f96",
+            "name": "mitm",
+            "type": "OUTPUT",
+            "side": "TOP",
+            "offset": 85,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "att"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "name": "ATT",
+              "variableName": "att_ready",
+              "value": 0,
+              "x": 260,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "47141322-ca6f-4434-8fd4-404d4c844dd0",
+              "sourceStateId": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "targetStateId": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "action": "tamper_payload",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "a4521ada-4b30-4bb0-ac9a-896a6306388c",
+              "sourceStateId": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "targetStateId": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "action": "tamper_key",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "0c557b3d-6b96-4201-a3a1-bf5ca27c3484",
+              "sourceStateId": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "targetStateId": "2e5f28f1-5543-4eb7-a23e-29753180eeb2",
+              "action": "wait",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "id": "e7a729c8-a209-4689-840a-8b9c102713d3",
+        "sourceComponentId": "ecf3c748-9a40-48f2-92f7-e1561e73b5f7",
+        "sourcePortId": "b53aa464-db49-4cf1-ac9e-36e53e616137",
+        "targetComponentId": "ebe3cabc-28f7-4c55-bdbd-9f7773bc3f31",
+        "targetPortId": "be490e8c-a0c1-44d5-8be7-8153da08b340",
+        "type": "PUSH"
+      },
+      {
+        "id": "0022db58-f3be-4388-8492-d4d566c479c2",
+        "sourceComponentId": "f38ae583-5c08-46c4-8578-c16afa92dbbe",
+        "sourcePortId": "c7d89b13-94b8-4cec-85d8-1ce9b4067f96",
+        "targetComponentId": "ebe3cabc-28f7-4c55-bdbd-9f7773bc3f31",
+        "targetPortId": "7e332877-ec7b-4b52-b9bf-47875dfde0ec",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "55f92c49-3769-4842-899b-fc42db4dcc75",
+        "name": "k",
+        "type": "int",
+        "value": "30"
+      },
+      {
+        "id": "44afdf8d-c441-4980-8571-698cd0b11760",
+        "name": "SCENARIO",
+        "type": "int",
+        "value": "2"
+      },
+      {
+        "id": "fd216d0a-ea4c-4c37-9cef-c251be98eaf1",
+        "name": "BAN",
+        "type": "double",
+        "value": "1"
+      },
+      {
+        "id": "e5127072-8446-458f-acf8-1deb85f38372",
+        "name": "t_round",
+        "type": "double",
+        "value": "1"
+      },
+      {
+        "id": "54319aab-9355-439a-97bf-6bf7c79cc5eb",
+        "name": "MTBA_DOS",
+        "type": "double",
+        "value": "13"
+      },
+      {
+        "id": "c2bc1d89-05f8-4ff6-b28b-2411ba8c92cf",
+        "name": "MTBA_ARP",
+        "type": "double",
+        "value": "8.5"
+      },
+      {
+        "id": "25c7ae8f-a308-48b1-afef-c06a30d13b82",
+        "name": "MTBA_MIRAI",
+        "type": "double",
+        "value": "10"
+      },
+      {
+        "id": "a6b05152-648b-49bc-ba25-3b3b5de9c8be",
+        "name": "EULER",
+        "type": "double",
+        "value": "2.718281828459045"
+      },
+      {
+        "id": "8335e171-33d4-4788-bce1-4716adebac28",
+        "name": "MTBA",
+        "type": "double",
+        "value": "SCENARIO=1 ? MTBA_DOS : (SCENARIO=2 ? MTBA_ARP : MTBA_MIRAI)"
+      },
+      {
+        "id": "6489c478-369f-453d-bc5a-cf234a5ad56b",
+        "name": "p_att",
+        "type": "double",
+        "value": "1 - pow(EULER, -t_round/(MTBA*BAN))"
+      }
+    ],
+    "formulas": [],
+    "labels": [
+      {
+        "id": "c2813c34-d61d-4a31-bc3d-04214c0e56a2",
+        "name": "payload_tamper",
+        "expression": "buf=2"
+      },
+      {
+        "id": "ac35dbdb-cfa5-48e0-b74f-9335ce130e9f",
+        "name": "unrouted",
+        "expression": "buf=3"
+      },
+      {
+        "id": "93e800ed-3932-4185-8720-5391503731b2",
+        "name": "delivered",
+        "expression": "buf=1"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "ce1d78fe-48c1-4343-a3a0-57cbd006da21",
+        "name": "damage",
+        "items": [
+          {
+            "id": "b536bcd3-0733-4ec9-af41-18b4c6cb2c98",
+            "guard": "buf=2",
+            "reward": "1"
+          }
+        ]
+      },
+      {
+        "id": "43ebf242-e4bd-4561-9378-e106ffcfcbf7",
+        "name": "unrouted",
+        "items": [
+          {
+            "id": "31c8b4ad-00d9-415e-bf31-35fff689278d",
+            "guard": "buf=3",
+            "reward": "1"
+          }
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "6eb0dbff-95bd-4ec5-bcb9-385acb45de54",
+        "name": "P1 Payload tampering",
+        "formula": "<<att,sen>> Pmax=? [ F (\"payload_tamper\" & rounds<=k) ]",
+        "description": "probability that a tampered payload reaches the broker within k rounds"
+      },
+      {
+        "id": "66c04466-a48c-4469-bbff-bf8ea64d9529",
+        "name": "P1 Attacker alone",
+        "formula": "<<att>> Pmax=? [ F (\"payload_tamper\" & rounds<=k) ]",
+        "description": "expected: 0, the sensors can stay silent"
+      },
+      {
+        "id": "7c6b694e-5d9c-4df5-aae9-6bae8955487d",
+        "name": "P2 Tampered messages",
+        "formula": "<<att,sen>> R{\"damage\"}max=? [ F rounds=k ]",
+        "description": "expected number of tampered payloads over k rounds"
+      },
+      {
+        "id": "dfbde994-85f5-4417-b233-a8b798d5c192",
+        "name": "P3 Unrouted message",
+        "formula": "<<att,sen>> Pmax=? [ F (\"unrouted\" & rounds<=k) ]",
+        "description": "routing-key tampering: a queue stays empty"
+      },
+      {
+        "id": "8cd34d59-eaf5-41a7-b33d-c2c710406e12",
+        "name": "P3 Unrouted messages",
+        "formula": "<<att,sen>> R{\"unrouted\"}max=? [ F rounds=k ]",
+        "description": "compare with BAN = 1 and BAN = 10"
+      }
+    ]
+  }
+}

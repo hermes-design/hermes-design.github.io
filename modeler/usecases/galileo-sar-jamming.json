@@ -1,17 +1,16 @@
 {
   "id": "galileo-sar-jamming",
   "title": "Galileo SAR link under jamming (CTMC)",
-  "chapter": "Part 5 — Case study 2: Galileo SAR under jamming",
-  "chapterOrder": 5,
+  "chapter": "Use case 4 — Galileo SAR link under jamming",
+  "chapterOrder": 4,
   "formalism": "ctmc",
   "tool": "PRISM 4.x (or PRISM-games)",
-  "slides": "Slides 39–42",
   "summary": "Four CTMC modules (Satellite, Signal, Attack, Defence) and one service formula. The jammer (SPARTA EX-0016) is countered by antenna nulling (CM0083) at rate λnull = α·λjam.",
   "description": [
-    "Each module alternates between two states with exponential rates (slide 40): Satellite and Signal fail and recover; the Attack module switches between NO_ATTACK and JAMMED with λjam = 1/MTTA and μjam = 1/2; the Defence module activates nulling at λnull = α·λjam and stops at μnull = 1/2.",
+    "Each module alternates between two states with exponential rates: Satellite and Signal fail and recover; the Attack module switches between NO_ATTACK and JAMMED with λjam = 1/MTTA and μjam = 1/2; the Defence module activates nulling at λnull = α·λjam and stops at μnull = 1/2.",
     "The service is up when satellite and signal are healthy and either no attack is active, or nulling is active during the attack: formula system_up.",
-    "α scales the defence rate relative to the attack rate (α = 1: same rate; α > 1: faster defence). REACTIVE = false keeps the four modules independent as on slide 40; REACTIVE = true lets nulling start only while the link is jammed.",
-    "Nobody decides in this model (fixed attack and defence rates), which is why a CTMC is enough (slide 13).",
+    "α scales the defence rate relative to the attack rate (α = 1: same rate; α > 1: faster defence). REACTIVE = false keeps the four modules independent; REACTIVE = true lets nulling start only while the link is jammed.",
+    "Nobody decides in this model (fixed attack and defence rates), which is why a CTMC is enough.",
     "Rates span ten orders of magnitude (10⁻⁸ … 1): iterative steady-state solvers do not converge, so the properties use transient (U<=T, F<=T) and cumulative (C<=T) analysis."
   ],
   "objectives": [
@@ -22,34 +21,34 @@
   "exercises": [
     "Run P=? [ \"up\" U<=T !\"up\" ] for α = 1, 2, 5, 10: are the curves parallel when α = 1?",
     "Increase MTTA (rarer attacks): how fast does the effect of jamming fade?",
-    "Compare the expected defence reward with the 5.85 % defended/total signals of the GNU Radio simulation (slide 42).",
+    "Compare the expected defence reward with the 5.85 % defended/total signals of the GNU Radio simulation.",
     "Set REACTIVE = true: what changes, and why?",
-    "Check the long-run signal availability μsig / (λsig + μsig) with the slide-40 rates against the 99.22 % of slide 39. What do you conclude?"
+    "Check the long-run signal availability μsig / (λsig + μsig) with these rates against an availability of 99.22 %. What do you conclude?"
   ],
   "parameters": [
     {
       "name": "lambda_sat",
       "label": "Satellite failure rate λ",
       "value": "2.03e-8",
-      "source": "Slide 40"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "mu_sat",
       "label": "Satellite recovery rate μ",
       "value": "4.03e-6",
-      "source": "Slide 40"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "lambda_sig",
       "label": "Signal degradation rate λsig",
       "value": "1e-3",
-      "source": "Slide 40"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "mu_sig",
       "label": "Signal recovery rate μsig",
       "value": "8.7e-6",
-      "source": "Slide 40"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "MTTA",
@@ -62,19 +61,19 @@
       "name": "mu_jam",
       "label": "Jamming end rate μjam",
       "value": "0.5",
-      "source": "Slide 40 (1/2)"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "alpha",
       "label": "Defence/attack rate ratio α",
       "value": "10",
-      "source": "Slides 40, 42"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "mu_null",
       "label": "Nulling end rate μnull",
       "value": "0.5",
-      "source": "Slide 40 (1/2)"
+      "source": "Galileo SAR parameters"
     },
     {
       "name": "REACTIVE",
@@ -93,7 +92,7 @@
     "modelType": "ctmc",
     "components": [
       {
-        "id": "0a7bf3cb-b86f-4000-9b66-88e6b4d1596b",
+        "id": "af154362-c3e9-4224-98a0-1855c07c0f18",
         "type": "SATELLITE",
         "name": "Satellite",
         "x": 120,
@@ -106,7 +105,7 @@
           "variables": [],
           "states": [
             {
-              "id": "22c1392f-27dd-4da6-98ca-c71b02d2ec6c",
+              "id": "a92c5a3f-9c1b-43f3-89c5-800c9da9e2df",
               "name": "OPERATIONAL",
               "variableName": "SAT",
               "value": 0,
@@ -114,7 +113,7 @@
               "y": 200
             },
             {
-              "id": "c60606ed-cc9d-4b23-a933-eefd6425a216",
+              "id": "9b59baaf-4c34-40a8-8c54-876ec4a26464",
               "name": "DEGRADED",
               "variableName": "SAT",
               "value": 1,
@@ -124,9 +123,9 @@
           ],
           "transitions": [
             {
-              "id": "6086cbe0-e7fc-4c35-b298-62dfc1d12048",
-              "sourceStateId": "22c1392f-27dd-4da6-98ca-c71b02d2ec6c",
-              "targetStateId": "c60606ed-cc9d-4b23-a933-eefd6425a216",
+              "id": "b84fc809-51a2-42a2-b405-ae1ef11f9899",
+              "sourceStateId": "a92c5a3f-9c1b-43f3-89c5-800c9da9e2df",
+              "targetStateId": "9b59baaf-4c34-40a8-8c54-876ec4a26464",
               "updates": [
                 {
                   "probability": "lambda_sat",
@@ -135,9 +134,9 @@
               ]
             },
             {
-              "id": "e6137a47-28b4-4140-aac2-207b460a257c",
-              "sourceStateId": "c60606ed-cc9d-4b23-a933-eefd6425a216",
-              "targetStateId": "22c1392f-27dd-4da6-98ca-c71b02d2ec6c",
+              "id": "92e8fda0-295f-4f82-9223-ca18db7c7ca9",
+              "sourceStateId": "9b59baaf-4c34-40a8-8c54-876ec4a26464",
+              "targetStateId": "a92c5a3f-9c1b-43f3-89c5-800c9da9e2df",
               "updates": [
                 {
                   "probability": "mu_sat",
@@ -149,7 +148,7 @@
         }
       },
       {
-        "id": "8469a76e-5ffd-420d-9696-d87d6179d6ae",
+        "id": "8d079dde-84dd-4cc9-b8fc-5fc0fb45eec9",
         "type": "BASIC",
         "name": "Signal",
         "x": 380,
@@ -162,7 +161,7 @@
           "variables": [],
           "states": [
             {
-              "id": "7168db92-2dc2-4f80-9bda-149519984de5",
+              "id": "847695ea-9ada-45d3-abc0-b7f0ae7cc319",
               "name": "OPERATIONAL",
               "variableName": "SIG",
               "value": 0,
@@ -170,7 +169,7 @@
               "y": 200
             },
             {
-              "id": "1a2902bb-cec0-45d2-ae6e-607fb6382662",
+              "id": "12baf6c5-3d10-4ef5-902b-8270148d0a63",
               "name": "DEGRADED",
               "variableName": "SIG",
               "value": 1,
@@ -180,9 +179,9 @@
           ],
           "transitions": [
             {
-              "id": "41ccc9f1-9a6c-43e2-83cc-d4f7b3477930",
-              "sourceStateId": "7168db92-2dc2-4f80-9bda-149519984de5",
-              "targetStateId": "1a2902bb-cec0-45d2-ae6e-607fb6382662",
+              "id": "5be95359-7453-4ba0-a5d2-aa0b62453b03",
+              "sourceStateId": "847695ea-9ada-45d3-abc0-b7f0ae7cc319",
+              "targetStateId": "12baf6c5-3d10-4ef5-902b-8270148d0a63",
               "updates": [
                 {
                   "probability": "lambda_sig",
@@ -191,9 +190,9 @@
               ]
             },
             {
-              "id": "41c5dbae-528f-48ea-a1ff-8ef73ad57e21",
-              "sourceStateId": "1a2902bb-cec0-45d2-ae6e-607fb6382662",
-              "targetStateId": "7168db92-2dc2-4f80-9bda-149519984de5",
+              "id": "02d43515-0afd-4ee1-8787-73f19c7a6eb0",
+              "sourceStateId": "12baf6c5-3d10-4ef5-902b-8270148d0a63",
+              "targetStateId": "847695ea-9ada-45d3-abc0-b7f0ae7cc319",
               "updates": [
                 {
                   "probability": "mu_sig",
@@ -205,7 +204,7 @@
         }
       },
       {
-        "id": "5fcb61c1-9267-4611-87af-2721d81c2f3d",
+        "id": "9abef730-eacb-4f2b-9379-492c4fd82ab0",
         "type": "ATTACKER",
         "name": "Attack",
         "x": 120,
@@ -218,7 +217,7 @@
           "variables": [],
           "states": [
             {
-              "id": "0f8f732e-ccc4-4eba-93c1-f27fdb178500",
+              "id": "7fc29152-579e-4d94-a53a-5dc23b96549e",
               "name": "NO_ATTACK",
               "variableName": "ATT",
               "value": 0,
@@ -226,7 +225,7 @@
               "y": 200
             },
             {
-              "id": "0e63dfef-cfec-40e1-acc8-78a7697bb112",
+              "id": "61a9022d-4b7c-4bdd-847e-44d37b3e32ec",
               "name": "JAMMED",
               "variableName": "ATT",
               "value": 1,
@@ -236,9 +235,9 @@
           ],
           "transitions": [
             {
-              "id": "0d245e5c-d43c-41a2-984f-2f57912a8312",
-              "sourceStateId": "0f8f732e-ccc4-4eba-93c1-f27fdb178500",
-              "targetStateId": "0e63dfef-cfec-40e1-acc8-78a7697bb112",
+              "id": "73203fdf-9a85-453e-9e44-9f37f0a96845",
+              "sourceStateId": "7fc29152-579e-4d94-a53a-5dc23b96549e",
+              "targetStateId": "61a9022d-4b7c-4bdd-847e-44d37b3e32ec",
               "updates": [
                 {
                   "probability": "lambda_jam",
@@ -247,9 +246,9 @@
               ]
             },
             {
-              "id": "23e0f02d-6292-4005-89cb-a7c41a04a375",
-              "sourceStateId": "0e63dfef-cfec-40e1-acc8-78a7697bb112",
-              "targetStateId": "0f8f732e-ccc4-4eba-93c1-f27fdb178500",
+              "id": "7202f2c8-7d37-4463-8f43-9626c68de59f",
+              "sourceStateId": "61a9022d-4b7c-4bdd-847e-44d37b3e32ec",
+              "targetStateId": "7fc29152-579e-4d94-a53a-5dc23b96549e",
               "updates": [
                 {
                   "probability": "mu_jam",
@@ -261,7 +260,7 @@
         }
       },
       {
-        "id": "71597ab8-e82e-458c-a71d-ccc2a5c2cb7c",
+        "id": "7fbaa510-365f-4350-a426-f3fb3676fdd2",
         "type": "GATEWAY",
         "name": "Defence",
         "x": 380,
@@ -274,7 +273,7 @@
           "variables": [],
           "states": [
             {
-              "id": "d4d5157d-4260-4b33-aabd-6f858c42ef30",
+              "id": "72d08faa-8b52-4cbc-a95f-8b4f1cb9aaf1",
               "name": "IDLE",
               "variableName": "DEF",
               "value": 0,
@@ -282,7 +281,7 @@
               "y": 200
             },
             {
-              "id": "d45d1604-ea94-4f68-b4cf-63295329ddcc",
+              "id": "c8e32636-65c1-4721-8103-1e7f2feacf07",
               "name": "NULLING",
               "variableName": "DEF",
               "value": 1,
@@ -292,9 +291,9 @@
           ],
           "transitions": [
             {
-              "id": "d7748c10-e25b-4eb5-962f-6e922361a52a",
-              "sourceStateId": "d4d5157d-4260-4b33-aabd-6f858c42ef30",
-              "targetStateId": "d45d1604-ea94-4f68-b4cf-63295329ddcc",
+              "id": "120f4779-474b-4f98-b112-82498f97a474",
+              "sourceStateId": "72d08faa-8b52-4cbc-a95f-8b4f1cb9aaf1",
+              "targetStateId": "c8e32636-65c1-4721-8103-1e7f2feacf07",
               "guard": "!REACTIVE | ATT=JAMMED",
               "updates": [
                 {
@@ -304,9 +303,9 @@
               ]
             },
             {
-              "id": "f0eb3d1b-78cc-411a-b8af-13638fc26579",
-              "sourceStateId": "d45d1604-ea94-4f68-b4cf-63295329ddcc",
-              "targetStateId": "d4d5157d-4260-4b33-aabd-6f858c42ef30",
+              "id": "0cffc645-540a-424b-b117-2eb4c2d10143",
+              "sourceStateId": "c8e32636-65c1-4721-8103-1e7f2feacf07",
+              "targetStateId": "72d08faa-8b52-4cbc-a95f-8b4f1cb9aaf1",
               "updates": [
                 {
                   "probability": "mu_null",
@@ -321,109 +320,109 @@
     "connectors": [],
     "constants": [
       {
-        "id": "099a72d5-590e-4bbc-97ad-b57f862dd434",
+        "id": "2bea7b0b-3162-4832-88e4-c78bb0303c2a",
         "name": "OPERATIONAL",
         "type": "int",
         "value": "0"
       },
       {
-        "id": "ec37f88c-e81e-4b9f-bd7e-58d09edd2e09",
+        "id": "07d5237e-f2c8-4d1b-ba4c-6d33a56b40c8",
         "name": "DEGRADED",
         "type": "int",
         "value": "1"
       },
       {
-        "id": "80ebba8e-3ef0-481a-8e6c-c41a3fb93a11",
+        "id": "afcee737-ee85-4ebe-acd5-816029ba8b6f",
         "name": "NO_ATTACK",
         "type": "int",
         "value": "0"
       },
       {
-        "id": "3320c85f-fea2-4bc0-9453-60cd245a855f",
+        "id": "3768cae0-2208-4f42-ba7a-cbe9eb013ba0",
         "name": "JAMMED",
         "type": "int",
         "value": "1"
       },
       {
-        "id": "8051cf96-56e5-4cee-8bfa-129d97574a0a",
+        "id": "1c3172be-36ba-4f35-99c1-27b94ae3f9f4",
         "name": "IDLE",
         "type": "int",
         "value": "0"
       },
       {
-        "id": "4426da11-85fe-4d5e-b590-b884835670c2",
+        "id": "4611dd42-c4ea-432c-90ef-bcb8e666e346",
         "name": "NULLING",
         "type": "int",
         "value": "1"
       },
       {
-        "id": "4e573618-8cf1-49c4-a105-709cb9174a2f",
+        "id": "6097d3de-dfcd-4851-9130-64ec3b317b86",
         "name": "lambda_sat",
         "type": "double",
         "value": "2.03e-8"
       },
       {
-        "id": "9982002c-e404-4ec0-b4b8-224baaca8c74",
+        "id": "f9aafd87-34dd-457d-aa19-ea351c288baf",
         "name": "mu_sat",
         "type": "double",
         "value": "4.03e-6"
       },
       {
-        "id": "fdc56257-81d6-4f45-84a5-bf6e74e87987",
+        "id": "9a393741-6b76-44d4-a2de-484efa4ebad7",
         "name": "lambda_sig",
         "type": "double",
         "value": "1e-3"
       },
       {
-        "id": "b5f6c53e-caf4-4421-97ed-9bdacdf0fa55",
+        "id": "108d2178-513a-4986-b881-cbe67103581b",
         "name": "mu_sig",
         "type": "double",
         "value": "8.7e-6"
       },
       {
-        "id": "40beabfb-0caa-4e5d-a4ff-672c9b4be9a1",
+        "id": "636b06ca-a9bf-4c1b-b8a8-8ac019ce6ca7",
         "name": "MTTA",
         "type": "double",
         "value": "10"
       },
       {
-        "id": "6485bed3-ffd4-4a73-aafb-422da9c847a2",
+        "id": "e77f45ae-20fe-4f31-93c2-5130deb5e24c",
         "name": "lambda_jam",
         "type": "double",
         "value": "1/MTTA"
       },
       {
-        "id": "2bb86877-6ba2-44b0-b19d-e85eefb465b3",
+        "id": "c22fa86a-a7e6-413e-91fd-71bf71d2baf9",
         "name": "mu_jam",
         "type": "double",
         "value": "0.5"
       },
       {
-        "id": "8c0a9d6e-50e6-4d58-b7a6-e39e79fafab7",
+        "id": "062ce0b1-6b7c-4c4d-8344-ac0d4df580fe",
         "name": "alpha",
         "type": "double",
         "value": "10"
       },
       {
-        "id": "6a16e35a-1706-42a7-b795-3972793c0b3a",
+        "id": "93b0a5f2-aa51-4f4c-9f53-30286f2d790a",
         "name": "lambda_null",
         "type": "double",
         "value": "alpha*lambda_jam"
       },
       {
-        "id": "a21c5861-85cf-4d27-b55d-778cf2afcd71",
+        "id": "3a6eb5a3-a211-49c9-9f6f-edc216ab3777",
         "name": "mu_null",
         "type": "double",
         "value": "0.5"
       },
       {
-        "id": "0ef77f3d-6ecc-4d84-8e63-aa7c1741e705",
+        "id": "99cc28f3-4d7b-436d-b1e6-b9242f24284a",
         "name": "REACTIVE",
         "type": "bool",
         "value": "false"
       },
       {
-        "id": "c64d1cd9-9da4-4df0-b454-5c26d5dac402",
+        "id": "f790151c-6d7c-41e3-968b-a74cd4798cbe",
         "name": "T",
         "type": "double",
         "value": "100"
@@ -431,46 +430,46 @@
     ],
     "formulas": [
       {
-        "id": "bdc5dd9d-7c47-449a-bcc3-fbc400ed81c3",
+        "id": "85dbf356-87a3-4e81-994b-a3eed6d14ba7",
         "name": "system_up",
         "expression": "(SAT=OPERATIONAL) & (SIG=OPERATIONAL) & ((ATT=NO_ATTACK) | (ATT=JAMMED & DEF=NULLING))"
       }
     ],
     "labels": [
       {
-        "id": "3b3d9e71-d05c-4282-86e9-f2e9dc413958",
+        "id": "84cc52cf-c896-4f23-a954-74cf54cc972f",
         "name": "up",
         "expression": "system_up"
       },
       {
-        "id": "9849831b-663a-4297-a0cb-e730591e1827",
+        "id": "62f03ada-b720-471c-8991-300927f2790b",
         "name": "jammed",
         "expression": "ATT=JAMMED"
       },
       {
-        "id": "9d5797c3-d4b4-4228-8b3f-ec27336b3387",
+        "id": "4311b312-3802-4b1b-b1f2-20a97d205666",
         "name": "defended",
         "expression": "ATT=JAMMED & DEF=NULLING"
       }
     ],
     "rewards": [
       {
-        "id": "40405b50-82cb-4577-b53d-79e973a119d0",
+        "id": "a65f11df-67d9-4d1e-8ea3-76a2067d1f37",
         "name": "defense",
         "items": [
           {
-            "id": "f2f21562-0dea-446d-914c-7b3170921090",
+            "id": "58a02ac3-1ea7-4cc3-a796-47966d67340e",
             "guard": "ATT=JAMMED & DEF=NULLING",
             "reward": "1"
           }
         ]
       },
       {
-        "id": "bc546ccb-3fb8-40ba-9865-7081c8910e35",
+        "id": "003eb477-2d2f-4437-9779-5eb7d46d034e",
         "name": "downtime",
         "items": [
           {
-            "id": "056f37fd-f52f-47de-8f33-163e5d6944e8",
+            "id": "18506bf8-ff2f-4a9d-b976-9bb1149569bd",
             "guard": "!system_up",
             "reward": "1"
           }
@@ -479,30 +478,30 @@
     ],
     "properties": [
       {
-        "id": "f9023a2e-9f51-4ef7-875a-0771b91b735a",
+        "id": "2c216b22-fb59-41eb-b84e-ccc150d714aa",
         "name": "Degraded within T",
         "formula": "P=? [ \"up\" U<=T !\"up\" ]",
-        "description": "slide 40 — probability that the service goes down within T"
+        "description": "probability that the service goes down within T"
       },
       {
-        "id": "c8226a7a-6e68-410e-b70b-8510e8dbdf65",
+        "id": "5f2a7abf-d185-4716-b2e4-422a7d044fc3",
         "name": "Jammed within T",
         "formula": "P=? [ F<=T \"jammed\" ]"
       },
       {
-        "id": "f419e4bf-7c1f-4f9b-9791-1999bc689748",
+        "id": "35cbda07-9955-4fdb-8163-98d0aed816c6",
         "name": "Availability over [0,T]",
         "formula": "1 - R{\"downtime\"}=? [ C<=T ] / T",
         "description": "mean fraction of [0,T] with the service up"
       },
       {
-        "id": "5bba75fd-39cf-441b-a207-1657c320bc99",
+        "id": "089abdef-5058-4853-965b-a9b7d8361eb1",
         "name": "Expected defence reward",
         "formula": "R{\"defense\"}=? [ C<=T ] / T",
-        "description": "fraction of [0,T] spent jammed AND defended (compare with slide 42)"
+        "description": "fraction of [0,T] spent jammed AND defended"
       },
       {
-        "id": "ed578182-a762-4dc2-923f-d69568ac23f4",
+        "id": "12e6b2b5-4ef5-4c07-a042-4f9e0563a3be",
         "name": "Expected downtime",
         "formula": "R{\"downtime\"}=? [ C<=T ]"
       }

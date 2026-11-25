@@ -1,0 +1,488 @@
+{
+  "id": "cecebre-edge-energy",
+  "title": "Cecebre dam: data corruption and energy at the edge (reduced CSG)",
+  "chapter": "Use case 7 — Edge gateway: data corruption and energy",
+  "chapterOrder": 7,
+  "formalism": "csg",
+  "tool": "PRISM-games 3.x",
+  "summary": "The water-level sensor of the Cecebre dam publishes through a SensiNact edge gateway; an attacker injects corrupted values at the southbound bridge. Compare synchronous and asynchronous communication, and the energy cost of the attack.",
+  "description": [
+    "Players: the water-level sensor (sen) publishes or skips a round; the attacker (att) injects a corrupted value or waits. The southbound bridge of the edge gateway is a non-player module: wl = 1 when the value forwarded to the cloud is corrupted.",
+    "Synchronous bridge (MODE = 0): the message is handed over directly, nothing is stored. Asynchronous bridge (MODE = 1): corrupted payloads are kept in a buffer of capacity CAP (nb slots used) and one slot is freed per clean round. Scanning the buffer costs CPU time.",
+    "Energy per round follows the power model, 2.1514·u + 4.142, where u is the gateway load (here: the corrupted value being handled plus the occupied buffer slots).",
+    "Countermeasure: BLOCK = 1 closes the attacker's port. Scenario 1: p_att = 0.2; scenario 2: p_att = 0.8.",
+    "Reduced teaching model (one sensor instead of three, no actuator): it reproduces the trends of the full study (asynchronous costs more, port blocking stabilises the energy), not its exact figures."
+  ],
+  "objectives": [
+    "Map components to players, ports to actions and connectors to non-player modules.",
+    "See how the communication style (sync / async) changes the cost of an attack.",
+    "Observe the state-space growth when the buffer capacity increases."
+  ],
+  "exercises": [
+    "Compute the maximal energy over 30 rounds for MODE = 0 and MODE = 1, with p_att = 0.2 then 0.8. Compute the sync / async ratio.",
+    "Set BLOCK = 1: what is left of the attack?",
+    "Increase CAP from 4 to 10 and note the number of states and the verification time."
+  ],
+  "parameters": [
+    {
+      "name": "k",
+      "label": "Number of rounds",
+      "value": "30"
+    },
+    {
+      "name": "MODE",
+      "label": "Communication",
+      "value": "1",
+      "description": "0 = synchronous, 1 = asynchronous"
+    },
+    {
+      "name": "p_att",
+      "label": "Attack success probability",
+      "value": "0.2",
+      "description": "scenario 1 = 0.2, scenario 2 = 0.8"
+    },
+    {
+      "name": "CAP",
+      "label": "Buffer capacity",
+      "value": "4",
+      "description": "asynchronous mode only (max 10)"
+    },
+    {
+      "name": "BLOCK",
+      "label": "Attacker port blocked",
+      "value": "0",
+      "description": "0 = no, 1 = yes (countermeasure)"
+    }
+  ],
+  "model": {
+    "modelType": "csg",
+    "includeRounds": true,
+    "components": [
+      {
+        "id": "fc9fbbd4-05f9-4df1-b9f9-9cbede5dcc17",
+        "type": "SENSOR",
+        "name": "WL_Sensor",
+        "x": 100,
+        "y": 80,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "8976ab09-4517-41cd-8034-cadc88aa3321",
+            "name": "pub",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "sen"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "ba90a85a-8d1c-4238-86fa-0e16a83ca35e",
+              "name": "SEN",
+              "variableName": "sen_ready",
+              "value": 0,
+              "x": 260,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "18aa3623-7c8a-4cff-87b0-ec98c209b65d",
+              "sourceStateId": "ba90a85a-8d1c-4238-86fa-0e16a83ca35e",
+              "targetStateId": "ba90a85a-8d1c-4238-86fa-0e16a83ca35e",
+              "action": "publish",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "981a0ca0-f357-494a-940c-25a42ebdd25f",
+              "sourceStateId": "ba90a85a-8d1c-4238-86fa-0e16a83ca35e",
+              "targetStateId": "ba90a85a-8d1c-4238-86fa-0e16a83ca35e",
+              "action": "skip",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "a973e06c-fcb6-4a25-9214-1aa0440a7042",
+        "type": "GATEWAY",
+        "name": "SouthboundBridge",
+        "x": 410,
+        "y": 80,
+        "width": 190,
+        "height": 110,
+        "ports": [
+          {
+            "id": "723e9a77-ca5e-458c-938b-2895b31b917e",
+            "name": "in",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "41724ee2-b862-4463-8c49-6660958b7e64",
+            "name": "inj",
+            "type": "INPUT",
+            "side": "BOTTOM",
+            "offset": 95,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "205a6a68-4c61-420c-b7a3-3f50b3f08e18",
+            "name": "north",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "isPlayer": false
+        },
+        "monitorDefinition": {
+          "variables": [
+            {
+              "id": "74a03c5c-2826-4024-8238-2c520c7cb0c1",
+              "name": "wl",
+              "min": 0,
+              "max": 1,
+              "init": 0
+            },
+            {
+              "id": "209deaa5-32c0-48a3-a514-8228d66716f0",
+              "name": "nb",
+              "min": 0,
+              "max": 10,
+              "init": 0
+            }
+          ],
+          "transitions": [
+            {
+              "id": "d13139d2-5e26-43f4-8594-5c0cc452ed79",
+              "actions": [
+                "publish",
+                "inject"
+              ],
+              "guard": "MODE=0",
+              "updates": [
+                {
+                  "probability": "p_att",
+                  "assignments": {
+                    "wl": "1"
+                  }
+                },
+                {
+                  "probability": "1-p_att",
+                  "assignments": {
+                    "wl": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "cfa3fbc8-0196-4960-8b2c-3fe7b772abc5",
+              "actions": [
+                "publish",
+                "inject"
+              ],
+              "guard": "MODE=1",
+              "updates": [
+                {
+                  "probability": "p_att",
+                  "assignments": {
+                    "wl": "1",
+                    "nb": "min(nb+1,CAP)"
+                  }
+                },
+                {
+                  "probability": "1-p_att",
+                  "assignments": {
+                    "wl": "0",
+                    "nb": "max(nb-1,0)"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "6b741898-e55c-4a78-b213-d3b12efa7315",
+              "actions": [
+                "publish",
+                "wait"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "wl": "0",
+                    "nb": "max(nb-1,0)"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "9f34ae82-efdc-4821-926a-ddeb8d744808",
+              "actions": [
+                "skip",
+                "inject"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "wl": "0",
+                    "nb": "max(nb-1,0)"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ad929cea-e8a5-445e-ae18-c38f32892eb3",
+              "actions": [
+                "skip",
+                "wait"
+              ],
+              "guard": "true",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {
+                    "wl": "0",
+                    "nb": "max(nb-1,0)"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "fce7eed1-7cdb-4ef9-a9cd-dd07d2574ed7",
+        "type": "BASIC",
+        "name": "Cloud",
+        "x": 720,
+        "y": 80,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "6d5790c6-587e-4dd0-a7bb-460ec9bec3b6",
+            "name": "in",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "isPlayer": false
+        }
+      },
+      {
+        "id": "dd69f8a9-5958-4f64-85f9-e04cd0eaaf1d",
+        "type": "ATTACKER",
+        "name": "Attacker",
+        "x": 410,
+        "y": 280,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "ec29e535-6bf1-4b37-b02f-1ba61ddc0907",
+            "name": "inj",
+            "type": "OUTPUT",
+            "side": "TOP",
+            "offset": 85,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "att"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "55a2fd4b-37ee-4d58-93e6-5e910fb35f1f",
+              "name": "ATT",
+              "variableName": "att_ready",
+              "value": 0,
+              "x": 260,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "7bc9a176-cf9a-427e-b227-77e48e9c90b3",
+              "sourceStateId": "55a2fd4b-37ee-4d58-93e6-5e910fb35f1f",
+              "targetStateId": "55a2fd4b-37ee-4d58-93e6-5e910fb35f1f",
+              "action": "inject",
+              "guard": "BLOCK=0",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "6fe32618-275b-4d02-b52f-8e21d2bc4b38",
+              "sourceStateId": "55a2fd4b-37ee-4d58-93e6-5e910fb35f1f",
+              "targetStateId": "55a2fd4b-37ee-4d58-93e6-5e910fb35f1f",
+              "action": "wait",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "id": "2f9b1237-72d3-4660-8a0d-44570e8a4914",
+        "sourceComponentId": "fc9fbbd4-05f9-4df1-b9f9-9cbede5dcc17",
+        "sourcePortId": "8976ab09-4517-41cd-8034-cadc88aa3321",
+        "targetComponentId": "a973e06c-fcb6-4a25-9214-1aa0440a7042",
+        "targetPortId": "723e9a77-ca5e-458c-938b-2895b31b917e",
+        "type": "PUSH"
+      },
+      {
+        "id": "e9cd3562-85bc-42ad-a51b-75e9fdbbb81a",
+        "sourceComponentId": "dd69f8a9-5958-4f64-85f9-e04cd0eaaf1d",
+        "sourcePortId": "ec29e535-6bf1-4b37-b02f-1ba61ddc0907",
+        "targetComponentId": "a973e06c-fcb6-4a25-9214-1aa0440a7042",
+        "targetPortId": "41724ee2-b862-4463-8c49-6660958b7e64",
+        "type": "PUSH"
+      },
+      {
+        "id": "01283ada-e845-4abd-a931-749fafcd867d",
+        "sourceComponentId": "a973e06c-fcb6-4a25-9214-1aa0440a7042",
+        "sourcePortId": "205a6a68-4c61-420c-b7a3-3f50b3f08e18",
+        "targetComponentId": "fce7eed1-7cdb-4ef9-a9cd-dd07d2574ed7",
+        "targetPortId": "6d5790c6-587e-4dd0-a7bb-460ec9bec3b6",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "c0642516-49f7-4459-8fe3-244a5ce0d5fc",
+        "name": "k",
+        "type": "int",
+        "value": "30"
+      },
+      {
+        "id": "eb31bce2-86c6-4abb-a6ad-70b5e86bc8e1",
+        "name": "MODE",
+        "type": "int",
+        "value": "1"
+      },
+      {
+        "id": "85e7dc92-f01d-4624-a2f6-1c02b2d18964",
+        "name": "p_att",
+        "type": "double",
+        "value": "0.2"
+      },
+      {
+        "id": "27501052-7ced-46b0-a0ef-1503524a4d7c",
+        "name": "CAP",
+        "type": "int",
+        "value": "4"
+      },
+      {
+        "id": "09a2b629-fe6e-4a7e-9939-3f66f1757109",
+        "name": "BLOCK",
+        "type": "int",
+        "value": "0"
+      }
+    ],
+    "formulas": [],
+    "labels": [
+      {
+        "id": "827695fa-25aa-443b-8474-7bd92a97d81f",
+        "name": "Corrupted_Data",
+        "expression": "wl=1"
+      },
+      {
+        "id": "fc0ac3b1-a72c-49c4-a146-92c586309a21",
+        "name": "buffer_full",
+        "expression": "nb=CAP"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "725bce99-d62d-4b7c-892b-e5bde3470c57",
+        "name": "energy",
+        "items": [
+          {
+            "id": "dcc92247-70b7-4467-84a6-d3691dc28343",
+            "guard": "true",
+            "reward": "2.1514*(wl+nb) + 4.142"
+          }
+        ]
+      },
+      {
+        "id": "e300ced2-d649-4f23-9ee9-319e1931df58",
+        "name": "corrupted",
+        "items": [
+          {
+            "id": "266375c3-7ba2-4bd5-87ae-63c5d1b33ce0",
+            "guard": "wl=1",
+            "reward": "1"
+          }
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "a5c0d05c-e94c-4c43-a153-783fe5567b68",
+        "name": "Corrupted data reaches the cloud",
+        "formula": "<<att,sen>> Pmax=? [ F (\"Corrupted_Data\" & rounds<=k) ]"
+      },
+      {
+        "id": "e869b692-47b7-47fa-8549-bf6e41dad156",
+        "name": "Maximal energy",
+        "formula": "<<att,sen>> R{\"energy\"}max=? [ F rounds=k ]",
+        "description": "compare MODE = 0 and MODE = 1"
+      },
+      {
+        "id": "d50fd222-808d-4124-8bc5-116994962114",
+        "name": "Energy the attacker can force",
+        "formula": "<<att>> R{\"energy\"}max=? [ F rounds=k ]",
+        "description": "whatever the sensor does"
+      },
+      {
+        "id": "b7f7b38f-7a18-484e-b00d-dadb29e4e796",
+        "name": "Expected corrupted values",
+        "formula": "<<att,sen>> R{\"corrupted\"}max=? [ F rounds=k ]"
+      },
+      {
+        "id": "e04ea3c4-0263-4e4b-9016-44d446ed7c16",
+        "name": "Buffer saturation",
+        "formula": "<<att,sen>> Pmax=? [ F (\"buffer_full\" & rounds<=k) ]",
+        "description": "asynchronous mode only"
+      }
+    ]
+  }
+}

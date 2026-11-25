@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HERMES Modeler · Documentation</title>
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f6f8fb; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+  --blue:#0066cc; --blue2:#3385d6; --pale:#e5f0fa; --orange:#eb811b; --green:#059669; --red:#dc2626; --code:#0f172a;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+html[data-lang="fr"] .en, html[data-lang="en"] .fr{display:none!important}
+a{color:var(--blue)}
+header.top{position:sticky;top:0;z-index:20;height:60px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 20px}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--blue);display:grid;place-items:center;color:#fff;font-weight:800}
+.brand b{display:block;font-size:15px;line-height:1.1}.brand span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.spacer{flex:1}
+.langs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:3px}
+.langs button{border:0;background:transparent;padding:5px 11px;border-radius:6px;font-weight:700;font-size:13px;color:var(--muted);cursor:pointer}
+.langs button.on{background:#fff;color:var(--blue);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;font-size:13px}
+.menu-btn{display:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:18px}
+.wrap{display:flex;max-width:1360px;margin:0 auto}
+nav.toc{position:sticky;top:60px;align-self:flex-start;width:280px;height:calc(100vh - 60px);overflow:auto;padding:22px 16px 40px 20px;border-right:1px solid var(--line);font-size:14px}
+nav.toc .grp{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:18px 0 6px}
+nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:4px 8px;border-radius:6px}
+nav.toc a:hover{background:var(--bg2)} nav.toc a.active{background:var(--pale);color:var(--blue);font-weight:700}
+nav.toc input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+main{flex:1;min-width:0;padding:28px 44px 120px;max-width:1000px}
+h1{font-size:34px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:26px;margin:2.2em 0 .5em;padding-top:.4em;border-top:1px solid var(--line)}
+h3{font-size:19px;margin:1.6em 0 .4em}
+h4{font-size:16px;margin:1.2em 0 .3em}
+p.lead{font-size:18px;color:#334155}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.88em;background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:.05em .35em}
+pre{position:relative;background:var(--code);color:#e2e8f0;border-radius:var(--radius);padding:14px 16px;overflow:auto;font-size:13.5px;line-height:1.55}
+pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+pre .copy{position:absolute;top:8px;right:8px;border:0;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;background:#334155;color:#e2e8f0;cursor:pointer}
+figure{margin:18px 0 24px}
+figure img{width:100%;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 18px rgba(15,23,42,.08);cursor:zoom-in}
+figcaption{font-size:13px;color:var(--muted);margin-top:6px;text-align:center}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--pale);color:#0b3d6e}
+.note,.tip,.warn{border-radius:var(--radius);padding:12px 16px;margin:16px 0;font-size:15px}
+.note{background:var(--pale);border:1px solid #bcd6f2}
+.tip{background:#ecfdf5;border:1px solid #a7f3d0}
+.warn{background:#fff7ed;border:1px solid #fed7aa}
+.note b:first-child,.tip b:first-child,.warn b:first-child{display:block;margin-bottom:2px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.card{border:1px solid var(--line);border-radius:var(--radius);padding:14px;background:#fff}
+.card h4{margin:0 0 4px;color:var(--blue)} .card p{margin:0;font-size:14px;color:#475569}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.flow span{background:var(--pale);border:1px solid #bcd6f2;border-radius:8px;padding:6px 12px;font-weight:700;font-size:14px;color:#0b3d6e}
+.flow i{color:var(--orange);font-style:normal;font-weight:800}
+.lab{border:1px solid var(--line);border-radius:14px;padding:4px 22px 18px;margin:26px 0;background:#fff;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+.lab h3{margin-top:.9em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.meta span{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);color:#475569}
+.meta .lvl1{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}.meta .lvl2{background:#fff7ed;color:#9a3412;border-color:#fed7aa}.meta .lvl3{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+ol.steps{counter-reset:s;list-style:none;padding-left:0}
+ol.steps>li{counter-increment:s;position:relative;padding:4px 0 8px 40px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center}
+details{border:1px dashed #cbd5e1;border-radius:var(--radius);padding:8px 14px;margin:12px 0;background:var(--bg2)}
+details summary{cursor:pointer;font-weight:700;color:#334155}
+kbd{font-family:inherit;font-size:12px;font-weight:700;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.ui{font-weight:700;color:#0b3d6e;background:var(--pale);border-radius:5px;padding:0 5px;white-space:nowrap}
+#zoom{position:fixed;inset:0;background:rgba(15,23,42,.85);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:20px}
+#zoom img{max-width:100%;max-height:100%;border-radius:8px}
+footer{color:var(--muted);font-size:13px;margin-top:60px;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:900px){
+  .menu-btn{display:block} nav.toc{position:fixed;left:0;top:60px;background:#fff;z-index:30;transform:translateX(-100%);transition:.2s;box-shadow:4px 0 20px rgba(0,0,0,.1)}
+  nav.toc.open{transform:none} main{padding:20px 16px 100px} .brand span{display:none}
+  .two{grid-template-columns:1fr} table{display:block;overflow-x:auto} .btn .fr,.btn .en{display:none!important} h1{font-size:27px} .ui{white-space:normal} .wrap{overflow-x:hidden}
+}
+@media print{header.top,nav.toc,pre .copy{display:none} main{max-width:none;padding:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <div class="logo">H</div>
+  <div class="brand"><b>HERMES Modeler</b><span>Documentation</span></div>
+  <div class="spacer"></div>
+  <div class="langs" role="group" aria-label="Language">
+    <button data-set="fr">FR</button><button data-set="en">EN</button>
+  </div>
+  <a class="btn" href="../index.html"><span class="fr">Ouvrir le modeler</span><span class="en">Open the modeler</span> →</a>
+</header>
+
+<div class="wrap">
+<nav class="toc" id="toc">
+  <input id="search" type="search" placeholder="🔍">
+  <div class="grp"><span class="fr">Démarrer</span><span class="en">Getting started</span></div>
+  <a href="#intro"><span class="fr">Présentation</span><span class="en">Overview</span></a>
+  <a href="#quickstart"><span class="fr">Démarrage en 5 minutes</span><span class="en">5-minute quick start</span></a>
+  <a href="#interface"><span class="fr">Visite de l'interface</span><span class="en">Interface tour</span></a>
+  <div class="grp"><span class="fr">Modéliser</span><span class="en">Modelling</span></div>
+  <a href="#components"><span class="fr">Composants</span><span class="en">Components</span></a>
+  <a href="#ports"><span class="fr">Ports et connecteurs</span><span class="en">Ports and connectors</span></a>
+  <a href="#behaviour"><span class="fr">Comportement (automate)</span><span class="en">Behaviour (state machine)</span></a>
+  <a href="#monitor"><span class="fr">Table Monitor</span><span class="en">Monitor table</span></a>
+  <a href="#definitions"><span class="fr">Constantes, labels, formules</span><span class="en">Constants, labels, formulas</span></a>
+  <a href="#rewards"><span class="fr">Récompenses</span><span class="en">Rewards</span></a>
+  <a href="#formalisms"><span class="fr">Formalismes et joueurs</span><span class="en">Formalisms and players</span></a>
+  <div class="grp"><span class="fr">Analyser</span><span class="en">Analysing</span></div>
+  <a href="#prism"><span class="fr">Code PRISM et propriétés</span><span class="en">PRISM code and properties</span></a>
+  <a href="#simulation"><span class="fr">Simulation et animation</span><span class="en">Simulation and animation</span></a>
+  <a href="#exports"><span class="fr">Exports</span><span class="en">Exports</span></a>
+  <a href="#usecases"><span class="fr">Bibliothèque de cas d'étude</span><span class="en">Use-case library</span></a>
+  <div class="grp"><span class="fr">Travaux pratiques</span><span class="en">Labs</span></div>
+  <a href="#labs"><span class="fr">Parcours des TP</span><span class="en">Lab path</span></a>
+  <a href="#lab1"><span class="fr">TP 1</span><span class="en">Lab 1</span> · <span class="fr">Premiers pas (CTMC)</span><span class="en">First steps (CTMC)</span></a>
+  <a href="#lab2"><span class="fr">TP 2</span><span class="en">Lab 2</span> · <span class="fr">Construire un jeu</span><span class="en">Build a game</span></a>
+  <a href="#lab3"><span class="fr">TP 3</span><span class="en">Lab 3</span> · <span class="fr">Ports sync / async</span><span class="en">Sync / async ports</span></a>
+  <a href="#lab4"><span class="fr">TP 4</span><span class="en">Lab 4</span> · <span class="fr">Attaque MITM</span><span class="en">MITM attack</span></a>
+  <a href="#lab5"><span class="fr">TP 5</span><span class="en">Lab 5</span> · <span class="fr">Énergie à l'edge</span><span class="en">Energy at the edge</span></a>
+  <a href="#lab6"><span class="fr">TP 6</span><span class="en">Lab 6</span> · <span class="fr">Humain dans la boucle</span><span class="en">Human in the loop</span></a>
+  <a href="#lab7"><span class="fr">TP 7</span><span class="en">Lab 7</span> · <span class="fr">Simulation et rapport</span><span class="en">Simulation and report</span></a>
+  <a href="#lab8"><span class="fr">TP 8</span><span class="en">Lab 8</span> · <span class="fr">Votre propre cas</span><span class="en">Your own case</span></a>
+  <div class="grp"><span class="fr">Référence</span><span class="en">Reference</span></div>
+  <a href="#cheatsheet"><span class="fr">Aide-mémoire PRISM</span><span class="en">PRISM cheat sheet</span></a>
+  <a href="#faq"><span class="fr">FAQ et dépannage</span><span class="en">FAQ and troubleshooting</span></a>
+</nav>
+
+<main id="content">
+
+<!-- =============================================================== INTRO -->
+<section id="intro">
+<h1><span class="fr">Documentation du HERMES Modeler</span><span class="en">HERMES Modeler documentation</span></h1>
+<p class="lead fr">Le HERMES Modeler est un outil web pour dessiner l'architecture d'un système cyber-physique (composants, ports, connecteurs), décrire le comportement de chaque composant, puis <b>générer automatiquement</b> un modèle PRISM ou PRISM-games, le <b>vérifier</b> et le <b>simuler</b> pas à pas.</p>
+<p class="lead en">HERMES Modeler is a web tool to draw the architecture of a cyber-physical system (components, ports, connectors), describe the behaviour of each component, then <b>automatically generate</b> a PRISM or PRISM-games model, <b>verify</b> it and <b>simulate</b> it step by step.</p>
+
+<div class="flow">
+  <span class="fr">Architecture</span><span class="en">Architecture</span><i>→</i>
+  <span class="fr">Comportements</span><span class="en">Behaviours</span><i>→</i>
+  <span class="fr">Constantes et récompenses</span><span class="en">Constants and rewards</span><i>→</i>
+  <span class="fr">Code PRISM + propriétés</span><span class="en">PRISM code + properties</span><i>→</i>
+  <span class="fr">Vérification (PRISM)</span><span class="en">Verification (PRISM)</span><i>/</i>
+  <span class="fr">Simulation (navigateur)</span><span class="en">Simulation (browser)</span>
+</div>
+
+<div class="cards">
+  <div class="card"><h4>CSG</h4><p class="fr">Jeux stochastiques concurrents (PRISM-games) : attaquant, système et humains jouent en même temps.</p><p class="en">Concurrent stochastic games (PRISM-games): attacker, system and humans play at the same time.</p></div>
+  <div class="card"><h4>CTMC</h4><p class="fr">Chaînes de Markov à temps continu : pannes, réparations, taux.</p><p class="en">Continuous-time Markov chains: failures, repairs, rates.</p></div>
+  <div class="card"><h4>MDP</h4><p class="fr">Processus de décision markoviens : non-déterminisme + probabilités.</p><p class="en">Markov decision processes: nondeterminism + probabilities.</p></div>
+  <div class="card"><h4>DTMC</h4><p class="fr">Chaînes de Markov à temps discret : protocoles probabilistes.</p><p class="en">Discrete-time Markov chains: probabilistic protocols.</p></div>
+</div>
+
+<div class="note fr"><b>À qui s'adresse ce guide ?</b>Aux étudiants (master, école d'ingénieurs) qui découvrent la vérification probabiliste, et aux enseignants qui veulent préparer des TP. Aucune installation n'est nécessaire pour modéliser et simuler ; PRISM ou PRISM-games n'est requis que pour la vérification exhaustive.</div>
+<div class="note en"><b>Who is this guide for?</b>Students (master's, engineering school) discovering probabilistic verification, and teachers preparing labs. Nothing needs to be installed to model and simulate; PRISM or PRISM-games is only required for exhaustive verification.</div>
+</section>
+
+<!-- =============================================================== QUICK START -->
+<section id="quickstart">
+<h2><span class="fr">Démarrage en 5 minutes</span><span class="en">5-minute quick start</span></h2>
+<ol class="steps fr">
+  <li>Cliquez sur l'onglet <span class="ui">Use Cases</span>, puis choisissez <b>Bus write access (shared resource)</b>.</li>
+  <li>Lisez le scénario, puis cliquez sur <span class="ui">Load into modeler</span> : l'architecture apparaît sur le canevas.</li>
+  <li>Cliquez sur <span class="ui">PRISM Code</span> : le modèle et ses propriétés sont générés. Téléchargez-les avec <span class="ui">Model</span> et <span class="ui">Properties</span>.</li>
+  <li>Cliquez sur <span class="ui">Simulate</span>, choisissez une action pour chaque joueur, puis <span class="ui">Step</span> ou <span class="ui">Play</span> : le diagramme de séquence se construit en direct.</li>
+  <li>Exportez le diagramme avec <span class="ui">PlantUML</span>, <span class="ui">SVG</span> ou <span class="ui">PNG</span>.</li>
+</ol>
+<ol class="steps en">
+  <li>Click the <span class="ui">Use Cases</span> tab, then choose <b>Bus write access (shared resource)</b>.</li>
+  <li>Read the scenario, then click <span class="ui">Load into modeler</span>: the architecture appears on the canvas.</li>
+  <li>Click <span class="ui">PRISM Code</span>: the model and its properties are generated. Download them with <span class="ui">Model</span> and <span class="ui">Properties</span>.</li>
+  <li>Click <span class="ui">Simulate</span>, pick an action for each player, then <span class="ui">Step</span> or <span class="ui">Play</span>: the sequence diagram grows live.</li>
+  <li>Export the diagram with <span class="ui">PlantUML</span>, <span class="ui">SVG</span> or <span class="ui">PNG</span>.</li>
+</ol>
+</section>
+
+<!-- =============================================================== INTERFACE -->
+<section id="interface">
+<h2><span class="fr">Visite de l'interface</span><span class="en">Interface tour</span></h2>
+<figure><img src="img/interface.jpg" alt="Modeler"><figcaption><span class="fr">L'espace de modélisation avec le cas du bus chargé.</span><span class="en">The modelling workspace with the bus use case loaded.</span></figcaption></figure>
+<table class="fr">
+<tr><th>Zone</th><th>Rôle</th></tr>
+<tr><td><b>Onglets</b> Modeler / Use Cases</td><td>Basculer entre l'éditeur et la bibliothèque de cas d'étude.</td></tr>
+<tr><td><b>Model</b> (liste déroulante)</td><td>Formalisme cible : CSG, CTMC, MDP ou DTMC. En CSG, la case <span class="ui">rounds</span> ajoute un compteur de tours.</td></tr>
+<tr><td><span class="ui">New</span> · <span class="ui">Save</span> · <span class="ui">Load</span></td><td>Nouveau modèle, sauvegarde et chargement du projet au format JSON.</td></tr>
+<tr><td><span class="ui">Definitions</span></td><td>Constantes, labels et formules du modèle.</td></tr>
+<tr><td><span class="ui">Rewards</span></td><td>Structures de récompenses (coûts, énergie, gains…).</td></tr>
+<tr><td><span class="ui">PNG</span></td><td>Exporte l'architecture en image.</td></tr>
+<tr><td><span class="ui">Simulate</span></td><td>Ouvre le simulateur pas à pas.</td></tr>
+<tr><td><span class="ui">PRISM Code</span></td><td>Affiche le code généré et l'éditeur de propriétés.</td></tr>
+<tr><td><b>Palette</b> (gauche)</td><td>Les 8 types de composants, à ajouter par clic sur <kbd>+</kbd> ou par glisser-déposer.</td></tr>
+<tr><td><b>Canevas</b> (centre)</td><td>Zoom, ajustement à l'écran, grille, magnétisme, mode main (déplacement).</td></tr>
+<tr><td><b>Propriétés</b> (droite)</td><td>Réglages du composant ou du connecteur sélectionné.</td></tr>
+<tr><td><b>Barre d'état</b> (bas)</td><td>Nombre de composants, de connecteurs, type de modèle, nombre de propriétés.</td></tr>
+</table>
+<table class="en">
+<tr><th>Area</th><th>Purpose</th></tr>
+<tr><td><b>Tabs</b> Modeler / Use Cases</td><td>Switch between the editor and the use-case library.</td></tr>
+<tr><td><b>Model</b> (drop-down)</td><td>Target formalism: CSG, CTMC, MDP or DTMC. In CSG, the <span class="ui">rounds</span> box adds a round counter.</td></tr>
+<tr><td><span class="ui">New</span> · <span class="ui">Save</span> · <span class="ui">Load</span></td><td>New model, save and load the project as JSON.</td></tr>
+<tr><td><span class="ui">Definitions</span></td><td>Constants, labels and formulas of the model.</td></tr>
+<tr><td><span class="ui">Rewards</span></td><td>Reward structures (costs, energy, gains…).</td></tr>
+<tr><td><span class="ui">PNG</span></td><td>Exports the architecture as an image.</td></tr>
+<tr><td><span class="ui">Simulate</span></td><td>Opens the step-by-step simulator.</td></tr>
+<tr><td><span class="ui">PRISM Code</span></td><td>Shows the generated code and the property editor.</td></tr>
+<tr><td><b>Palette</b> (left)</td><td>The 8 component types, added with <kbd>+</kbd> or by drag and drop.</td></tr>
+<tr><td><b>Canvas</b> (centre)</td><td>Zoom, fit to screen, grid, snap, hand mode (panning).</td></tr>
+<tr><td><b>Properties</b> (right)</td><td>Settings of the selected component or connector.</td></tr>
+<tr><td><b>Status bar</b> (bottom)</td><td>Number of components, connectors, model type, number of properties.</td></tr>
+</table>
+<div class="tip fr"><b>Astuce</b>La barre bleue au-dessus du canevas rappelle le cas d'étude chargé ; le lien <span class="ui">details</span> ramène à sa fiche.</div>
+<div class="tip en"><b>Tip</b>The blue bar above the canvas reminds you of the loaded use case; the <span class="ui">details</span> link takes you back to its sheet.</div>
+</section>
+
+<!-- =============================================================== COMPONENTS -->
+<section id="components">
+<h2><span class="fr">Composants</span><span class="en">Components</span></h2>
+<p class="fr">Chaque composant devient un <b>module PRISM</b>. En CSG, chaque composant (sauf les Monitors) est aussi un <b>joueur</b>. Le type ne change pas la sémantique : il sert à l'icône, à la couleur et à la lisibilité du diagramme.</p>
+<p class="en">Each component becomes a <b>PRISM module</b>. In CSG, each component (except Monitors) is also a <b>player</b>. The type does not change the semantics: it sets the icon, the colour and the readability of the diagram.</p>
+<table class="fr">
+<tr><th>Type</th><th>Usage typique</th><th>Édition</th></tr>
+<tr><td>Sensor</td><td>Capteur qui publie des mesures</td><td>Automate</td></tr>
+<tr><td>Actuator</td><td>Actionneur (vanne, moteur…)</td><td>Automate</td></tr>
+<tr><td>Edge Gateway</td><td>Passerelle, broker, pont</td><td>Automate ou table</td></tr>
+<tr><td>Satellite</td><td>Bord, charge utile, OBC</td><td>Automate</td></tr>
+<tr><td>Station</td><td>Station sol, opérateur humain</td><td>Automate</td></tr>
+<tr><td>Basic Component</td><td>Tout autre élément</td><td>Automate</td></tr>
+<tr><td>Monitor</td><td>Arbitre non-joueur qui synchronise les actions jointes</td><td>Table</td></tr>
+<tr><td>Attacker</td><td>Adversaire (DoS, MITM, brouillage…)</td><td>Automate</td></tr>
+</table>
+<table class="en">
+<tr><th>Type</th><th>Typical use</th><th>Edited as</th></tr>
+<tr><td>Sensor</td><td>Sensor publishing measurements</td><td>State machine</td></tr>
+<tr><td>Actuator</td><td>Actuator (valve, motor…)</td><td>State machine</td></tr>
+<tr><td>Edge Gateway</td><td>Gateway, broker, bridge</td><td>State machine or table</td></tr>
+<tr><td>Satellite</td><td>On-board system, payload, OBC</td><td>State machine</td></tr>
+<tr><td>Station</td><td>Ground station, human operator</td><td>State machine</td></tr>
+<tr><td>Basic Component</td><td>Anything else</td><td>State machine</td></tr>
+<tr><td>Monitor</td><td>Non-player arbiter synchronising joint actions</td><td>Table</td></tr>
+<tr><td>Attacker</td><td>Adversary (DoS, MITM, jamming…)</td><td>State machine</td></tr>
+</table>
+<figure><img src="img/properties.jpg" alt="Properties"><figcaption><span class="fr">Panneau Propriétés d'un composant : nom, taille, icône, ports et bouton Edit Behavior.</span><span class="en">Properties panel of a component: name, size, icon, ports and the Edit Behavior button.</span></figcaption></figure>
+<ul class="fr">
+  <li><b>General</b> : nom (il donne le nom du module PRISM, en minuscules), largeur et hauteur.</li>
+  <li><b>Visuals</b> : vous pouvez remplacer l'icône par une image (PNG, JPEG, GIF).</li>
+  <li><b>Interface</b> : liste des ports, ajout de ports synchrones ou asynchrones, côté et position.</li>
+  <li><b>Edit Behavior</b> ou <b>Edit Monitor Table</b> : ouvre l'éditeur de comportement adapté.</li>
+  <li>Les icônes en haut du panneau permettent de <b>dupliquer</b> ou de <b>supprimer</b> le composant.</li>
+</ul>
+<ul class="en">
+  <li><b>General</b>: name (it gives the PRISM module name, in lower case), width and height.</li>
+  <li><b>Visuals</b>: you can replace the icon with an image (PNG, JPEG, GIF).</li>
+  <li><b>Interface</b>: list of ports, add synchronous or asynchronous ports, side and position.</li>
+  <li><b>Edit Behavior</b> or <b>Edit Monitor Table</b>: opens the matching behaviour editor.</li>
+  <li>The icons at the top of the panel <b>duplicate</b> or <b>delete</b> the component.</li>
+</ul>
+</section>
+
+<!-- =============================================================== PORTS -->
+<section id="ports">
+<h2><span class="fr">Ports et connecteurs</span><span class="en">Ports and connectors</span></h2>
+<p class="fr">Pour relier deux composants, <b>cliquez sur un port</b>, puis <b>cliquez sur un port de l'autre composant</b>. Un port porte une <b>action PRISM</b> (par défaut, son nom). Les ports bleus sont synchrones, les ports violets asynchrones.</p>
+<p class="en">To connect two components, <b>click a port</b>, then <b>click a port of the other component</b>. A port carries a <b>PRISM action</b> (by default, its name). Blue ports are synchronous, purple ports asynchronous.</p>
+<figure><img src="img/connector.jpg" alt="Connector"><figcaption><span class="fr">Réglages d'un connecteur asynchrone : type, capacité, comportement quand le canal est plein, routage.</span><span class="en">Settings of an asynchronous connector: type, capacity, behaviour when the channel is full, routing.</span></figcaption></figure>
+<table class="fr">
+<tr><th></th><th>Synchrone (SYNC)</th><th>Asynchrone (ASYNC)</th></tr>
+<tr><td>Sémantique</td><td>Rendez-vous : émetteur et récepteur exécutent l'action ensemble.</td><td>Un module canal FIFO est généré entre les deux.</td></tr>
+<tr><td>DTMC / MDP / CTMC</td><td>Action partagée native.</td><td>Canal <code>chN</code> avec capacité <code>CAP</code>.</td></tr>
+<tr><td>CSG</td><td>Action jointe dans un Monitor généré.</td><td>Canal piloté par actions jointes.</td></tr>
+<tr><td>Quand le canal est plein</td><td>—</td><td><b>Block the sender</b> ou <b>Drop the message</b> (en CSG : toujours <i>drop</i>, un joueur ne peut pas être bloqué).</td></tr>
+</table>
+<table class="en">
+<tr><th></th><th>Synchronous (SYNC)</th><th>Asynchronous (ASYNC)</th></tr>
+<tr><td>Semantics</td><td>Rendezvous: sender and receiver execute the action together.</td><td>A FIFO channel module is generated between them.</td></tr>
+<tr><td>DTMC / MDP / CTMC</td><td>Native shared action.</td><td>Channel <code>chN</code> with capacity <code>CAP</code>.</td></tr>
+<tr><td>CSG</td><td>Joint action in a generated Monitor.</td><td>Channel driven by joint actions.</td></tr>
+<tr><td>When the channel is full</td><td>—</td><td><b>Block the sender</b> or <b>Drop the message</b> (in CSG: always <i>drop</i>, a player cannot be blocked).</td></tr>
+</table>
+<ul class="fr">
+  <li><b>Connector Type</b> : <i>Push</i> (l'émetteur envoie) ou <i>Pull</i> (le récepteur va chercher).</li>
+  <li><b>Routage</b> : double-cliquez sur un connecteur pour ajouter un point de passage ; double-cliquez sur un point pour le supprimer ; <span class="ui">Reset Waypoints</span> remet le tracé droit.</li>
+</ul>
+<ul class="en">
+  <li><b>Connector Type</b>: <i>Push</i> (the sender sends) or <i>Pull</i> (the receiver fetches).</li>
+  <li><b>Routing</b>: double-click a connector to add a waypoint; double-click a waypoint to remove it; <span class="ui">Reset Waypoints</span> straightens the line.</li>
+</ul>
+<div class="warn fr"><b>Piège connu des jeux</b>Une variable globale partagée entre deux joueurs est acceptée par PRISM-games, mais si les deux joueurs la modifient au même tour, une des deux mises à jour est perdue sans avertissement. Le générateur évite ce piège en passant par un Monitor ou un canal : ne contournez pas ce mécanisme en écrivant des variables globales à la main.</div>
+<div class="warn en"><b>Known pitfall of games</b>A global variable shared by two players is accepted by PRISM-games, but if both players update it in the same round, one update is silently lost. The generator avoids this by going through a Monitor or a channel: do not bypass it by writing global variables by hand.</div>
+</section>
+
+<!-- =============================================================== BEHAVIOUR -->
+<section id="behaviour">
+<h2><span class="fr">Comportement : l'éditeur d'automate</span><span class="en">Behaviour: the state-machine editor</span></h2>
+<figure><img src="img/behaviour.jpg" alt="State machine"><figcaption><span class="fr">L'automate de l'ordinateur de bord (cas « radiation ») : états NOMINAL, SEU, SEFI.</span><span class="en">The on-board computer state machine (radiation case): NOMINAL, SEU, SEFI states.</span></figcaption></figure>
+<ol class="steps fr">
+  <li><b>États</b> : <span class="ui">Add State</span> crée un état. Chaque état a un nom et une <b>valeur</b> (l'entier pris par la variable d'état). Faites glisser les états pour les disposer.</li>
+  <li><b>Variable d'état</b> : elle est créée automatiquement (par ex. <code>obc</code>) et prend la valeur de l'état courant. L'état initial est réglé dans <b>Init</b>.</li>
+  <li><b>Variables locales</b> : le bouton <kbd>+</kbd> de la colonne <b>Variables</b> ajoute une variable bornée (min, max, init), par exemple un compteur.</li>
+  <li><b>Transitions</b> : sélectionnez l'état de départ, cliquez sur <span class="ui">Add Transition</span>, puis cliquez sur l'état d'arrivée (le même état pour une boucle).</li>
+  <li>Pour chaque transition, renseignez :
+    <ul>
+      <li><b>Action (Sync)</b> : le nom d'action PRISM. Laissez-le vide pour une transition interne ; donnez le même nom que le port pour synchroniser.</li>
+      <li><b>Guard (Condition)</b> : condition booléenne, par exemple <code>v &lt; 10</code>.</li>
+      <li><b>Probabilistic Updates</b> : une ou plusieurs branches avec une probabilité (ou un <b>taux</b> en CTMC) et des affectations, par exemple <code>0.8</code> → <code>s'=1</code>.</li>
+    </ul></li>
+  <li><span class="ui">View Code</span> montre le module PRISM produit par l'automate ; <span class="ui">Deselect</span> annule la sélection ; la croix ferme l'éditeur.</li>
+</ol>
+<ol class="steps en">
+  <li><b>States</b>: <span class="ui">Add State</span> creates a state. Each state has a name and a <b>value</b> (the integer taken by the state variable). Drag states to arrange them.</li>
+  <li><b>State variable</b>: it is created automatically (e.g. <code>obc</code>) and takes the value of the current state. The initial state is set in <b>Init</b>.</li>
+  <li><b>Local variables</b>: the <kbd>+</kbd> button of the <b>Variables</b> column adds a bounded variable (min, max, init), for example a counter.</li>
+  <li><b>Transitions</b>: select the source state, click <span class="ui">Add Transition</span>, then click the target state (the same state for a self-loop).</li>
+  <li>For each transition, fill in:
+    <ul>
+      <li><b>Action (Sync)</b>: the PRISM action name. Leave it empty for an internal transition; use the port name to synchronise.</li>
+      <li><b>Guard (Condition)</b>: a Boolean condition, e.g. <code>v &lt; 10</code>.</li>
+      <li><b>Probabilistic Updates</b>: one or more branches with a probability (or a <b>rate</b> in CTMC) and assignments, e.g. <code>0.8</code> → <code>s'=1</code>.</li>
+    </ul></li>
+  <li><span class="ui">View Code</span> shows the PRISM module produced by the machine; <span class="ui">Deselect</span> clears the selection; the cross closes the editor.</li>
+</ol>
+<div class="tip fr"><b>Bon réflexe</b>Les probabilités d'une transition doivent sommer à 1 en DTMC, MDP et CSG. En CTMC, ce sont des taux (par unité de temps), pas des probabilités.</div>
+<div class="tip en"><b>Good habit</b>The probabilities of a transition must sum to 1 in DTMC, MDP and CSG. In CTMC they are rates (per time unit), not probabilities.</div>
+</section>
+
+<!-- =============================================================== MONITOR -->
+<section id="monitor">
+<h2><span class="fr">La table Monitor</span><span class="en">The Monitor table</span></h2>
+<p class="fr">Un <b>Monitor</b> est un module <b>non-joueur</b> qui réagit aux actions choisies par les joueurs. Il est édité sous forme de table : c'est l'endroit naturel pour décrire « qui gagne » quand plusieurs joueurs agissent au même tour, ou ce qui arrive à un message attaqué.</p>
+<p class="en">A <b>Monitor</b> is a <b>non-player</b> module that reacts to the actions chosen by the players. It is edited as a table: it is the natural place to describe "who wins" when several players act in the same round, or what happens to an attacked message.</p>
+<figure><img src="img/monitor.jpg" alt="Monitor table"><figcaption><span class="fr">La table du bus : pour chaque couple d'actions jointes, une garde et des mises à jour probabilistes.</span><span class="en">The bus table: for each pair of joint actions, a guard and probabilistic updates.</span></figcaption></figure>
+<ul class="fr">
+  <li><b>Monitor Variables</b> : <span class="ui">Add Variable</span> crée une variable bornée (min, max, init).</li>
+  <li><b>Add Transition</b> : une ligne de la table. Dans <b>Actions</b>, choisissez avec <span class="ui">+ Add Action</span> les actions qui doivent être présentes ensemble, par exemple <code>[w1, r2]</code>.</li>
+  <li><b>Guard</b> : condition sur l'état courant, par exemple <code>s=0</code>.</li>
+  <li><b>Probabilistic Updates</b> : <span class="ui">Add Probabilistic Branch</span> ajoute une branche ; chaque branche a une probabilité et des affectations.</li>
+  <li>Tout composant (par exemple une Edge Gateway) dont le comportement est une table s'ouvre dans cet éditeur.</li>
+</ul>
+<ul class="en">
+  <li><b>Monitor Variables</b>: <span class="ui">Add Variable</span> creates a bounded variable (min, max, init).</li>
+  <li><b>Add Transition</b>: one row of the table. In <b>Actions</b>, use <span class="ui">+ Add Action</span> to choose the actions that must occur together, e.g. <code>[w1, r2]</code>.</li>
+  <li><b>Guard</b>: condition on the current state, e.g. <code>s=0</code>.</li>
+  <li><b>Probabilistic Updates</b>: <span class="ui">Add Probabilistic Branch</span> adds a branch; each branch has a probability and assignments.</li>
+  <li>Any component (for example an Edge Gateway) whose behaviour is a table opens in this editor.</li>
+</ul>
+</section>
+
+<!-- =============================================================== DEFINITIONS -->
+<section id="definitions">
+<h2><span class="fr">Constantes, labels et formules</span><span class="en">Constants, labels and formulas</span></h2>
+<figure><img src="img/definitions.jpg" alt="Definitions"><figcaption><span class="fr">L'éditeur Definitions, avec le navigateur de composants à droite pour insérer un état ou une action.</span><span class="en">The Definitions editor, with the component browser on the right to insert a state or an action.</span></figcaption></figure>
+<table class="fr">
+<tr><th>Onglet</th><th>Contenu</th><th>Exemple</th></tr>
+<tr><td>Constants</td><td>Paramètres (<code>int</code>, <code>double</code>, <code>bool</code>). Une constante sans valeur reste libre : on la fixe dans PRISM (<code>-const</code>) ou dans une expérience.</td><td><code>const double p_att = 0.2;</code></td></tr>
+<tr><td>Labels</td><td>Noms d'ensembles d'états, utilisés dans les propriétés.</td><td><code>"jammed" = att=1</code></td></tr>
+<tr><td>Formulas</td><td>Expressions réutilisables.</td><td><code>p * (1 - q)</code></td></tr>
+</table>
+<table class="en">
+<tr><th>Tab</th><th>Content</th><th>Example</th></tr>
+<tr><td>Constants</td><td>Parameters (<code>int</code>, <code>double</code>, <code>bool</code>). A constant without a value stays free: set it in PRISM (<code>-const</code>) or in an experiment.</td><td><code>const double p_att = 0.2;</code></td></tr>
+<tr><td>Labels</td><td>Names of sets of states, used in properties.</td><td><code>"jammed" = att=1</code></td></tr>
+<tr><td>Formulas</td><td>Reusable expressions.</td><td><code>p * (1 - q)</code></td></tr>
+</table>
+<div class="warn fr"><b>Pour simuler</b>Toutes les constantes doivent avoir une valeur. Le simulateur signale la constante manquante.</div>
+<div class="warn en"><b>To simulate</b>Every constant needs a value. The simulator names the missing one.</div>
+</section>
+
+<!-- =============================================================== REWARDS -->
+<section id="rewards">
+<h2><span class="fr">Récompenses</span><span class="en">Rewards</span></h2>
+<p class="fr">Une structure de récompenses associe une valeur à des états ou à des actions : coût, énergie, temps d'arrêt, nombre de messages falsifiés… Syntaxe PRISM : <code>[action] garde : valeur;</code>. Sans action, la récompense est attachée aux états (en CTMC, elle est multipliée par le temps passé dans l'état).</p>
+<p class="en">A reward structure attaches a value to states or actions: cost, energy, downtime, number of tampered messages… PRISM syntax: <code>[action] guard : value;</code>. Without an action, the reward is attached to states (in CTMC, it is multiplied by the time spent in the state).</p>
+<figure><img src="img/rewards.jpg" alt="Rewards"><figcaption><span class="fr">La structure <code>downtime</code> du cas « radiation » : 1 par unité de temps quand l'OBC n'est pas nominal.</span><span class="en">The <code>downtime</code> structure of the radiation case: 1 per time unit when the OBC is not nominal.</span></figcaption></figure>
+<ol class="steps fr">
+  <li><span class="ui">New Reward Structure</span>, puis nommez-la (<b>Structure Name</b>).</li>
+  <li><span class="ui">Add Reward Rule</span> : action (facultative), garde et valeur.</li>
+  <li>Le navigateur de composants (à droite) insère les noms d'états, de variables et d'actions d'un clic.</li>
+</ol>
+<ol class="steps en">
+  <li><span class="ui">New Reward Structure</span>, then name it (<b>Structure Name</b>).</li>
+  <li><span class="ui">Add Reward Rule</span>: action (optional), guard and value.</li>
+  <li>The component browser (right) inserts state, variable and action names with one click.</li>
+</ol>
+</section>
+
+<!-- =============================================================== FORMALISMS -->
+<section id="formalisms">
+<h2><span class="fr">Formalismes et joueurs</span><span class="en">Formalisms and players</span></h2>
+<table class="fr">
+<tr><th>Formalisme</th><th>Qui choisit ?</th><th>Ce que l'on calcule</th><th>Outil</th></tr>
+<tr><td>DTMC</td><td>Personne : tout est probabiliste.</td><td><code>P=? [F φ]</code>, récompenses</td><td>PRISM</td></tr>
+<tr><td>MDP</td><td>Un seul décideur (ou l'environnement).</td><td><code>Pmax=?</code>, <code>Pmin=?</code></td><td>PRISM</td></tr>
+<tr><td>CTMC</td><td>La course entre taux.</td><td>Probabilités transitoires, état stationnaire <code>S=?</code></td><td>PRISM</td></tr>
+<tr><td>CSG</td><td>Plusieurs joueurs, simultanément.</td><td><code>&lt;&lt;C&gt;&gt; Pmax=?</code>, <code>R{..}max=?</code></td><td>PRISM-games</td></tr>
+</table>
+<table class="en">
+<tr><th>Formalism</th><th>Who chooses?</th><th>What is computed</th><th>Tool</th></tr>
+<tr><td>DTMC</td><td>Nobody: everything is probabilistic.</td><td><code>P=? [F φ]</code>, rewards</td><td>PRISM</td></tr>
+<tr><td>MDP</td><td>A single decision maker (or the environment).</td><td><code>Pmax=?</code>, <code>Pmin=?</code></td><td>PRISM</td></tr>
+<tr><td>CTMC</td><td>The race between rates.</td><td>Transient probabilities, steady state <code>S=?</code></td><td>PRISM</td></tr>
+<tr><td>CSG</td><td>Several players, simultaneously.</td><td><code>&lt;&lt;C&gt;&gt; Pmax=?</code>, <code>R{..}max=?</code></td><td>PRISM-games</td></tr>
+</table>
+<p class="fr"><b>Joueurs (CSG)</b> : chaque composant qui n'est pas un Monitor devient un joueur <code>player p … endplayer</code>. Les noms de joueurs (<code>att</code>, <code>sen</code>…) sont ceux utilisés dans les coalitions <code>&lt;&lt;att,sen&gt;&gt;</code>. <b>rounds</b> ajoute un module qui compte les tours jusqu'à <code>k</code>, pour écrire des propriétés bornées comme <code>F ("x" &amp; rounds&lt;=k)</code>.</p>
+<p class="en"><b>Players (CSG)</b>: each component that is not a Monitor becomes a player <code>player p … endplayer</code>. Player names (<code>att</code>, <code>sen</code>…) are the ones used in coalitions <code>&lt;&lt;att,sen&gt;&gt;</code>. <b>rounds</b> adds a module counting rounds up to <code>k</code>, to write bounded properties such as <code>F ("x" &amp; rounds&lt;=k)</code>.</p>
+</section>
+
+<!-- =============================================================== PRISM -->
+<section id="prism">
+<h2><span class="fr">Code PRISM et propriétés</span><span class="en">PRISM code and properties</span></h2>
+<figure><img src="img/prism-code.jpg" alt="PRISM code"><figcaption><span class="fr">Le code généré (onglets <code>model.prism</code> / <code>model.props</code>) et l'éditeur de propriétés à droite.</span><span class="en">The generated code (<code>model.prism</code> / <code>model.props</code> tabs) and the property editor on the right.</span></figcaption></figure>
+<ol class="steps fr">
+  <li>Cliquez sur <span class="ui">PRISM Code</span>. Le code est régénéré à chaque ouverture.</li>
+  <li>Dans la colonne de droite, <span class="ui">Add</span> crée une propriété : un nom, la formule et un commentaire.</li>
+  <li><span class="ui">Copy</span> copie le code ; <span class="ui">Model</span> et <span class="ui">Properties</span> téléchargent les deux fichiers.</li>
+  <li>Lancez la vérification en ligne de commande :</li>
+</ol>
+<ol class="steps en">
+  <li>Click <span class="ui">PRISM Code</span>. The code is regenerated each time.</li>
+  <li>In the right column, <span class="ui">Add</span> creates a property: a name, the formula and a comment.</li>
+  <li><span class="ui">Copy</span> copies the code; <span class="ui">Model</span> and <span class="ui">Properties</span> download both files.</li>
+  <li>Run the verification from the command line:</li>
+</ol>
+<pre><code># CSG → PRISM-games  (https://www.prismmodelchecker.org/games/)
+prism-games model.prism model.props
+
+# DTMC / MDP / CTMC → PRISM  (https://www.prismmodelchecker.org/)
+prism model.ctmc model.props
+
+# <span class="fr">une seule propriété, avec une constante fixée</span><span class="en">one property, with a constant set</span>
+prism-games model.prism model.props -prop 2 -const p_att=0.8
+
+# <span class="fr">expérience : faire varier k de 1 à 30</span><span class="en">experiment: vary k from 1 to 30</span>
+prism-games model.prism model.props -prop 1 -const k=1:30 -exportresults res.csv:csv</code></pre>
+<div class="note fr"><b>Interface graphique</b>Vous pouvez aussi ouvrir les deux fichiers dans l'interface graphique de PRISM (<i>Model → Open model</i>, <i>Properties → Open properties list</i>) puis lancer <i>Verify</i> ou <i>New experiment</i>.</div>
+<div class="note en"><b>Graphical interface</b>You can also open both files in the PRISM GUI (<i>Model → Open model</i>, <i>Properties → Open properties list</i>) and run <i>Verify</i> or <i>New experiment</i>.</div>
+</section>
+
+<!-- =============================================================== SIMULATION -->
+<section id="simulation">
+<h2><span class="fr">Simulation et animation</span><span class="en">Simulation and animation</span></h2>
+<p class="fr">Le bouton <span class="ui">Simulate</span> exécute le modèle <b>pas à pas, dans le navigateur</b>. Le simulateur lit le code PRISM généré lui-même : les canaux asynchrones, les Monitors et le module <code>rounds</code> se comportent exactement comme dans PRISM.</p>
+<p class="en">The <span class="ui">Simulate</span> button runs the model <b>step by step, in the browser</b>. The simulator reads the generated PRISM code itself: asynchronous channels, Monitors and the <code>rounds</code> module behave exactly as in PRISM.</p>
+<figure><img src="img/sim-energy.jpg" alt="Simulation"><figcaption><span class="fr">Simulation du cas « edge gateway » : diagramme de séquence en direct, joueurs à gauche, récompenses et état à droite.</span><span class="en">Simulation of the edge-gateway case: live sequence diagram, players on the left, rewards and state on the right.</span></figcaption></figure>
+
+<h3><span class="fr">Les commandes</span><span class="en">Controls</span></h3>
+<table class="fr">
+<tr><th>Bouton</th><th>Effet</th></tr>
+<tr><td>↺ Reset</td><td>Revient à l'état initial et efface la trace.</td></tr>
+<tr><td>↶ Step back</td><td>Annule le dernier pas (y compris les récompenses).</td></tr>
+<tr><td><span class="ui">Step</span></td><td>Exécute un pas (un tour en CSG).</td></tr>
+<tr><td><span class="ui">Play</span> / <span class="ui">Pause</span></td><td>Animation continue ; s'arrête quand l'horizon <code>k</code> est atteint ou en cas de blocage.</td></tr>
+<tr><td><span class="ui">×10</span></td><td>Exécute dix pas d'un coup.</td></tr>
+<tr><td>Vitesse</td><td>Slow, Normal, Fast, Very fast.</td></tr>
+</table>
+<table class="en">
+<tr><th>Button</th><th>Effect</th></tr>
+<tr><td>↺ Reset</td><td>Goes back to the initial state and clears the trace.</td></tr>
+<tr><td>↶ Step back</td><td>Undoes the last step (rewards included).</td></tr>
+<tr><td><span class="ui">Step</span></td><td>Runs one step (one round in CSG).</td></tr>
+<tr><td><span class="ui">Play</span> / <span class="ui">Pause</span></td><td>Continuous animation; stops when the horizon <code>k</code> is reached or on a deadlock.</td></tr>
+<tr><td><span class="ui">×10</span></td><td>Runs ten steps at once.</td></tr>
+<tr><td>Speed</td><td>Slow, Normal, Fast, Very fast.</td></tr>
+</table>
+
+<h3><span class="fr">Qui décide, selon le formalisme</span><span class="en">Who decides, per formalism</span></h3>
+<table class="fr">
+<tr><th>Formalisme</th><th>Panneau de gauche</th><th>Résolution d'un pas</th></tr>
+<tr><td>CSG</td><td>Pour chaque joueur : <span class="ui">random</span> ou une action activée.</td><td>Tous les joueurs jouent en même temps ; chaque module exécute la commande correspondante ; les branches probabilistes sont tirées au sort.</td></tr>
+<tr><td>MDP</td><td>Liste des transitions activées.</td><td>Cliquez sur une transition pour résoudre le non-déterminisme ; <span class="ui">Step</span> choisit au hasard.</td></tr>
+<tr><td>DTMC</td><td>Liste des transitions activées.</td><td>Choix uniforme, puis tirage de la branche.</td></tr>
+<tr><td>CTMC</td><td>Transitions avec leur probabilité de gagner la course.</td><td>Course entre taux ; le temps avance d'un délai exponentiel (horloge affichée).</td></tr>
+</table>
+<table class="en">
+<tr><th>Formalism</th><th>Left panel</th><th>How a step is resolved</th></tr>
+<tr><td>CSG</td><td>For each player: <span class="ui">random</span> or an enabled action.</td><td>All players act at the same time; each module runs the matching command; probabilistic branches are sampled.</td></tr>
+<tr><td>MDP</td><td>List of enabled transitions.</td><td>Click a transition to resolve the nondeterminism; <span class="ui">Step</span> chooses at random.</td></tr>
+<tr><td>DTMC</td><td>List of enabled transitions.</td><td>Uniform choice, then branch sampling.</td></tr>
+<tr><td>CTMC</td><td>Transitions with their probability of winning the race.</td><td>Race between rates; time advances by an exponential delay (the clock is shown).</td></tr>
+</table>
+
+<h3><span class="fr">Lire le diagramme de séquence</span><span class="en">Reading the sequence diagram</span></h3>
+<ul class="fr">
+  <li>Une <b>colonne par composant</b> (et une par canal asynchrone), plus une colonne verte <b>Rewards</b>.</li>
+  <li>Un <b>bandeau par tour</b> (CSG) ou par pas ; en CTMC il affiche aussi l'instant <code>t</code>.</li>
+  <li>Une <b>flèche par action</b> : du joueur vers le module qui la reçoit ; une boucle si l'action reste locale ; en pointillés pour une transition interne (τ).</li>
+  <li>Une <b>note jaune</b> par module : la branche tirée (par ex. <code>p_att = 0.2</code>) et les variables modifiées (<code>nb: 1 → 2</code>).</li>
+  <li>Une <b>note verte</b> : les récompenses gagnées pendant le pas.</li>
+  <li>Le <b>dernier pas</b> est en orange ; la mini-carte d'architecture allume les composants concernés.</li>
+</ul>
+<ul class="en">
+  <li>One <b>column per component</b> (and one per asynchronous channel), plus a green <b>Rewards</b> column.</li>
+  <li>One <b>band per round</b> (CSG) or per step; in CTMC it also shows the time <code>t</code>.</li>
+  <li>One <b>arrow per action</b>: from the player to the module receiving it; a loop if the action stays local; dashed for an internal transition (τ).</li>
+  <li>A <b>yellow note</b> per module: the sampled branch (e.g. <code>p_att = 0.2</code>) and the changed variables (<code>nb: 1 → 2</code>).</li>
+  <li>A <b>green note</b>: the rewards earned during the step.</li>
+  <li>The <b>last step</b> is orange; the architecture mini-map lights up the components involved.</li>
+</ul>
+
+<h3><span class="fr">Les indicateurs</span><span class="en">Indicators</span></h3>
+<ul class="fr">
+  <li><b>Rewards (cumulated)</b> : pour chaque structure, la valeur cumulée, le dernier gain, la moyenne par pas (par unité de temps en CTMC) et une mini-courbe.</li>
+  <li><b>Labels</b> : en vert, les labels vrais dans l'état courant.</li>
+  <li><b>State</b> : toutes les variables, avec une jauge entre min et max ; celles qui viennent de changer sont en orange.</li>
+</ul>
+<ul class="en">
+  <li><b>Rewards (cumulated)</b>: for each structure, the cumulated value, the last gain, the average per step (per time unit in CTMC) and a sparkline.</li>
+  <li><b>Labels</b>: in green, the labels true in the current state.</li>
+  <li><b>State</b>: all variables, with a gauge between min and max; the ones that just changed are orange.</li>
+</ul>
+<figure><img src="img/sim-ctmc.jpg" alt="CTMC simulation"><figcaption><span class="fr">Simulation d'une CTMC : transitions avec leur probabilité de gagner la course, horloge, récompense de temps d'arrêt.</span><span class="en">CTMC simulation: transitions with their probability of winning the race, clock, downtime reward.</span></figcaption></figure>
+
+<div class="note fr"><b>Simulation ou vérification ?</b>Une simulation montre <b>une</b> exécution possible, avec <b>une</b> stratégie : c'est idéal pour comprendre et déboguer un modèle. La vérification PRISM calcule le résultat <b>exact</b> sur <b>toutes</b> les exécutions et, en CSG, sur les <b>stratégies optimales</b>. Répéter beaucoup de simulations avec la bonne stratégie retrouve la valeur de PRISM (voir le TP 7).</div>
+<div class="note en"><b>Simulation or verification?</b>A simulation shows <b>one</b> possible run, with <b>one</b> strategy: ideal to understand and debug a model. PRISM verification computes the <b>exact</b> result over <b>all</b> runs and, in CSG, over <b>optimal strategies</b>. Repeating many simulations with the right strategy recovers PRISM's value (see Lab 7).</div>
+</section>
+
+<!-- =============================================================== EXPORTS -->
+<section id="exports">
+<h2><span class="fr">Exports</span><span class="en">Exports</span></h2>
+<table class="fr">
+<tr><th>Où</th><th>Format</th><th>Usage</th></tr>
+<tr><td>En-tête : <span class="ui">Save</span></td><td>JSON</td><td>Sauvegarde complète du projet ; <span class="ui">Load</span> le recharge.</td></tr>
+<tr><td>En-tête : <span class="ui">PNG</span></td><td>PNG</td><td>Image de l'architecture.</td></tr>
+<tr><td>PRISM Code</td><td><code>.prism</code> / <code>.ctmc</code> / <code>.props</code></td><td>Vérification avec PRISM ou PRISM-games.</td></tr>
+<tr><td>Simulation</td><td><b>PlantUML</b> (<code>.puml</code>)</td><td>Diagramme de séquence textuel, à rendre sur plantuml.com ou à inclure dans LaTeX / Markdown.</td></tr>
+<tr><td>Simulation</td><td><b>SVG</b> / <b>PNG</b></td><td>Diagramme complet (toute la trace) pour un rapport ou des diapositives.</td></tr>
+<tr><td>Simulation</td><td><b>CSV</b></td><td>Trace : pas, temps, actions, variables, récompenses de chaque pas (tableur, Python, R).</td></tr>
+<tr><td>Use Cases</td><td>JSON</td><td>Modèle courant exporté comme modèle de cas d'étude (enseignants).</td></tr>
+</table>
+<table class="en">
+<tr><th>Where</th><th>Format</th><th>Use</th></tr>
+<tr><td>Header: <span class="ui">Save</span></td><td>JSON</td><td>Full project save; <span class="ui">Load</span> reloads it.</td></tr>
+<tr><td>Header: <span class="ui">PNG</span></td><td>PNG</td><td>Image of the architecture.</td></tr>
+<tr><td>PRISM Code</td><td><code>.prism</code> / <code>.ctmc</code> / <code>.props</code></td><td>Verification with PRISM or PRISM-games.</td></tr>
+<tr><td>Simulation</td><td><b>PlantUML</b> (<code>.puml</code>)</td><td>Textual sequence diagram, to render on plantuml.com or include in LaTeX / Markdown.</td></tr>
+<tr><td>Simulation</td><td><b>SVG</b> / <b>PNG</b></td><td>Full diagram (whole trace) for a report or slides.</td></tr>
+<tr><td>Simulation</td><td><b>CSV</b></td><td>Trace: step, time, actions, variables, rewards of each step (spreadsheet, Python, R).</td></tr>
+<tr><td>Use Cases</td><td>JSON</td><td>Current model exported as a use-case template (teachers).</td></tr>
+</table>
+<div class="two">
+<pre><code>@startuml
+participant "Sensors" as sensors
+control "RabbitMQ_Broker" as rabbitmq_broker
+actor "Attacker" as attacker
+== Round 1 ==
+sensors -> rabbitmq_broker : send
+attacker -> rabbitmq_broker : tamper_payload
+note over rabbitmq_broker
+1-p_att = 0.889
+buf: 0 → 1
+end note
+@enduml</code></pre>
+<figure style="margin:0"><img src="img/plantuml.png" alt="PlantUML" style="max-height:420px;object-fit:contain;background:#fff"><figcaption><span class="fr">Le même export rendu par PlantUML.</span><span class="en">The same export rendered by PlantUML.</span></figcaption></figure>
+</div>
+</section>
+
+<!-- =============================================================== USE CASES -->
+<section id="usecases">
+<h2><span class="fr">Bibliothèque de cas d'étude</span><span class="en">Use-case library</span></h2>
+<figure><img src="img/usecases.jpg" alt="Use cases"><figcaption><span class="fr">L'onglet Use Cases : liste filtrable, scénario, objectifs, paramètres, exercices, fichiers PRISM.</span><span class="en">The Use Cases tab: filterable list, scenario, objectives, parameters, exercises, PRISM files.</span></figcaption></figure>
+<table class="fr">
+<tr><th>#</th><th>Cas</th><th>Formalisme</th><th>Thème</th></tr>
+<tr><td>1</td><td>Radiation upsets and operator response</td><td>CTMC</td><td>Sûreté de fonctionnement, disponibilité</td></tr>
+<tr><td>2</td><td>Bus write access (shared resource)</td><td>CSG</td><td>Bases des jeux concurrents</td></tr>
+<tr><td>3</td><td>GPS SPS collaborative maintenance</td><td>CSG</td><td>Humain dans la boucle, coûts</td></tr>
+<tr><td>4</td><td>Galileo SAR link under jamming</td><td>CTMC</td><td>Brouillage et défense</td></tr>
+<tr><td>5</td><td>Sync vs async ports : IoT pipeline, producer / consumer</td><td>CTMC, CSG</td><td>Communication</td></tr>
+<tr><td>6</td><td>RabbitMQ broker under MITM attacks</td><td>CSG</td><td>Falsification, contre-mesure</td></tr>
+<tr><td>7</td><td>Edge gateway: data corruption and energy</td><td>CSG</td><td>Énergie, passage à l'échelle</td></tr>
+</table>
+<table class="en">
+<tr><th>#</th><th>Case</th><th>Formalism</th><th>Topic</th></tr>
+<tr><td>1</td><td>Radiation upsets and operator response</td><td>CTMC</td><td>Dependability, availability</td></tr>
+<tr><td>2</td><td>Bus write access (shared resource)</td><td>CSG</td><td>Concurrent-game basics</td></tr>
+<tr><td>3</td><td>GPS SPS collaborative maintenance</td><td>CSG</td><td>Human in the loop, costs</td></tr>
+<tr><td>4</td><td>Galileo SAR link under jamming</td><td>CTMC</td><td>Jamming and defence</td></tr>
+<tr><td>5</td><td>Sync vs async ports: IoT pipeline, producer / consumer</td><td>CTMC, CSG</td><td>Communication</td></tr>
+<tr><td>6</td><td>RabbitMQ broker under MITM attacks</td><td>CSG</td><td>Tampering, countermeasure</td></tr>
+<tr><td>7</td><td>Edge gateway: data corruption and energy</td><td>CSG</td><td>Energy, scalability</td></tr>
+</table>
+<p class="fr">Chaque fiche contient le scénario, les objectifs, les paramètres réglables, des exercices « Try it yourself » et les fichiers <code>.prism</code> / <code>.props</code> à télécharger. Les cas 3, 6 et 7 sont des <b>modèles réduits</b> : ils reproduisent les tendances des études complètes, pas leurs chiffres exacts.</p>
+<p class="en">Each sheet contains the scenario, the objectives, the adjustable parameters, "Try it yourself" exercises and the <code>.prism</code> / <code>.props</code> files to download. Cases 3, 6 and 7 are <b>reduced models</b>: they reproduce the trends of the full studies, not their exact figures.</p>
+</section>
+
+<!-- =============================================================== LABS -->
+<section id="labs">
+<h2><span class="fr">Parcours des travaux pratiques</span><span class="en">Lab path</span></h2>
+<p class="fr">Les TP vont du plus simple (lire et simuler un modèle) au plus complet (construire, vérifier, simuler et rendre compte). Comptez environ 1 h par TP ; les TP 1, 2 et 7 forment une séance découverte de 3 h. Les encadrés « Corrigé » sont destinés aux enseignants et à l'auto-évaluation.</p>
+<p class="en">Labs go from the simplest (read and simulate a model) to the most complete (build, verify, simulate and report). Allow about 1 h per lab; Labs 1, 2 and 7 make a 3-hour discovery session. The "Answers" boxes are for teachers and self-assessment.</p>
+<table class="fr">
+<tr><th>TP</th><th>Thème</th><th>Formalisme</th><th>Niveau</th><th>Notions</th></tr>
+<tr><td>1</td><td>Premiers pas</td><td>CTMC</td><td>★</td><td>Interface, taux, simulation temporisée</td></tr>
+<tr><td>2</td><td>Construire un jeu</td><td>CSG</td><td>★★</td><td>Automates, Monitor, coalitions</td></tr>
+<tr><td>3</td><td>Ports sync / async</td><td>CSG</td><td>★★</td><td>Canaux, capacité, pertes</td></tr>
+<tr><td>4</td><td>Attaque MITM</td><td>CSG</td><td>★★</td><td>Stratégies, contre-mesure</td></tr>
+<tr><td>5</td><td>Énergie à l'edge</td><td>CSG</td><td>★★★</td><td>Récompenses, explosion d'états</td></tr>
+<tr><td>6</td><td>Humain dans la boucle</td><td>CSG</td><td>★★★</td><td>Trois joueurs, coûts</td></tr>
+<tr><td>7</td><td>Simulation et rapport</td><td>tous</td><td>★★</td><td>Animation, exports, Monte-Carlo</td></tr>
+<tr><td>8</td><td>Votre propre cas</td><td>au choix</td><td>★★★</td><td>Projet</td></tr>
+</table>
+<table class="en">
+<tr><th>Lab</th><th>Topic</th><th>Formalism</th><th>Level</th><th>Concepts</th></tr>
+<tr><td>1</td><td>First steps</td><td>CTMC</td><td>★</td><td>Interface, rates, timed simulation</td></tr>
+<tr><td>2</td><td>Build a game</td><td>CSG</td><td>★★</td><td>State machines, Monitor, coalitions</td></tr>
+<tr><td>3</td><td>Sync / async ports</td><td>CSG</td><td>★★</td><td>Channels, capacity, losses</td></tr>
+<tr><td>4</td><td>MITM attack</td><td>CSG</td><td>★★</td><td>Strategies, countermeasure</td></tr>
+<tr><td>5</td><td>Energy at the edge</td><td>CSG</td><td>★★★</td><td>Rewards, state explosion</td></tr>
+<tr><td>6</td><td>Human in the loop</td><td>CSG</td><td>★★★</td><td>Three players, costs</td></tr>
+<tr><td>7</td><td>Simulation and report</td><td>all</td><td>★★</td><td>Animation, exports, Monte Carlo</td></tr>
+<tr><td>8</td><td>Your own case</td><td>any</td><td>★★★</td><td>Project</td></tr>
+</table>
+<div class="note fr"><b>Prérequis</b>Un navigateur récent. Pour les questions de vérification : PRISM 4.x et PRISM-games 3.x (Java 11+) installés sur la machine, ou disponibles en salle de TP.</div>
+<div class="note en"><b>Prerequisites</b>A recent browser. For verification questions: PRISM 4.x and PRISM-games 3.x (Java 11+) installed on the machine, or available in the lab room.</div>
+</section>
+
+<!-- LAB 1 -->
+<section id="lab1" class="lab">
+<h3><span class="fr">TP 1</span><span class="en">Lab 1</span> · <span class="fr">Premiers pas : pannes dues aux radiations (CTMC)</span><span class="en">First steps: radiation upsets (CTMC)</span></h3>
+<div class="meta"><span class="lvl1">★</span><span>CTMC</span><span>~45 min</span><span class="fr">Cas 1</span><span class="en">Case 1</span></div>
+<p class="fr"><b>Objectifs</b> : prendre en main l'interface ; lire un automate à taux ; relier simulation et état stationnaire.</p>
+<p class="en"><b>Objectives</b>: get to know the interface; read a rate-based state machine; relate simulation and steady state.</p>
+<ol class="steps fr">
+  <li>Onglet <span class="ui">Use Cases</span> → <b>Radiation upsets and operator response</b> → lisez le scénario → <span class="ui">Load into modeler</span>.</li>
+  <li>Sélectionnez <b>OBC</b> puis <span class="ui">Edit Behavior</span>. Relevez les trois états et, pour chaque transition, son taux. Lesquels sont des pannes, lesquels des réparations ?</li>
+  <li>Ouvrez <span class="ui">Definitions</span> : retrouvez <code>MTBF_SEU</code>, <code>MTTR_scrub</code>, etc. Quel lien entre un MTBF et un taux ?</li>
+  <li>Ouvrez <span class="ui">Rewards</span> : que mesure la structure <code>downtime</code> ?</li>
+  <li><span class="ui">Simulate</span> → <span class="ui">×10</span> plusieurs fois. Observez l'horloge, les transitions les plus probables, la jauge de la variable <code>obc</code>.</li>
+  <li>Lancez <span class="ui">Play</span> en vitesse <i>Very fast</i> pendant ~1 minute. Notez la moyenne <b>downtime avg / time</b>.</li>
+  <li>Téléchargez le modèle et les propriétés, puis vérifiez la propriété de disponibilité de long terme avec PRISM (<code>-gaussseidel</code> si la convergence est lente).</li>
+</ol>
+<ol class="steps en">
+  <li><span class="ui">Use Cases</span> tab → <b>Radiation upsets and operator response</b> → read the scenario → <span class="ui">Load into modeler</span>.</li>
+  <li>Select <b>OBC</b> then <span class="ui">Edit Behavior</span>. Write down the three states and, for each transition, its rate. Which ones are failures, which ones repairs?</li>
+  <li>Open <span class="ui">Definitions</span>: find <code>MTBF_SEU</code>, <code>MTTR_scrub</code>, etc. How is an MTBF related to a rate?</li>
+  <li>Open <span class="ui">Rewards</span>: what does the <code>downtime</code> structure measure?</li>
+  <li><span class="ui">Simulate</span> → <span class="ui">×10</span> several times. Watch the clock, the most likely transitions, the gauge of variable <code>obc</code>.</li>
+  <li>Run <span class="ui">Play</span> at <i>Very fast</i> for about one minute. Note the <b>downtime avg / time</b> average.</li>
+  <li>Download the model and properties, then check the long-run availability property with PRISM (<code>-gaussseidel</code> if convergence is slow).</li>
+</ol>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr">Un taux est l'inverse d'une durée moyenne : <code>λ = 1/MTBF</code>, <code>μ = 1/MTTR</code>. <code>downtime</code> vaut 1 par unité de temps hors de l'état nominal : sa moyenne temporelle est la fraction d'indisponibilité. Une longue simulation donne environ <b>0,013</b>, la valeur stationnaire calculée par PRISM est <b>0,0132</b> : la simulation converge vers l'état stationnaire (théorème ergodique).</p>
+<p class="en">A rate is the inverse of a mean duration: <code>λ = 1/MTBF</code>, <code>μ = 1/MTTR</code>. <code>downtime</code> is 1 per time unit outside the nominal state: its time average is the unavailability. A long simulation gives about <b>0.013</b>; the steady-state value computed by PRISM is <b>0.0132</b>: the simulation converges to the steady state (ergodic theorem).</p>
+</details>
+</section>
+
+<!-- LAB 2 -->
+<section id="lab2" class="lab">
+<h3><span class="fr">TP 2</span><span class="en">Lab 2</span> · <span class="fr">Construire un jeu concurrent : le bus partagé</span><span class="en">Build a concurrent game: the shared bus</span></h3>
+<div class="meta"><span class="lvl2">★★</span><span>CSG</span><span>~1 h 15</span><span class="fr">Cas 2</span><span class="en">Case 2</span></div>
+<p class="fr"><b>Objectifs</b> : créer un modèle de A à Z ; comprendre les actions jointes et le rôle du Monitor ; écrire une propriété avec coalition.</p>
+<p class="en"><b>Objectives</b>: create a model from scratch; understand joint actions and the role of the Monitor; write a property with a coalition.</p>
+<p class="fr"><b>Scénario</b> : deux joueurs veulent écrire sur un bus. À chaque tour, chacun choisit lire (<code>r</code>) ou écrire (<code>w</code>) sans connaître le choix de l'autre. Celui qui écrit pendant que l'autre lit gagne l'accès.</p>
+<p class="en"><b>Scenario</b>: two players want to write on a bus. Each round, each one chooses read (<code>r</code>) or write (<code>w</code>) without knowing the other's choice. The one writing while the other reads wins access.</p>
+<h4><span class="fr">Partie A : construire</span><span class="en">Part A: build</span></h4>
+<ol class="steps fr">
+  <li><span class="ui">New</span>, puis <b>Model</b> = <b>CSG (PRISM-games)</b>, case <span class="ui">rounds</span> cochée.</li>
+  <li>Ajoutez deux <b>Basic Component</b> nommés <code>Player1</code> et <code>Player2</code>, et un <b>Monitor</b> nommé <code>CommunicationBus</code>.</li>
+  <li>Sur chaque joueur, ajoutez un port synchrone <code>bus</code> ; sur le Monitor, deux ports <code>in1</code> et <code>in2</code>. Reliez <code>Player1.bus → in1</code> et <code>Player2.bus → in2</code>.</li>
+  <li><code>Player1</code> → <span class="ui">Edit Behavior</span> : un état <code>READY</code> (valeur 0) avec trois boucles : <code>w1</code> et <code>r1</code> (garde <code>s=0</code>), <code>reset_1</code> (garde <code>s&gt;0</code>). Faites de même pour <code>Player2</code> avec <code>w2</code>, <code>r2</code>, <code>reset_2</code>.</li>
+  <li><code>CommunicationBus</code> → <span class="ui">Edit Monitor Table</span> : variables <code>s</code> [0..10] init 0 et <code>win</code> [0..2] init 0, puis les lignes :
+    <pre><code>[w1,w2] s=0 -> (s'=1) & (win'=0)
+[r1,r2] s=0 -> (s'=1) & (win'=0)
+[w1,r2] s=0 -> (s'=3) & (win'=1)
+[r1,w2] s=0 -> (s'=2) & (win'=2)
+[reset_1,reset_2] s>0 -> (s'=0) & (win'=0)</code></pre></li>
+  <li><span class="ui">Definitions</span> : constante <code>k</code> (int, 10) ; <span class="ui">Rewards</span> : structure <code>utility1</code> avec <code>[w1,r2] true : 1</code> et <code>[r1,w2] true : -1</code>.</li>
+  <li><span class="ui">PRISM Code</span> → ajoutez <code>&lt;&lt;p1,p2&gt;&gt; Pmax=? [ F win=1 ]</code> et <code>&lt;&lt;p1&gt;&gt; Pmax=? [ F win=1 ]</code>.</li>
+  <li>Comparez votre code avec celui du cas d'étude <b>Bus write access</b> chargé depuis la bibliothèque (il ajoute une action <code>unlock</code> qui permet de passer son tour).</li>
+</ol>
+<ol class="steps en">
+  <li><span class="ui">New</span>, then <b>Model</b> = <b>CSG (PRISM-games)</b>, <span class="ui">rounds</span> ticked.</li>
+  <li>Add two <b>Basic Component</b>s named <code>Player1</code> and <code>Player2</code>, and a <b>Monitor</b> named <code>CommunicationBus</code>.</li>
+  <li>On each player add a synchronous port <code>bus</code>; on the Monitor, two ports <code>in1</code> and <code>in2</code>. Connect <code>Player1.bus → in1</code> and <code>Player2.bus → in2</code>.</li>
+  <li><code>Player1</code> → <span class="ui">Edit Behavior</span>: one state <code>READY</code> (value 0) with three self-loops: <code>w1</code> and <code>r1</code> (guard <code>s=0</code>), <code>reset_1</code> (guard <code>s&gt;0</code>). Same for <code>Player2</code> with <code>w2</code>, <code>r2</code>, <code>reset_2</code>.</li>
+  <li><code>CommunicationBus</code> → <span class="ui">Edit Monitor Table</span>: variables <code>s</code> [0..10] init 0 and <code>win</code> [0..2] init 0, then the rows:
+    <pre><code>[w1,w2] s=0 -> (s'=1) & (win'=0)
+[r1,r2] s=0 -> (s'=1) & (win'=0)
+[w1,r2] s=0 -> (s'=3) & (win'=1)
+[r1,w2] s=0 -> (s'=2) & (win'=2)
+[reset_1,reset_2] s>0 -> (s'=0) & (win'=0)</code></pre></li>
+  <li><span class="ui">Definitions</span>: constant <code>k</code> (int, 10); <span class="ui">Rewards</span>: structure <code>utility1</code> with <code>[w1,r2] true : 1</code> and <code>[r1,w2] true : -1</code>.</li>
+  <li><span class="ui">PRISM Code</span> → add <code>&lt;&lt;p1,p2&gt;&gt; Pmax=? [ F win=1 ]</code> and <code>&lt;&lt;p1&gt;&gt; Pmax=? [ F win=1 ]</code>.</li>
+  <li>Compare your code with the <b>Bus write access</b> use case loaded from the library (it adds an <code>unlock</code> action to skip a round).</li>
+</ol>
+<h4><span class="fr">Partie B : jouer et vérifier</span><span class="en">Part B: play and verify</span></h4>
+<ol class="steps fr">
+  <li><span class="ui">Simulate</span>. Jouez <code>Player1 = w1</code>, <code>Player2 = r2</code> : qui gagne ? Puis <code>w1</code> contre <code>w2</code>.</li>
+  <li>Laissez les deux joueurs en <span class="ui">random</span> et lancez <span class="ui">Play</span> : comment évolue <code>utility1</code> ?</li>
+  <li>Vérifiez les deux propriétés avec PRISM-games, puis la version bornée <code>&lt;&lt;p1&gt;&gt; Pmax=? [ F (win=1 &amp; rounds&lt;=k) ]</code> pour k = 1..10.</li>
+</ol>
+<ol class="steps en">
+  <li><span class="ui">Simulate</span>. Play <code>Player1 = w1</code>, <code>Player2 = r2</code>: who wins? Then <code>w1</code> against <code>w2</code>.</li>
+  <li>Leave both players on <span class="ui">random</span> and press <span class="ui">Play</span>: how does <code>utility1</code> evolve?</li>
+  <li>Verify both properties with PRISM-games, then the bounded version <code>&lt;&lt;p1&gt;&gt; Pmax=? [ F (win=1 &amp; rounds&lt;=k) ]</code> for k = 1..10.</li>
+</ol>
+<figure><img src="img/sim-bus.jpg" alt="Bus simulation"><figcaption><span class="fr">Simulation du bus : les deux joueurs envoient leur action au Monitor, qui met à jour <code>s</code> et <code>win</code>.</span><span class="en">Bus simulation: both players send their action to the Monitor, which updates <code>s</code> and <code>win</code>.</span></figcaption></figure>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr"><code>w1</code> contre <code>r2</code> : <code>win=1</code>. <code>w1</code> contre <code>w2</code> : collision, personne ne gagne. Avec la coalition <code>&lt;&lt;p1,p2&gt;&gt;</code>, P = 1 : les deux joueurs coopèrent. <code>p1</code> seul ne peut pas garantir 1 en temps borné, car <code>p2</code> peut toujours écrire en même temps ; la valeur bornée croît avec k. C'est la différence entre <b>coopérer</b> et <b>jouer contre</b> un adversaire. En aléatoire, <code>utility1</code> fluctue autour de 0 (jeu symétrique).</p>
+<p class="en"><code>w1</code> vs <code>r2</code>: <code>win=1</code>. <code>w1</code> vs <code>w2</code>: collision, nobody wins. With the coalition <code>&lt;&lt;p1,p2&gt;&gt;</code>, P = 1: both players cooperate. <code>p1</code> alone cannot guarantee 1 in bounded time, since <code>p2</code> can always write at the same time; the bounded value grows with k. This is the difference between <b>cooperating</b> and <b>playing against</b> an adversary. At random, <code>utility1</code> fluctuates around 0 (symmetric game).</p>
+</details>
+</section>
+
+<!-- LAB 3 -->
+<section id="lab3" class="lab">
+<h3><span class="fr">TP 3</span><span class="en">Lab 3</span> · <span class="fr">Ports synchrones et asynchrones</span><span class="en">Synchronous and asynchronous ports</span></h3>
+<div class="meta"><span class="lvl2">★★</span><span>CSG</span><span>~1 h</span><span class="fr">Cas 5</span><span class="en">Case 5</span></div>
+<p class="fr"><b>Objectifs</b> : voir le canal FIFO généré ; mesurer l'effet de la capacité et de la politique « plein ».</p>
+<p class="en"><b>Objectives</b>: see the generated FIFO channel; measure the effect of capacity and of the "full" policy.</p>
+<ol class="steps fr">
+  <li>Chargez <b>Async port in a game: producer / consumer</b>. Cliquez sur le connecteur violet : notez <b>Capacity (CAP)</b> et <b>When full</b>.</li>
+  <li><span class="ui">PRISM Code</span> : repérez le module <code>ch1</code> généré. Quelles actions jointes le pilotent ?</li>
+  <li><span class="ui">Simulate</span> : la colonne <b>channel ch1</b> apparaît dans le diagramme. Forcez le producteur à envoyer et le consommateur à attendre : que devient le canal quand il est plein ?</li>
+  <li>Observez les récompenses (messages reçus, perdus) avec des choix aléatoires, puis avec un consommateur qui lit toujours.</li>
+  <li>Revenez au modeler, passez le connecteur en <b>SYNC</b> (ports bleus) et régénérez le code : que devient le module canal ?</li>
+  <li>Chargez <b>IoT pipeline (CTMC)</b> et comparez <b>Block the sender</b> et <b>Drop the message</b>.</li>
+</ol>
+<ol class="steps en">
+  <li>Load <b>Async port in a game: producer / consumer</b>. Click the purple connector: note <b>Capacity (CAP)</b> and <b>When full</b>.</li>
+  <li><span class="ui">PRISM Code</span>: find the generated <code>ch1</code> module. Which joint actions drive it?</li>
+  <li><span class="ui">Simulate</span>: the <b>channel ch1</b> column appears in the diagram. Force the producer to send and the consumer to wait: what happens when the channel is full?</li>
+  <li>Watch the rewards (messages received, lost) with random choices, then with a consumer that always reads.</li>
+  <li>Back in the modeler, switch the connector to <b>SYNC</b> (blue ports) and regenerate the code: what happens to the channel module?</li>
+  <li>Load <b>IoT pipeline (CTMC)</b> and compare <b>Block the sender</b> and <b>Drop the message</b>.</li>
+</ol>
+<figure><img src="img/sim-async.jpg" alt="Async simulation"><figcaption><span class="fr">Le canal asynchrone apparaît comme un participant à part entière : on voit le remplissage et les pertes.</span><span class="en">The asynchronous channel appears as a participant of its own: filling and losses are visible.</span></figcaption></figure>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr">En CSG, un joueur ne peut pas être bloqué : un canal plein <b>perd</b> le message (récompense de perte). Avec un connecteur synchrone, le canal disparaît et l'envoi devient une action jointe. Le nombre d'états d'un canal compteur croît linéairement avec la capacité (24 → 252 états de CAP = 1 à 20) ; transporter les valeurs coûte D<sup>N</sup> états.</p>
+<p class="en">In CSG a player cannot be blocked: a full channel <b>drops</b> the message (loss reward). With a synchronous connector the channel disappears and sending becomes a joint action. The state count of a counter channel grows linearly with capacity (24 → 252 states from CAP = 1 to 20); carrying values costs D<sup>N</sup> states.</p>
+</details>
+</section>
+
+<!-- LAB 4 -->
+<section id="lab4" class="lab">
+<h3><span class="fr">TP 4</span><span class="en">Lab 4</span> · <span class="fr">Attaque MITM sur un broker RabbitMQ</span><span class="en">MITM attack on a RabbitMQ broker</span></h3>
+<div class="meta"><span class="lvl2">★★</span><span>CSG</span><span>~1 h</span><span class="fr">Cas 6</span><span class="en">Case 6</span></div>
+<p class="fr"><b>Objectifs</b> : transformer une fréquence d'attaque en probabilité ; comparer des coalitions ; évaluer une contre-mesure.</p>
+<p class="en"><b>Objectives</b>: turn an attack frequency into a probability; compare coalitions; assess a countermeasure.</p>
+<ol class="steps fr">
+  <li>Chargez <b>RabbitMQ broker under MITM attacks</b>. Dans <span class="ui">Definitions</span>, expliquez <code>p_att = 1 - pow(EULER, -t_round/(MTBA*BAN))</code>.</li>
+  <li><span class="ui">Simulate</span> : jouez <code>sen = send</code> et <code>att = tamper_payload</code>. Combien de tours avant le premier <code>payload_tamper</code> ? Recommencez (Reset) plusieurs fois.</li>
+  <li>Jouez <code>att = tamper_key</code> : quel label s'allume ? Que représente-t-il pour la file de destination ?</li>
+  <li>Vérifiez P1 avec <code>&lt;&lt;att,sen&gt;&gt;</code> puis avec <code>&lt;&lt;att&gt;&gt;</code>. Expliquez la différence.</li>
+  <li>Lancez une expérience sur <code>SCENARIO = 1, 2, 3</code> (DoS, ARP, Mirai). Classez les attaques.</li>
+  <li>Comparez la propriété « P3 Unrouted messages » avec <code>BAN = 1</code> puis <code>BAN = 10</code>.</li>
+</ol>
+<ol class="steps en">
+  <li>Load <b>RabbitMQ broker under MITM attacks</b>. In <span class="ui">Definitions</span>, explain <code>p_att = 1 - pow(EULER, -t_round/(MTBA*BAN))</code>.</li>
+  <li><span class="ui">Simulate</span>: play <code>sen = send</code> and <code>att = tamper_payload</code>. How many rounds until the first <code>payload_tamper</code>? Repeat (Reset) several times.</li>
+  <li>Play <code>att = tamper_key</code>: which label lights up? What does it mean for the target queue?</li>
+  <li>Verify P1 with <code>&lt;&lt;att,sen&gt;&gt;</code> then with <code>&lt;&lt;att&gt;&gt;</code>. Explain the difference.</li>
+  <li>Run an experiment over <code>SCENARIO = 1, 2, 3</code> (DoS, ARP, Mirai). Rank the attacks.</li>
+  <li>Compare the "P3 Unrouted messages" property with <code>BAN = 1</code> then <code>BAN = 10</code>.</li>
+</ol>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr"><code>p_att</code> est la probabilité qu'au moins une attaque survienne pendant un tour, pour des arrivées exponentielles de moyenne MTBA (allongée par le bannissement). Avec <code>&lt;&lt;att&gt;&gt;</code> seul, la valeur est <b>0</b> : les capteurs peuvent ne jamais envoyer. En coalition, sur 30 tours : ARP ≈ <b>0,97</b> &gt; Mirai ≈ <b>0,95</b> &gt; DoS ≈ <b>0,90</b>. Le nombre attendu de messages non routés passe d'environ <b>3,2</b> à <b>0,34</b> avec <code>BAN = 10</code>.</p>
+<p class="en"><code>p_att</code> is the probability that at least one attack occurs during a round, for exponential arrivals with mean MTBA (lengthened by banning). With <code>&lt;&lt;att&gt;&gt;</code> alone the value is <b>0</b>: the sensors may never send. In coalition, over 30 rounds: ARP ≈ <b>0.97</b> &gt; Mirai ≈ <b>0.95</b> &gt; DoS ≈ <b>0.90</b>. The expected number of unrouted messages drops from about <b>3.2</b> to <b>0.34</b> with <code>BAN = 10</code>.</p>
+</details>
+</section>
+
+<!-- LAB 5 -->
+<section id="lab5" class="lab">
+<h3><span class="fr">TP 5</span><span class="en">Lab 5</span> · <span class="fr">Corruption de données et énergie à l'edge</span><span class="en">Data corruption and energy at the edge</span></h3>
+<div class="meta"><span class="lvl3">★★★</span><span>CSG</span><span>~1 h 15</span><span class="fr">Cas 7</span><span class="en">Case 7</span></div>
+<p class="fr"><b>Objectifs</b> : quantifier le coût physique d'une attaque logique ; comparer les styles de communication ; observer l'explosion de l'espace d'états.</p>
+<p class="en"><b>Objectives</b>: quantify the physical cost of a logical attack; compare communication styles; observe state-space explosion.</p>
+<ol class="steps fr">
+  <li>Chargez <b>Edge gateway: data corruption and energy</b>. Cliquez sur <b>SouthboundBridge</b> → <span class="ui">Edit Monitor Table</span> : lisez les lignes <code>MODE=0</code> (synchrone) et <code>MODE=1</code> (asynchrone).</li>
+  <li><span class="ui">Simulate</span> avec <code>publish</code> et <code>inject</code> : regardez la variable <code>nb</code> (buffer) et la mini-courbe <code>energy</code>.</li>
+  <li>Dans <span class="ui">Definitions</span>, mettez <code>MODE = 0</code> puis relancez la simulation : comparez la moyenne d'énergie par pas.</li>
+  <li>Avec PRISM-games, remplissez le tableau ci-dessous (propriété « Maximal energy »).</li>
+  <li>Mettez <code>BLOCK = 1</code> : que reste-t-il de l'attaque ?</li>
+  <li>Passez <code>CAP</code> de 4 à 10 : notez le nombre d'états et le temps de vérification.</li>
+</ol>
+<ol class="steps en">
+  <li>Load <b>Edge gateway: data corruption and energy</b>. Click <b>SouthboundBridge</b> → <span class="ui">Edit Monitor Table</span>: read the <code>MODE=0</code> (synchronous) and <code>MODE=1</code> (asynchronous) rows.</li>
+  <li><span class="ui">Simulate</span> with <code>publish</code> and <code>inject</code>: watch variable <code>nb</code> (buffer) and the <code>energy</code> sparkline.</li>
+  <li>In <span class="ui">Definitions</span>, set <code>MODE = 0</code> and simulate again: compare the average energy per step.</li>
+  <li>With PRISM-games, fill in the table below ("Maximal energy" property).</li>
+  <li>Set <code>BLOCK = 1</code>: what is left of the attack?</li>
+  <li>Change <code>CAP</code> from 4 to 10: note the number of states and the verification time.</li>
+</ol>
+<table><tr><th>p_att</th><th>MODE = 0 (sync)</th><th>MODE = 1 (async)</th><th><span class="fr">Ratio</span><span class="en">Ratio</span></th></tr>
+<tr><td>0.2</td><td>…</td><td>…</td><td>…</td></tr><tr><td>0.8</td><td>…</td><td>…</td><td>…</td></tr></table>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr">Énergie maximale sur 30 tours : p = 0,2 → <b>137</b> (sync) / <b>156</b> (async) ; p = 0,8 → <b>174</b> / <b>383</b>. L'asynchrone coûte plus car le buffer accumule des valeurs corrompues que la passerelle doit parcourir. Avec <code>BLOCK = 1</code>, l'énergie tombe à <b>124</b> (consommation de base). De CAP = 4 à 10, le modèle passe de <b>234</b> à <b>522</b> états.</p>
+<p class="en">Maximal energy over 30 rounds: p = 0.2 → <b>137</b> (sync) / <b>156</b> (async); p = 0.8 → <b>174</b> / <b>383</b>. Asynchronous costs more because the buffer accumulates corrupted values that the gateway must scan. With <code>BLOCK = 1</code> the energy drops to <b>124</b> (baseline). From CAP = 4 to 10 the model grows from <b>234</b> to <b>522</b> states.</p>
+</details>
+</section>
+
+<!-- LAB 6 -->
+<section id="lab6" class="lab">
+<h3><span class="fr">TP 6</span><span class="en">Lab 6</span> · <span class="fr">L'humain dans la boucle : maintenance d'un satellite GPS</span><span class="en">Human in the loop: GPS satellite maintenance</span></h3>
+<div class="meta"><span class="lvl3">★★★</span><span>CSG</span><span>~1 h</span><span class="fr">Cas 3</span><span class="en">Case 3</span></div>
+<p class="fr"><b>Objectifs</b> : modéliser des équipes humaines comme des joueurs ; comparer des stratégies de maintenance en coût et en disponibilité.</p>
+<p class="en"><b>Objectives</b>: model human teams as players; compare maintenance strategies in cost and availability.</p>
+<ol class="steps fr">
+  <li>Chargez <b>GPS SPS collaborative maintenance</b>. Identifiez les trois joueurs <code>env</code>, <code>o</code> (équipe en orbite) et <code>g</code> (équipe au sol) et le Monitor.</li>
+  <li>Dans <span class="ui">Definitions</span>, relevez les MTBF des trois classes de pannes et les probabilités dérivées <code>pr_…</code>.</li>
+  <li><span class="ui">Simulate</span> : jouez d'abord l'équipe en orbite systématiquement, puis l'équipe au sol. Comparez les récompenses de coût et de remplacements.</li>
+  <li>Vérifiez les propriétés de remplacements et de coût cumulé ; tracez-les en fonction de k.</li>
+  <li>Discussion : quelle stratégie choisir si le budget initial est contraint ? si la disponibilité prime ?</li>
+</ol>
+<ol class="steps en">
+  <li>Load <b>GPS SPS collaborative maintenance</b>. Identify the three players <code>env</code>, <code>o</code> (in-orbit team) and <code>g</code> (ground team) and the Monitor.</li>
+  <li>In <span class="ui">Definitions</span>, note the MTBF of the three failure classes and the derived <code>pr_…</code> probabilities.</li>
+  <li><span class="ui">Simulate</span>: first always play the in-orbit team, then the ground team. Compare the cost and replacement rewards.</li>
+  <li>Verify the replacement and cumulated-cost properties; plot them against k.</li>
+  <li>Discussion: which strategy if the initial budget is constrained? if availability comes first?</li>
+</ol>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr">L'équipe en orbite rétablit le service plus vite mais remplace plus souvent : son coût cumulé est plus élevé. L'équipe au sol demande un investissement initial plus lourd mais offre une meilleure disponibilité en moins de tours. La conclusion attendue est une <b>stratégie équilibrée</b> entre les deux équipes.</p>
+<p class="en">The in-orbit team restores service faster but replaces more often: its cumulated cost is higher. The ground team needs a heavier initial investment but gives better availability in fewer rounds. The expected conclusion is a <b>balanced strategy</b> between both teams.</p>
+</details>
+</section>
+
+<!-- LAB 7 -->
+<section id="lab7" class="lab">
+<h3><span class="fr">TP 7</span><span class="en">Lab 7</span> · <span class="fr">Animation, simulation statistique et rapport</span><span class="en">Animation, statistical simulation and report</span></h3>
+<div class="meta"><span class="lvl2">★★</span><span class="fr">tous formalismes</span><span class="en">all formalisms</span><span>~1 h</span></div>
+<p class="fr"><b>Objectifs</b> : maîtriser l'animation ; produire des figures pour un rapport ; relier simulation répétée et résultat exact.</p>
+<p class="en"><b>Objectives</b>: master the animation; produce figures for a report; relate repeated simulation and exact result.</p>
+<h4><span class="fr">Partie A : animer et documenter</span><span class="en">Part A: animate and document</span></h4>
+<ol class="steps fr">
+  <li>Chargez le cas RabbitMQ. <span class="ui">Simulate</span>, vitesse <i>Slow</i>, puis <span class="ui">Play</span> : suivez la mini-carte d'architecture et la note jaune de chaque tour.</li>
+  <li>Mettez en pause au premier <code>payload_tamper</code>. Utilisez <span class="ui">Step back</span> pour revenir d'un tour, puis rejouez avec une autre action de l'attaquant.</li>
+  <li>Exportez la trace en <b>PlantUML</b>, collez-la sur plantuml.com ; exportez aussi en <b>SVG</b> et <b>PNG</b>.</li>
+  <li>Intégrez le diagramme dans un document LaTeX :
+<pre><code>\usepackage{graphicx}
+\begin{figure}[h]\centering
+  \includegraphics[width=\linewidth]{simulation.png}
+  \caption{Trace d'une attaque MITM / MITM attack trace}
+\end{figure}</code></pre></li>
+</ol>
+<ol class="steps en">
+  <li>Load the RabbitMQ case. <span class="ui">Simulate</span>, <i>Slow</i> speed, then <span class="ui">Play</span>: follow the architecture mini-map and the yellow note of each round.</li>
+  <li>Pause at the first <code>payload_tamper</code>. Use <span class="ui">Step back</span> to go back one round, then replay with another attacker action.</li>
+  <li>Export the trace as <b>PlantUML</b> and paste it on plantuml.com; also export <b>SVG</b> and <b>PNG</b>.</li>
+  <li>Include the diagram in a LaTeX document:
+<pre><code>\usepackage{graphicx}
+\begin{figure}[h]\centering
+  \includegraphics[width=\linewidth]{simulation.png}
+  \caption{MITM attack trace}
+\end{figure}</code></pre></li>
+</ol>
+<h4><span class="fr">Partie B : de la simulation à la probabilité</span><span class="en">Part B: from simulation to probability</span></h4>
+<ol class="steps fr">
+  <li>Avec <code>sen = send</code>, <code>att = tamper_payload</code>, faites 20 parties de 30 tours (Reset entre chaque). Comptez les parties où <code>payload_tamper</code> apparaît.</li>
+  <li>Pour aller plus vite : exportez des traces en <b>CSV</b> et calculez la fréquence avec un tableur ou Python.</li>
+  <li>Comparez avec la valeur PRISM-games de P1 (≈ 0,97). Pourquoi l'écart diminue-t-il avec le nombre de parties ?</li>
+</ol>
+<ol class="steps en">
+  <li>With <code>sen = send</code>, <code>att = tamper_payload</code>, play 20 games of 30 rounds (Reset between each). Count the games where <code>payload_tamper</code> appears.</li>
+  <li>To go faster: export traces as <b>CSV</b> and compute the frequency with a spreadsheet or Python.</li>
+  <li>Compare with the PRISM-games value of P1 (≈ 0.97). Why does the gap shrink with the number of games?</li>
+</ol>
+<pre><code>import pandas as pd
+t = pd.read_csv("simulation-trace.csv")
+print((t["buf"] == 2).any())          # <span class="fr">falsification dans cette partie ?</span><span class="en">tampering in this game?</span>
+print(t.filter(like="_step").sum())   # <span class="fr">récompenses cumulées</span><span class="en">cumulated rewards</span></code></pre>
+<details><summary><span class="fr">Corrigé</span><span class="en">Answers</span></summary>
+<p class="fr">La fréquence observée est une estimation Monte-Carlo de la probabilité ; son erreur décroît en 1/√N (loi des grands nombres). Sur 20 000 parties, on obtient 0,972 pour une valeur exacte de 0,971. La simulation ne remplace pas la vérification : elle ne fixe qu'<b>une</b> stratégie, alors que PRISM-games optimise sur toutes.</p>
+<p class="en">The observed frequency is a Monte Carlo estimate of the probability; its error decreases as 1/√N (law of large numbers). Over 20,000 games we get 0.972 for an exact value of 0.971. Simulation does not replace verification: it fixes <b>one</b> strategy, while PRISM-games optimises over all of them.</p>
+</details>
+</section>
+
+<!-- LAB 8 -->
+<section id="lab8" class="lab">
+<h3><span class="fr">TP 8</span><span class="en">Lab 8</span> · <span class="fr">Projet : votre propre cas d'étude</span><span class="en">Project: your own use case</span></h3>
+<div class="meta"><span class="lvl3">★★★</span><span class="fr">au choix</span><span class="en">any</span><span>2–4 h</span></div>
+<ol class="steps fr">
+  <li>Choisissez un système (maison connectée, drone, réseau véhicule, chaîne industrielle…) et une menace.</li>
+  <li>Dessinez l'architecture : au moins un attaquant, un Monitor ou un connecteur asynchrone.</li>
+  <li>Écrivez les comportements, les constantes (avec des valeurs justifiées) et au moins deux récompenses.</li>
+  <li>Écrivez trois propriétés : une probabilité, une récompense, une comparaison de coalitions.</li>
+  <li>Simulez un scénario représentatif et exportez-le en PlantUML.</li>
+  <li>Proposez une contre-mesure et mesurez son effet avec PRISM.</li>
+  <li><b>Enseignants</b> : dans l'onglet Use Cases, le lien <span class="ui">Export current model as use case</span> produit un fichier JSON à compléter (scénario, objectifs, exercices) et à ajouter à <code>public/usecases/</code>.</li>
+</ol>
+<ol class="steps en">
+  <li>Choose a system (smart home, drone, vehicle network, industrial line…) and a threat.</li>
+  <li>Draw the architecture: at least one attacker, one Monitor or one asynchronous connector.</li>
+  <li>Write the behaviours, the constants (with justified values) and at least two rewards.</li>
+  <li>Write three properties: a probability, a reward, a coalition comparison.</li>
+  <li>Simulate a representative scenario and export it as PlantUML.</li>
+  <li>Propose a countermeasure and measure its effect with PRISM.</li>
+  <li><b>Teachers</b>: in the Use Cases tab, the <span class="ui">Export current model as use case</span> link produces a JSON file to complete (scenario, objectives, exercises) and add to <code>public/usecases/</code>.</li>
+</ol>
+<div class="tip fr"><b>Grille d'évaluation suggérée</b>Architecture et justification (25 %) · comportements corrects (25 %) · propriétés pertinentes et résultats (25 %) · simulation, figures et discussion de la contre-mesure (25 %).</div>
+<div class="tip en"><b>Suggested marking grid</b>Architecture and justification (25%) · correct behaviours (25%) · relevant properties and results (25%) · simulation, figures and countermeasure discussion (25%).</div>
+</section>
+
+<!-- =============================================================== CHEATSHEET -->
+<section id="cheatsheet">
+<h2><span class="fr">Aide-mémoire PRISM</span><span class="en">PRISM cheat sheet</span></h2>
+<pre><code>// <span class="fr">commande</span><span class="en">command</span>
+[action] guard -> p1 : (x'=1) & (y'=y+1) + p2 : (x'=0);
+// CSG : <span class="fr">action jointe dans un module non-joueur</span><span class="en">joint action in a non-player module</span>
+[a1,b2] s=0 -> 0.7 : (win'=1) + 0.3 : (win'=2);
+// <span class="fr">récompenses</span><span class="en">rewards</span>
+rewards "energy"
+  true : 4.142 + 2.1514*load;     // <span class="fr">par état (par unité de temps en CTMC)</span><span class="en">per state (per time unit in CTMC)</span>
+  [send] true : 1;                // <span class="fr">par action</span><span class="en">per action</span>
+endrewards</code></pre>
+<table class="fr">
+<tr><th>Propriété</th><th>Sens</th></tr>
+<tr><td><code>P=? [ F φ ]</code></td><td>Probabilité d'atteindre φ un jour (DTMC, CTMC).</td></tr>
+<tr><td><code>P=? [ F&lt;=T φ ]</code></td><td>… avant l'instant / le pas T.</td></tr>
+<tr><td><code>S=? [ φ ]</code></td><td>Fraction de temps en φ à long terme (CTMC).</td></tr>
+<tr><td><code>Pmax=? [ F φ ]</code></td><td>Probabilité maximale sur les choix (MDP).</td></tr>
+<tr><td><code>R{"r"}=? [ C&lt;=T ]</code></td><td>Récompense cumulée jusqu'à T.</td></tr>
+<tr><td><code>&lt;&lt;p1,p2&gt;&gt; Pmax=? [ F φ ]</code></td><td>La coalition {p1,p2} maximise φ quoi que fassent les autres (CSG).</td></tr>
+<tr><td><code>&lt;&lt;att&gt;&gt; R{"r"}max=? [ F rounds=k ]</code></td><td>Récompense que l'attaquant peut garantir en k tours.</td></tr>
+</table>
+<table class="en">
+<tr><th>Property</th><th>Meaning</th></tr>
+<tr><td><code>P=? [ F φ ]</code></td><td>Probability of eventually reaching φ (DTMC, CTMC).</td></tr>
+<tr><td><code>P=? [ F&lt;=T φ ]</code></td><td>… before time / step T.</td></tr>
+<tr><td><code>S=? [ φ ]</code></td><td>Long-run fraction of time in φ (CTMC).</td></tr>
+<tr><td><code>Pmax=? [ F φ ]</code></td><td>Maximal probability over choices (MDP).</td></tr>
+<tr><td><code>R{"r"}=? [ C&lt;=T ]</code></td><td>Cumulated reward up to T.</td></tr>
+<tr><td><code>&lt;&lt;p1,p2&gt;&gt; Pmax=? [ F φ ]</code></td><td>Coalition {p1,p2} maximises φ whatever the others do (CSG).</td></tr>
+<tr><td><code>&lt;&lt;att&gt;&gt; R{"r"}max=? [ F rounds=k ]</code></td><td>Reward the attacker can guarantee in k rounds.</td></tr>
+</table>
+<p class="fr">Opérateurs : <code>&amp;</code> et, <code>|</code> ou, <code>!</code> non, <code>=&gt;</code> implique, <code>=</code> égal, <code>!=</code> différent, <code>c ? a : b</code>, fonctions <code>min</code>, <code>max</code>, <code>pow</code>, <code>floor</code>, <code>ceil</code>, <code>mod</code>, <code>log</code>.</p>
+<p class="en">Operators: <code>&amp;</code> and, <code>|</code> or, <code>!</code> not, <code>=&gt;</code> implies, <code>=</code> equal, <code>!=</code> different, <code>c ? a : b</code>, functions <code>min</code>, <code>max</code>, <code>pow</code>, <code>floor</code>, <code>ceil</code>, <code>mod</code>, <code>log</code>.</p>
+</section>
+
+<!-- =============================================================== FAQ -->
+<section id="faq">
+<h2><span class="fr">FAQ et dépannage</span><span class="en">FAQ and troubleshooting</span></h2>
+<details class="fr"><summary>« Constant … has no value » au lancement de la simulation</summary><p>Une constante n'a pas de valeur. Donnez-lui une valeur dans <span class="ui">Definitions</span> (vous pourrez toujours la surcharger dans PRISM avec <code>-const</code>).</p></details>
+<details class="en"><summary>"Constant … has no value" when starting the simulation</summary><p>A constant has no value. Give it one in <span class="ui">Definitions</span> (you can still override it in PRISM with <code>-const</code>).</p></details>
+<details class="fr"><summary>« … outside [min..max] » pendant la simulation</summary><p>Une affectation sort des bornes de la variable : c'est aussi une erreur pour PRISM. Ajoutez une garde (par ex. <code>nb &lt; CAP</code>) ou utilisez <code>min(nb+1, CAP)</code>.</p></details>
+<details class="en"><summary>"… outside [min..max]" during the simulation</summary><p>An assignment leaves the variable bounds: PRISM would reject it too. Add a guard (e.g. <code>nb &lt; CAP</code>) or use <code>min(nb+1, CAP)</code>.</p></details>
+<details class="fr"><summary>« Deadlock » en DTMC / MDP / CTMC</summary><p>Aucune transition n'est activée : vérifiez les gardes, et qu'une action partagée existe bien dans tous les modules qui la déclarent. PRISM ajoute des boucles sur les états bloquants (option <code>-fixdl</code>) ; le simulateur, lui, s'arrête pour vous le signaler.</p></details>
+<details class="en"><summary>"Deadlock" in DTMC / MDP / CTMC</summary><p>No transition is enabled: check the guards, and that a shared action exists in every module that declares it. PRISM adds self-loops on deadlock states (<code>-fixdl</code> option); the simulator stops to tell you.</p></details>
+<details class="fr"><summary>Un joueur n'a pas l'action que je veux dans le simulateur</summary><p>Seules les actions dont la garde est vraie dans l'état courant sont proposées. Si vous aviez forcé une action devenue impossible, le simulateur la remplace par un choix aléatoire et l'indique.</p></details>
+<details class="en"><summary>A player does not offer the action I want in the simulator</summary><p>Only actions whose guard is true in the current state are offered. If you had forced an action that is no longer possible, the simulator replaces it with a random choice and says so.</p></details>
+<details class="fr"><summary>PRISM-games est très lent ou manque de mémoire</summary><p>C'est l'explosion de l'espace d'états : réduisez les bornes des variables, la capacité des canaux et l'horizon <code>k</code> ; préférez des canaux « compteurs » ; augmentez la mémoire Java (<code>-javamaxmem 4g</code>).</p></details>
+<details class="en"><summary>PRISM-games is very slow or runs out of memory</summary><p>This is state-space explosion: reduce variable bounds, channel capacities and the horizon <code>k</code>; prefer "counter" channels; increase Java memory (<code>-javamaxmem 4g</code>).</p></details>
+<details class="fr"><summary>Ma propriété CSG renvoie 0 alors que l'attaque est fréquente</summary><p>Vérifiez la coalition : <code>&lt;&lt;att&gt;&gt;</code> seul suppose que tous les autres joueurs s'opposent à l'attaquant (par ex. les capteurs n'envoient jamais). Utilisez <code>&lt;&lt;att,sen&gt;&gt;</code> pour le pire cas coopératif.</p></details>
+<details class="en"><summary>My CSG property returns 0 although the attack is frequent</summary><p>Check the coalition: <code>&lt;&lt;att&gt;&gt;</code> alone assumes all other players oppose the attacker (e.g. sensors never send). Use <code>&lt;&lt;att,sen&gt;&gt;</code> for the cooperative worst case.</p></details>
+<details class="fr"><summary>Mon travail est-il sauvegardé ?</summary><p>Non, pas automatiquement : utilisez <span class="ui">Save</span> (fichier JSON) régulièrement, et <span class="ui">Load</span> pour reprendre.</p></details>
+<details class="en"><summary>Is my work saved?</summary><p>Not automatically: use <span class="ui">Save</span> (JSON file) regularly, and <span class="ui">Load</span> to resume.</p></details>
+
+<footer>
+<span class="fr">HERMES Modeler — IRIT, Université Toulouse – Jean Jaurès. Projets HERMES-Design et ACIS-IoT. Outils de vérification : <a href="https://www.prismmodelchecker.org/">PRISM</a> et <a href="https://www.prismmodelchecker.org/games/">PRISM-games</a>.</span>
+<span class="en">HERMES Modeler — IRIT, Université Toulouse – Jean Jaurès. HERMES-Design and ACIS-IoT projects. Verification tools: <a href="https://www.prismmodelchecker.org/">PRISM</a> and <a href="https://www.prismmodelchecker.org/games/">PRISM-games</a>.</span>
+</footer>
+</section>
+</main>
+</div>
+
+<div id="zoom"><img alt=""></div>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  function setLang(l){
+    root.setAttribute('data-lang', l); root.setAttribute('lang', l);
+    document.querySelectorAll('.langs button').forEach(function(b){ b.classList.toggle('on', b.dataset.set === l); });
+    document.getElementById('search').placeholder = l === 'fr' ? '🔍 Rechercher…' : '🔍 Search…';
+    try { localStorage.setItem('hermes-doc-lang', l); } catch(e) {}
+    var u = new URL(location.href); u.searchParams.set('lang', l); history.replaceState(null, '', u);
+  }
+  var q = new URLSearchParams(location.search).get('lang'), saved = null;
+  try { saved = localStorage.getItem('hermes-doc-lang'); } catch(e) {}
+  setLang(q === 'en' || q === 'fr' ? q : saved || ((navigator.language || 'fr').slice(0,2) === 'fr' ? 'fr' : 'en'));
+  document.querySelectorAll('.langs button').forEach(function(b){ b.onclick = function(){ setLang(b.dataset.set); }; });
+
+  // copy buttons
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b = document.createElement('button'); b.className = 'copy'; b.textContent = 'copy';
+    b.onclick = function(){
+      var c = pre.querySelector('code').cloneNode(true);
+      c.querySelectorAll('.' + (root.dataset.lang === 'fr' ? 'en' : 'fr')).forEach(function(n){ n.remove(); });
+      navigator.clipboard && navigator.clipboard.writeText(c.innerText);
+      b.textContent = '✓'; setTimeout(function(){ b.textContent = 'copy'; }, 1200);
+    };
+    pre.appendChild(b);
+  });
+
+  // zoom on images
+  var z = document.getElementById('zoom');
+  document.querySelectorAll('figure img').forEach(function(img){ img.onclick = function(){ z.querySelector('img').src = img.src; z.style.display = 'flex'; }; });
+  z.onclick = function(){ z.style.display = 'none'; };
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') z.style.display = 'none'; });
+
+  // mobile menu
+  var toc = document.getElementById('toc');
+  document.getElementById('menuBtn').onclick = function(){ toc.classList.toggle('open'); };
+  toc.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ toc.classList.remove('open'); }); });
+
+  // active section in the table of contents
+  var links = Array.prototype.slice.call(toc.querySelectorAll('a'));
+  var obs = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting) { links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); }); } });
+  }, { rootMargin: '-70px 0px -70% 0px' });
+  document.querySelectorAll('main section[id]').forEach(function(s){ obs.observe(s); });
+
+  // search in the table of contents and section text
+  document.getElementById('search').addEventListener('input', function(e){
+    var v = e.target.value.trim().toLowerCase();
+    links.forEach(function(a){
+      var sec = document.querySelector(a.getAttribute('href'));
+      var hit = !v || a.innerText.toLowerCase().indexOf(v) >= 0 || (sec && sec.innerText.toLowerCase().indexOf(v) >= 0);
+      a.style.display = hit ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

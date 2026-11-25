@@ -1,0 +1,258 @@
+{
+  "id": "ports-producer-consumer-csg",
+  "title": "Async port in a game: producer / consumer",
+  "chapter": "Use case 5 — Synchronous vs asynchronous ports",
+  "chapterOrder": 5,
+  "formalism": "csg",
+  "tool": "PRISM-games 3.x",
+  "summary": "Two players exchange messages through an asynchronous port. In a CSG both move at the same time, so the generated channel is written over joint actions.",
+  "description": [
+    "The producer chooses send or idle_p each round; the consumer chooses recv or idle_c, and after a reception it is BUSY for one round with probability p_busy (it then has to rest).",
+    "Why a transformation over joint actions? PRISM-games rejects a channel with two independent commands [send] and [recv] when both fire in the same round, and a shared global counter silently loses one of the two updates. The generated module ch1 lists [send,recv] (push + pop), [send,b] (push) and [a,recv] (pop) explicitly.",
+    "A player cannot be blocked: when the channel is full, a send is dropped (reward ch1_lost)."
+  ],
+  "objectives": [
+    "Understand why asynchronous communication needs a joint-action channel in a CSG.",
+    "Use coalitions to ask who can cause or prevent message loss."
+  ],
+  "exercises": [
+    "Predict first: can the producer alone force a loss (<<prod>>)? Can the consumer alone prevent it (<<cons>>)?",
+    "Increase CAP_ch1: how does the probability that the producer forces an overflow within k rounds change?",
+    "Open PRISM Code and count the commands of ch1: how does it grow with the number of actions of each player?"
+  ],
+  "parameters": [
+    {
+      "name": "k",
+      "label": "Number of rounds",
+      "value": "10"
+    },
+    {
+      "name": "CAP_ch1",
+      "label": "Channel capacity",
+      "value": "2"
+    },
+    {
+      "name": "p_busy",
+      "label": "P(consumer busy after a reception)",
+      "value": "0.5"
+    }
+  ],
+  "model": {
+    "modelType": "csg",
+    "components": [
+      {
+        "id": "77f52c7e-947c-4fea-9182-b9c4b14c5138",
+        "type": "BASIC",
+        "name": "Producer",
+        "x": 80,
+        "y": 100,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "37701601-6862-4981-a3d7-c565078ee7a6",
+            "name": "send",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "ASYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "prod"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "94118beb-9fdf-4670-a976-08e2bdaa1c28",
+              "name": "ON",
+              "variableName": "pr",
+              "value": 0,
+              "x": 280,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "26408c76-05f3-4459-801c-5ecf14bbbc1c",
+              "sourceStateId": "94118beb-9fdf-4670-a976-08e2bdaa1c28",
+              "targetStateId": "94118beb-9fdf-4670-a976-08e2bdaa1c28",
+              "action": "send",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "141a9b88-fe38-4e6f-8e21-8a82b136835a",
+              "sourceStateId": "94118beb-9fdf-4670-a976-08e2bdaa1c28",
+              "targetStateId": "94118beb-9fdf-4670-a976-08e2bdaa1c28",
+              "action": "idle_p",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "411a2af7-0caa-4279-9faa-0af3ddc16e40",
+        "type": "BASIC",
+        "name": "Consumer",
+        "x": 500,
+        "y": 100,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "960e7c91-e93f-4d71-a965-997d86cc01d8",
+            "name": "recv",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "ASYNCHRONOUS"
+          }
+        ],
+        "properties": {
+          "playerName": "cons"
+        },
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "name": "READY",
+              "variableName": "co",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "a16238c0-7d00-431c-9aa4-a5e9cd527af3",
+              "name": "BUSY",
+              "variableName": "co",
+              "value": 1,
+              "x": 420,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "de2cab0f-bb6f-41a8-ad5a-7637ffeeb280",
+              "sourceStateId": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "targetStateId": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "action": "recv",
+              "updates": [
+                {
+                  "probability": "1-p_busy",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "fe856e2c-2c73-48d9-a175-59c64aa275f3",
+              "sourceStateId": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "targetStateId": "a16238c0-7d00-431c-9aa4-a5e9cd527af3",
+              "action": "recv",
+              "updates": [
+                {
+                  "probability": "p_busy",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "22486121-7433-4a2f-a832-f8277b556037",
+              "sourceStateId": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "targetStateId": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "action": "idle_c",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "58f26cfb-7545-4fc7-8a1f-effa7de38b3c",
+              "sourceStateId": "a16238c0-7d00-431c-9aa4-a5e9cd527af3",
+              "targetStateId": "11e2680c-f6e0-47fb-adc3-c9d69e05d6e4",
+              "action": "rest",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "capacity": 2,
+        "overflow": "DROP",
+        "id": "10c1f938-084e-43ba-993a-d697fc03ce1d",
+        "sourceComponentId": "77f52c7e-947c-4fea-9182-b9c4b14c5138",
+        "sourcePortId": "37701601-6862-4981-a3d7-c565078ee7a6",
+        "targetComponentId": "411a2af7-0caa-4279-9faa-0af3ddc16e40",
+        "targetPortId": "960e7c91-e93f-4d71-a965-997d86cc01d8",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "9fceabb9-d290-4282-b4e8-4f536e20e457",
+        "name": "k",
+        "type": "int",
+        "value": "10"
+      },
+      {
+        "id": "a362a0c6-836a-4083-b325-35c7b09b934d",
+        "name": "CAP_ch1",
+        "type": "int",
+        "value": "2"
+      },
+      {
+        "id": "73b57dd8-0039-4099-847c-e4dda2a96a45",
+        "name": "p_busy",
+        "type": "double",
+        "value": "0.5"
+      }
+    ],
+    "formulas": [],
+    "labels": [],
+    "rewards": [],
+    "properties": [
+      {
+        "id": "b0ed1e2a-e08b-44e0-a00f-61bff21deee0",
+        "name": "Producer forces a loss",
+        "formula": "<<prod>> Pmax=? [ F (\"ch1_full\" & rounds<=k) ]",
+        "description": "probability to fill the channel, whatever the consumer does"
+      },
+      {
+        "id": "80d64eb8-a8ab-4a61-99d8-51b00260a03a",
+        "name": "Expected losses (producer vs consumer)",
+        "formula": "<<prod>> R{\"ch1_lost\"}max=? [ F rounds=k ]"
+      },
+      {
+        "id": "275c8ec7-f7df-4229-a076-52552dcff18f",
+        "name": "Consumer prevents losses",
+        "formula": "<<cons>> R{\"ch1_lost\"}min=? [ F rounds=k ]",
+        "description": "same zero-sum game, seen from the consumer"
+      },
+      {
+        "id": "4fdbdea3-47ba-42ac-a506-ce101a131aae",
+        "name": "Cooperative throughput",
+        "formula": "<<prod,cons>> R{\"ch1_received\"}max=? [ F rounds=k ]"
+      }
+    ]
+  }
+}

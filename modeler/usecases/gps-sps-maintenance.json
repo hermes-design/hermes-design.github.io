@@ -1,17 +1,16 @@
 {
   "id": "gps-sps-maintenance",
   "title": "GPS SPS collaborative maintenance (reduced CSG)",
-  "chapter": "Part 4 — Case study 1: GPS SPS with humans in the loop",
-  "chapterOrder": 4,
+  "chapter": "Use case 3 — GPS SPS maintenance with humans in the loop",
+  "chapterOrder": 3,
   "formalism": "csg",
   "tool": "PRISM-games 3.x",
-  "slides": "Slides 23–31, 46",
   "summary": "Reduced teaching version of the GPS game: Environment vs. on-orbit staff (Po) vs. on-ground staff (Pg), arbitrated by a non-player Monitor. Probabilities are generated from the GPS SPS parameters.",
   "description": [
     "Three players act concurrently each round: the Environment (env) tries a hazard — unscheduled interruption, short-term or long-term hard failure, soft failure; the on-orbit staff (o) and the on-ground staff (g) decide whether to take a failure and how to repair it.",
-    "Short-term hard failure: only Po can repair it, by switching to a redundant subsystem (success Pbeta). Long-term hard failure: if both teams take the task, the Monitor allocates it with OnGroundPriority (slide 30). Po switches to a redundant subsystem / sends software commands (success Pbeta, unless the satellite is at end of life, p_eol), then tries to move & replace a redundant satellite (Pbeta). If that fails, the task goes to Pg: check spare (pr_build), build + manufacture, launch (Pn).",
-    "Per-round failure probabilities are derived from the MTBFs with p_fail = 1 − e^(−t/MTBF) (slide 19), t being the duration of a round. Change t_round or an MTBF and the whole model is regenerated.",
-    "This is a reduced model written for the hands-on session (a few hundred states): it keeps the structure of the journal model but not its full detail (24 slots, O&M degradation, costs), so the numbers differ from the paper's figures."
+    "Short-term hard failure: only Po can repair it, by switching to a redundant subsystem (success Pbeta). Long-term hard failure: if both teams take the task, the Monitor allocates it with OnGroundPriority. Po switches to a redundant subsystem / sends software commands (success Pbeta, unless the satellite is at end of life, p_eol), then tries to move & replace a redundant satellite (Pbeta). If that fails, the task goes to Pg: check spare (pr_build), build + manufacture, launch (Pn).",
+    "Per-round failure probabilities are derived from the MTBFs with p_fail = 1 − e^(−t/MTBF), t being the duration of a round. Change t_round or an MTBF and the whole model is regenerated.",
+    "This is a reduced model written for teaching (a few hundred states): it keeps the structure of the full model but not its full detail (24 slots, O&M degradation, costs), so the numbers differ from the full model."
   ],
   "objectives": [
     "Model humans as strategic players, not as failure probabilities.",
@@ -22,14 +21,14 @@
     "Compare PRO5, PRO6 and PRO7: which team reaches the reliability target first?",
     "Sweep OnGroundPriority from 0 to 1 (PRISM Experiments) and compare <<env,o>> R{\"replace\"} with <<env,g>> R{\"manufacture\"}.",
     "Lower Pbeta to 0.5: how does the load move to the on-ground staff?",
-    "Bonus: duplicate OnOrbitStaff into a second on-orbit player and watch the state space grow (slide 37)."
+    "Bonus: duplicate OnOrbitStaff into a second on-orbit player and watch the state space grow."
   ],
   "parameters": [
     {
       "name": "k",
       "label": "Number of rounds",
       "value": "30",
-      "description": "Horizon of the properties (slides use k = 1 … 30)"
+      "description": "Horizon of the properties (k = 1 … 30)"
     },
     {
       "name": "t_round",
@@ -45,21 +44,21 @@
       "value": "0.5",
       "unit": "years",
       "description": "Handled by the on-orbit staff only (switch to a redundant subsystem)",
-      "source": "GPS SPS PS — slide 26"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "MTBF_LT",
       "label": "Long-term hard failure MTBF",
       "value": "15",
       "unit": "years",
-      "source": "GPS SPS PS — slide 26"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "MTBF_SOFT",
       "label": "Soft failure MTBF",
       "value": "7.5",
       "unit": "years",
-      "source": "GPS SPS PS — slide 26"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "pr_uns",
@@ -73,19 +72,19 @@
       "label": "P(soft failure not alerted in time)",
       "value": "1e-5",
       "description": "Unalerted misleading signal information = loss of integrity",
-      "source": "Slide 26 (NTE without timely alert)"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "p_eol",
       "label": "End-of-life probability",
       "value": "0.6",
-      "source": "Slide 26"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "Pbeta",
       "label": "On-orbit repair success (pβ)",
       "value": "0.8",
-      "source": "Slide 26"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "pr_build",
@@ -97,21 +96,21 @@
       "name": "Pn",
       "label": "Launch success (pn)",
       "value": "0.9",
-      "source": "Slide 26"
+      "source": "GPS SPS Performance Standard"
     },
     {
       "name": "OnGroundPriority",
       "label": "On-ground priority",
       "value": "0.5",
       "description": "Probability that the ground team gets the task when both teams take it (swept from 0 to 1)",
-      "source": "Slide 30"
+      "source": "GPS SPS Performance Standard"
     }
   ],
   "model": {
     "modelType": "csg",
     "components": [
       {
-        "id": "e652dec5-3012-42f4-946b-599c32623f9a",
+        "id": "1c37db28-806a-4acc-9e25-fe40d96f7ef4",
         "type": "BASIC",
         "name": "Environment",
         "x": 120,
@@ -120,7 +119,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "b98e9be7-e0da-4ab6-b631-62a59a5cda1b",
+            "id": "23a24c91-cb13-4a5c-92c2-d29407670b7f",
             "name": "mon",
             "type": "OUTPUT",
             "side": "BOTTOM",
@@ -135,7 +134,7 @@
           "variables": [],
           "states": [
             {
-              "id": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "name": "ENV",
               "variableName": "env_ready",
               "value": 0,
@@ -145,9 +144,9 @@
           ],
           "transitions": [
             {
-              "id": "0b0beaf7-d278-4b60-8849-04ac832d772c",
-              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
-              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "8e95697e-0845-4799-9180-cb6a211228fe",
+              "sourceStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
+              "targetStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "action": "e_none",
               "guard": "sat=0",
               "updates": [
@@ -158,9 +157,9 @@
               ]
             },
             {
-              "id": "0e0bdd74-9c74-42d7-9d82-a6f671b556a2",
-              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
-              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "dc5a841a-8077-4a82-b9fd-885289381652",
+              "sourceStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
+              "targetStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "action": "e_uns",
               "guard": "sat=0",
               "updates": [
@@ -171,9 +170,9 @@
               ]
             },
             {
-              "id": "6819b14d-6746-491b-88e8-b88b1a623130",
-              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
-              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "7ac1bddc-2bfd-4fc1-a2c0-1257686d18b1",
+              "sourceStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
+              "targetStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "action": "e_st",
               "guard": "sat=0",
               "updates": [
@@ -184,9 +183,9 @@
               ]
             },
             {
-              "id": "cfdd7498-6354-4b25-9a94-52f4e1869be0",
-              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
-              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "a1ec76c6-676a-47da-bddd-28878b81b3c1",
+              "sourceStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
+              "targetStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "action": "e_lt",
               "guard": "sat=0",
               "updates": [
@@ -197,9 +196,9 @@
               ]
             },
             {
-              "id": "ec983463-9fb5-419a-9b27-12f63a6fa59a",
-              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
-              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "bc8273ca-9f20-4780-9b32-23e2166c1ddf",
+              "sourceStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
+              "targetStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "action": "e_soft",
               "guard": "sat=0",
               "updates": [
@@ -210,9 +209,9 @@
               ]
             },
             {
-              "id": "5568e790-d1d9-4ffb-a7b4-2ca26cda9e9c",
-              "sourceStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
-              "targetStateId": "99aa85b3-bc2b-47af-b11b-a88b79b3300d",
+              "id": "d99b9f0d-85df-4f76-aa79-839d78bfd13a",
+              "sourceStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
+              "targetStateId": "261eb109-16f9-4a2b-927b-31a46e115c6d",
               "action": "e_wait",
               "guard": "sat>0",
               "updates": [
@@ -226,7 +225,7 @@
         }
       },
       {
-        "id": "e528b6f3-fde8-449d-8748-2f0e4f0b7587",
+        "id": "d8f72f36-08c3-4de2-a485-d3027430b4e2",
         "type": "SATELLITE",
         "name": "OnOrbitStaff",
         "x": 410,
@@ -235,7 +234,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "d8ee034e-dddf-4491-8595-81fd810f95c5",
+            "id": "2d070145-a7f4-4a0b-aa7e-af88152aa144",
             "name": "mon",
             "type": "OUTPUT",
             "side": "BOTTOM",
@@ -250,7 +249,7 @@
           "variables": [],
           "states": [
             {
-              "id": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "id": "81e96b6c-7389-448e-a291-6ecc6865f50d",
               "name": "PO",
               "variableName": "o_ready",
               "value": 0,
@@ -260,9 +259,9 @@
           ],
           "transitions": [
             {
-              "id": "1dae4cc6-803a-4105-8173-3dfa6e1b3325",
-              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
-              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "id": "352a3256-e98c-4ea2-b2d9-4b2c7fc869c0",
+              "sourceStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
+              "targetStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
               "action": "o_stby",
               "updates": [
                 {
@@ -272,9 +271,9 @@
               ]
             },
             {
-              "id": "f7788e3d-bd70-4368-abe2-c3674adff6ff",
-              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
-              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "id": "1b05942c-2187-49d3-8478-9523f7fed96f",
+              "sourceStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
+              "targetStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
               "action": "o_take",
               "guard": "sat=2",
               "updates": [
@@ -285,9 +284,9 @@
               ]
             },
             {
-              "id": "3fc69b26-37ae-4ff0-8a06-0b8583289aaf",
-              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
-              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "id": "f4e5035e-bf83-4c00-9fa8-1f7972e12c41",
+              "sourceStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
+              "targetStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
               "action": "o_switch",
               "guard": "(sat=4 & ostage=0) | sat=7",
               "updates": [
@@ -298,9 +297,9 @@
               ]
             },
             {
-              "id": "ece6c1ad-ed82-45a2-941e-8df2dcb2412b",
-              "sourceStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
-              "targetStateId": "85e8efdf-1e3e-41e1-aaa3-4b96ee63bca9",
+              "id": "91478f7f-8af9-49b8-afe4-6cf6a00e7b7c",
+              "sourceStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
+              "targetStateId": "81e96b6c-7389-448e-a291-6ecc6865f50d",
               "action": "o_replace",
               "guard": "sat=4 & ostage=1",
               "updates": [
@@ -314,7 +313,7 @@
         }
       },
       {
-        "id": "311dee06-53ed-44ed-8a50-d123869ac8ae",
+        "id": "9b80351c-d918-4f9b-b3b8-93451bc6291c",
         "type": "STATION",
         "name": "OnGroundStaff",
         "x": 700,
@@ -323,7 +322,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "8d51ece1-ebf7-4e21-b885-d12bc93feb3a",
+            "id": "d037ed2e-83b4-4e30-a68b-baa80443927a",
             "name": "mon",
             "type": "OUTPUT",
             "side": "BOTTOM",
@@ -338,7 +337,7 @@
           "variables": [],
           "states": [
             {
-              "id": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "id": "eb2ddf35-328c-4827-a614-633cce177eed",
               "name": "PG",
               "variableName": "g_ready",
               "value": 0,
@@ -348,9 +347,9 @@
           ],
           "transitions": [
             {
-              "id": "a3083de1-c66c-4dd7-9a5f-3972aa6da3c7",
-              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
-              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "id": "58f64d1d-b27b-45af-87f7-9b9f29fa778a",
+              "sourceStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
+              "targetStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
               "action": "g_stby",
               "updates": [
                 {
@@ -360,9 +359,9 @@
               ]
             },
             {
-              "id": "8c23795b-eaa6-4af5-be5f-aa513881d3e5",
-              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
-              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "id": "2d6be72f-ee57-4f9d-8e91-d0d2e11e1db2",
+              "sourceStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
+              "targetStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
               "action": "g_take",
               "guard": "sat=2",
               "updates": [
@@ -373,9 +372,9 @@
               ]
             },
             {
-              "id": "a93508c1-5422-42e9-85a6-3c8376cb3f5d",
-              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
-              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "id": "9bfe319b-5e94-42e1-9b1f-1b5f212e5370",
+              "sourceStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
+              "targetStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
               "action": "g_check",
               "guard": "sat=5 & gstage=0",
               "updates": [
@@ -386,9 +385,9 @@
               ]
             },
             {
-              "id": "ee688afb-33aa-48e2-8fb5-14c84cd1f786",
-              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
-              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "id": "b5e524ba-9822-4ca4-93d5-8c2dde7f1854",
+              "sourceStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
+              "targetStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
               "action": "g_build",
               "guard": "sat=5 & gstage=1",
               "updates": [
@@ -399,9 +398,9 @@
               ]
             },
             {
-              "id": "2ffdbfa4-4ebd-4c84-9f07-47badf14140d",
-              "sourceStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
-              "targetStateId": "15d5d75b-94f0-4cdb-890c-ed97ddfab736",
+              "id": "6016a687-eba8-466d-b5f2-0d0bc35f847a",
+              "sourceStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
+              "targetStateId": "eb2ddf35-328c-4827-a614-633cce177eed",
               "action": "g_launch",
               "guard": "sat=5 & gstage=2",
               "updates": [
@@ -415,7 +414,7 @@
         }
       },
       {
-        "id": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
+        "id": "5d99d4a5-dfbb-4db5-b073-9ceb4ff85f55",
         "type": "MONITOR",
         "name": "Maintenance",
         "x": 410,
@@ -424,7 +423,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "31b6aa17-942c-490a-a8ec-7015427fe8a3",
+            "id": "e37bd11c-b30e-424c-8b90-233fe448004a",
             "name": "env",
             "type": "INPUT",
             "side": "TOP",
@@ -432,7 +431,7 @@
             "commMode": "SYNCHRONOUS"
           },
           {
-            "id": "1cef5c51-2bbb-49e1-b838-f9aad96d307e",
+            "id": "b591c499-1dc3-4903-a399-36613c6e19cf",
             "name": "orbit",
             "type": "INPUT",
             "side": "TOP",
@@ -440,7 +439,7 @@
             "commMode": "SYNCHRONOUS"
           },
           {
-            "id": "545acbfe-1603-480b-9a17-cc418dccd1b0",
+            "id": "0715fab9-c5f7-4564-9fb6-9313f75d5812",
             "name": "ground",
             "type": "INPUT",
             "side": "TOP",
@@ -454,35 +453,35 @@
         "monitorDefinition": {
           "variables": [
             {
-              "id": "e0cfbeb4-ae7b-4fe9-b226-033efcf41b7d",
+              "id": "f790e8fd-5201-475a-990e-a5735fcf91a1",
               "name": "sat",
               "min": 0,
               "max": 7,
               "init": 0
             },
             {
-              "id": "f675baec-b724-4e32-ae6f-ad0f8e630229",
+              "id": "3de8328e-55cb-43bb-978f-d3883319e95f",
               "name": "ostage",
               "min": 0,
               "max": 1,
               "init": 0
             },
             {
-              "id": "2df3ff0d-3fcf-4070-b160-2ca289536d3c",
+              "id": "8ca57cf1-63b4-4a76-9ed1-c4549e9fd3ae",
               "name": "gstage",
               "min": 0,
               "max": 2,
               "init": 0
             },
             {
-              "id": "dbd4327c-9f5f-4d71-8ab3-0fc742dfa7d7",
+              "id": "1a2ac515-a35b-4d95-89cb-b0a5bffe6292",
               "name": "win",
               "min": 0,
               "max": 2,
               "init": 0
             },
             {
-              "id": "3c74bfc7-cd9f-4901-8e51-7f69236bbc56",
+              "id": "35308330-675d-43c1-b63d-fb4773bd3b4f",
               "name": "last",
               "min": 0,
               "max": 2,
@@ -491,7 +490,7 @@
           ],
           "transitions": [
             {
-              "id": "57746999-cffa-411a-83e6-fa500ac96ca4",
+              "id": "457a12c2-90b7-4878-b448-18faa3451f9b",
               "actions": [
                 "e_none",
                 "o_stby",
@@ -508,7 +507,7 @@
               ]
             },
             {
-              "id": "63d32572-c4e7-4a62-b720-551d484b432e",
+              "id": "d1c8e397-c14f-488e-852a-c29749632470",
               "actions": [
                 "e_uns",
                 "o_stby",
@@ -532,7 +531,7 @@
               ]
             },
             {
-              "id": "af117eb2-9652-442c-ad85-dbce7a09433a",
+              "id": "d477f7b1-5e8c-4274-8264-ed1542270b48",
               "actions": [
                 "e_st",
                 "o_stby",
@@ -556,7 +555,7 @@
               ]
             },
             {
-              "id": "9c56b491-e730-4e2f-a22c-3c3d7ba01f1c",
+              "id": "42de5dd3-6ed4-4c3f-b9c7-2c25eab525c8",
               "actions": [
                 "e_lt",
                 "o_stby",
@@ -580,7 +579,7 @@
               ]
             },
             {
-              "id": "9d62e023-6221-4a2b-8f1a-59be2cc7eb46",
+              "id": "2e8b7e87-ca06-4db4-a0e9-6108f07e25a7",
               "actions": [
                 "e_soft",
                 "o_stby",
@@ -604,7 +603,7 @@
               ]
             },
             {
-              "id": "baa7c9a6-add3-4d16-94df-cc6e1aa9de60",
+              "id": "e4b5544c-5bbf-49f5-b0ac-d0574e328646",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -621,7 +620,7 @@
               ]
             },
             {
-              "id": "55e52551-77e0-4aca-978d-a569004a5895",
+              "id": "bc8ec2ef-7728-4082-bb54-a233e0334bad",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -644,7 +643,7 @@
               ]
             },
             {
-              "id": "ce3410ef-7f97-43db-8d71-4ed0b542c102",
+              "id": "6da98323-347a-40c9-a8ae-867af82ac14a",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -661,7 +660,7 @@
               ]
             },
             {
-              "id": "ed3aa815-b7a5-4163-bd4e-6c10fe0fca5e",
+              "id": "d9ffde4f-56c0-4c5e-8d65-ef6874f901c7",
               "actions": [
                 "e_wait",
                 "o_take",
@@ -680,7 +679,7 @@
               ]
             },
             {
-              "id": "19279bf3-e73e-4888-8312-c5a35905be85",
+              "id": "279d033d-2bc2-4692-8b8c-238d016c9012",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -699,7 +698,7 @@
               ]
             },
             {
-              "id": "b6736ffd-4be0-4162-bda3-35d1e71ac19c",
+              "id": "2c19ea73-32d5-4bce-a686-1dd66ce682c9",
               "actions": [
                 "e_wait",
                 "o_take",
@@ -726,7 +725,7 @@
               ]
             },
             {
-              "id": "3fb9d2a6-b3d5-49f3-9351-576c58eaea3a",
+              "id": "159cfa6e-5171-463b-8ae7-b5dd25906a22",
               "actions": [
                 "e_wait",
                 "o_switch",
@@ -748,7 +747,7 @@
               ]
             },
             {
-              "id": "d18a7353-1f9a-49a1-8adf-d4a251a56e6f",
+              "id": "f68aa428-be1f-4e70-8376-90b233e34ca3",
               "actions": [
                 "e_wait",
                 "o_switch",
@@ -773,7 +772,7 @@
               ]
             },
             {
-              "id": "1484f1ee-a645-4fb7-882f-a319aba7c391",
+              "id": "e450174c-c8d2-462d-9332-e3489d84c68e",
               "actions": [
                 "e_wait",
                 "o_replace",
@@ -802,7 +801,7 @@
               ]
             },
             {
-              "id": "b8bc225c-506e-434a-b6b5-b6d946e54b61",
+              "id": "092a548b-f23e-4a23-b90c-d167044a00e7",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -823,7 +822,7 @@
               ]
             },
             {
-              "id": "6bea6048-84ec-427e-977d-73318accc52d",
+              "id": "796ab104-f1f4-41f5-90f1-c287a132e3f6",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -840,7 +839,7 @@
               ]
             },
             {
-              "id": "f3a92cb6-33ee-4781-a22b-18ab6abee575",
+              "id": "395a866c-ecb9-4b83-90b5-13b04851ec16",
               "actions": [
                 "e_wait",
                 "o_stby",
@@ -869,123 +868,123 @@
     ],
     "connectors": [
       {
-        "id": "b1754308-c574-4de1-b3c7-9997eee0ed4a",
-        "sourceComponentId": "e652dec5-3012-42f4-946b-599c32623f9a",
-        "sourcePortId": "b98e9be7-e0da-4ab6-b631-62a59a5cda1b",
-        "targetComponentId": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
-        "targetPortId": "31b6aa17-942c-490a-a8ec-7015427fe8a3",
+        "id": "2b7f3f46-669e-4084-a6e3-b32f776f9d06",
+        "sourceComponentId": "1c37db28-806a-4acc-9e25-fe40d96f7ef4",
+        "sourcePortId": "23a24c91-cb13-4a5c-92c2-d29407670b7f",
+        "targetComponentId": "5d99d4a5-dfbb-4db5-b073-9ceb4ff85f55",
+        "targetPortId": "e37bd11c-b30e-424c-8b90-233fe448004a",
         "type": "PUSH"
       },
       {
-        "id": "cfb50312-855d-4df2-861c-21fb57b206c2",
-        "sourceComponentId": "e528b6f3-fde8-449d-8748-2f0e4f0b7587",
-        "sourcePortId": "d8ee034e-dddf-4491-8595-81fd810f95c5",
-        "targetComponentId": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
-        "targetPortId": "1cef5c51-2bbb-49e1-b838-f9aad96d307e",
+        "id": "0a075401-b2e9-4e1c-a793-d25a6e5438ae",
+        "sourceComponentId": "d8f72f36-08c3-4de2-a485-d3027430b4e2",
+        "sourcePortId": "2d070145-a7f4-4a0b-aa7e-af88152aa144",
+        "targetComponentId": "5d99d4a5-dfbb-4db5-b073-9ceb4ff85f55",
+        "targetPortId": "b591c499-1dc3-4903-a399-36613c6e19cf",
         "type": "PUSH"
       },
       {
-        "id": "2a0e2c63-17a5-4898-83ac-22e43cd0aefc",
-        "sourceComponentId": "311dee06-53ed-44ed-8a50-d123869ac8ae",
-        "sourcePortId": "8d51ece1-ebf7-4e21-b885-d12bc93feb3a",
-        "targetComponentId": "cf2f69f1-c0de-41d9-9e23-d24bc6a56592",
-        "targetPortId": "545acbfe-1603-480b-9a17-cc418dccd1b0",
+        "id": "098b1042-1114-4dc0-832f-f7409af5201d",
+        "sourceComponentId": "9b80351c-d918-4f9b-b3b8-93451bc6291c",
+        "sourcePortId": "d037ed2e-83b4-4e30-a68b-baa80443927a",
+        "targetComponentId": "5d99d4a5-dfbb-4db5-b073-9ceb4ff85f55",
+        "targetPortId": "0715fab9-c5f7-4564-9fb6-9313f75d5812",
         "type": "PUSH"
       }
     ],
     "constants": [
       {
-        "id": "2480dd0e-a6f6-480c-9ec9-76340db69c66",
+        "id": "fd30ba2d-9f27-46ad-a470-2dda9453f50e",
         "name": "k",
         "type": "int",
         "value": "30"
       },
       {
-        "id": "f8a867b2-f134-46d6-8116-97af4a164815",
+        "id": "60a904f2-f7cd-47fb-a879-6dc49ff1f0ac",
         "name": "t_round",
         "type": "double",
         "value": "0.5"
       },
       {
-        "id": "cb645cd8-4e17-4131-b4f9-4fa2c3e450c0",
+        "id": "085bf297-8cc0-4369-a3ae-036a3bdcddef",
         "name": "MTBF_ST",
         "type": "double",
         "value": "0.5"
       },
       {
-        "id": "a12a9975-1751-499d-a3e3-bdf5b81eddef",
+        "id": "bd79eefa-c4dd-4024-922c-4842e80fab95",
         "name": "MTBF_LT",
         "type": "double",
         "value": "15"
       },
       {
-        "id": "d59b7593-1a23-4b11-b29a-ad1885a1a460",
+        "id": "cf9fa812-1086-454d-a90f-5b3d18dc5a11",
         "name": "MTBF_SOFT",
         "type": "double",
         "value": "7.5"
       },
       {
-        "id": "9e97f100-3baf-4454-aa98-122413563239",
+        "id": "d037a1ac-dc29-475d-9445-db8b761feb73",
         "name": "EULER",
         "type": "double",
         "value": "2.718281828459045"
       },
       {
-        "id": "0a084a13-9bc3-49af-bd56-7e74d27e17ca",
+        "id": "c4bf153a-5b6f-4817-8f5b-1de282165e2e",
         "name": "pr_st",
         "type": "double",
         "value": "1 - pow(EULER, -t_round/MTBF_ST)"
       },
       {
-        "id": "f20daceb-fb18-4213-8868-676a62b1d8f2",
+        "id": "42357864-85c6-44ce-9a55-6b25883dc279",
         "name": "pr_lt",
         "type": "double",
         "value": "1 - pow(EULER, -t_round/MTBF_LT)"
       },
       {
-        "id": "3dda6f89-793d-4828-8af7-5ecbf18c8b71",
+        "id": "73d8a24d-1466-490f-82dc-228fafec666a",
         "name": "pr_soft",
         "type": "double",
         "value": "1 - pow(EULER, -t_round/MTBF_SOFT)"
       },
       {
-        "id": "817bfbf0-aeca-4dfb-af98-681940f1879a",
+        "id": "4b787010-68bf-4016-9c94-2cca6230474b",
         "name": "pr_uns",
         "type": "double",
         "value": "0.1"
       },
       {
-        "id": "0df744ec-3fa9-431d-908a-adae343126c4",
+        "id": "cdd4005d-7eb7-4017-a1a6-b0e8a12b883a",
         "name": "p_umsi",
         "type": "double",
         "value": "1e-5"
       },
       {
-        "id": "8220205d-b1cc-42d6-97e4-244abb4f0315",
+        "id": "5fed27f5-9264-45e8-854a-be327073b429",
         "name": "p_eol",
         "type": "double",
         "value": "0.6"
       },
       {
-        "id": "7d70b40a-f1da-4360-b544-0ff117a43a39",
+        "id": "0fb84a77-02d9-471f-8cf6-cd356d942453",
         "name": "Pbeta",
         "type": "double",
         "value": "0.8"
       },
       {
-        "id": "9d08ab56-8825-4a3d-973f-2ab6ce66e9b1",
+        "id": "a4af17a7-e0a9-4add-aa58-27858413d618",
         "name": "pr_build",
         "type": "double",
         "value": "0.9"
       },
       {
-        "id": "d59ed8c4-3df5-4937-8578-d43b625b8171",
+        "id": "63beca43-625f-4f1c-ab79-6c562d56b68b",
         "name": "Pn",
         "type": "double",
         "value": "0.9"
       },
       {
-        "id": "79d8c311-bfd2-4beb-a99c-7b9a498aeb54",
+        "id": "c50f239b-6527-4f92-a352-25ffa6c38411",
         "name": "OnGroundPriority",
         "type": "double",
         "value": "0.5"
@@ -994,82 +993,82 @@
     "formulas": [],
     "labels": [
       {
-        "id": "b26cf5a7-ad8f-4a1e-ab10-78508f375d38",
+        "id": "825c1509-7595-4c54-8b4f-3828889d1e77",
         "name": "normal",
         "expression": "sat=0"
       },
       {
-        "id": "59909e30-aead-44ac-b3f8-1ad49118ae97",
+        "id": "0ea2f660-a547-420d-ad2e-9013fecd4e0a",
         "name": "Loss_Continuity",
         "expression": "sat=1 | sat=2 | sat=4 | sat=5 | sat=7"
       },
       {
-        "id": "e3dde31b-d33d-4341-b044-55ac900780e0",
+        "id": "274d2c4e-0414-40a6-b584-2b9f8830f209",
         "name": "Loss_Integrity",
         "expression": "sat=6"
       },
       {
-        "id": "bd316ea3-3743-478b-8848-c9a3a8e0a905",
+        "id": "af456790-a07f-441a-8d88-c6caf45d6da8",
         "name": "replace",
         "expression": "last=1"
       },
       {
-        "id": "cb48b362-bd79-4155-af15-b80e1dabf081",
+        "id": "41b90104-8376-49a9-9906-ccf6d114010b",
         "name": "manufacture",
         "expression": "last=2"
       }
     ],
     "rewards": [
       {
-        "id": "7ce0fd3c-a7e5-4536-a6b4-a1707811343f",
+        "id": "bf16f97b-1141-4011-aa50-c74b9e20424c",
         "name": "Loss_Continuity",
         "items": [
           {
-            "id": "92065fa6-1097-41ac-945e-69933fb62421",
+            "id": "d153e94a-0bbc-498e-b53a-eab3e94bf97c",
             "guard": "sat=1 | sat=2 | sat=4 | sat=5 | sat=7",
             "reward": "1"
           }
         ]
       },
       {
-        "id": "8c827a51-ecc4-4a32-938b-ca3eec42353d",
+        "id": "1df6ca94-03c5-455d-a0f9-0b95e9894a16",
         "name": "Loss_Integrity",
         "items": [
           {
-            "id": "d9e24a54-53f4-4caf-9f3c-e6e8269f33d7",
+            "id": "3e42e924-bb43-44c5-8aa0-060e17ba0d4e",
             "guard": "sat=6",
             "reward": "1"
           }
         ]
       },
       {
-        "id": "1fa19f3f-9081-43c0-8f0c-50217b1c71a5",
+        "id": "490aea0d-3af7-4ebd-9a46-ad22d781517f",
         "name": "replace",
         "items": [
           {
-            "id": "4bad25b2-4e79-471b-bebb-69de9952e7f6",
+            "id": "2a1a24b4-e739-4a07-ae55-1d9286264ec7",
             "guard": "last=1",
             "reward": "1"
           }
         ]
       },
       {
-        "id": "0e9c751d-299d-41cf-bb6a-1e7af8a92990",
+        "id": "7ac72e0f-62df-44f6-a1be-1bd449c4d90d",
         "name": "manufacture",
         "items": [
           {
-            "id": "2b8b941f-0078-4c79-bdaa-9ccae543c134",
+            "id": "4afe45b3-872c-4c46-a483-77f3ff8253c0",
             "guard": "last=2",
             "reward": "1"
           }
         ]
       },
       {
-        "id": "bee08ba9-52aa-4a6d-aec4-de55da3eba9a",
+        "id": "3ae1a5fd-79f2-4d1a-beb6-4f9c8db45c08",
         "name": "replaceOrManufacture",
         "items": [
           {
-            "id": "faf0d44a-03f6-4f15-92eb-4639a2efab34",
+            "id": "9e4f818b-94b0-4ede-8101-50eab1961792",
             "guard": "last>0",
             "reward": "1"
           }
@@ -1078,58 +1077,58 @@
     ],
     "properties": [
       {
-        "id": "d010460b-c096-4228-ab7f-918a4b68bde4",
+        "id": "8aa0d685-936f-4c11-b898-7995a3392d02",
         "name": "PRO1 Continuity",
         "formula": "<<env>> Pmax=? [ F (\"Loss_Continuity\" & rounds<=k) ]"
       },
       {
-        "id": "669aa352-9d47-488c-bf09-9213f2c0c7e8",
+        "id": "a41d0195-ae28-4dd8-8973-abece93d66fd",
         "name": "PRO2 Continuity (expected)",
         "formula": "<<env>> R{\"Loss_Continuity\"}max=? [ F rounds=k ]",
         "description": "expected rounds without service within k rounds"
       },
       {
-        "id": "0e631a58-95e8-4490-9235-422bbb2ffd4f",
+        "id": "dd1b9aac-a4bd-4d23-9f2c-15064efa75ba",
         "name": "PRO3 Integrity",
         "formula": "<<env>> Pmax=? [ F (\"Loss_Integrity\" & rounds<=k) ]"
       },
       {
-        "id": "090411f1-963d-409f-aefb-f6840e6a390e",
+        "id": "b6e6f38e-b107-4195-9c9b-568747d35ae7",
         "name": "PRO4 Integrity (expected)",
         "formula": "<<env>> R{\"Loss_Integrity\"}max=? [ F rounds=k ]"
       },
       {
-        "id": "7d3c5881-8fdc-4427-9616-5f94100f01c8",
+        "id": "5b462bf9-0c5e-4328-b67b-a7d9809d67e5",
         "name": "PRO5 Reliability, on-orbit staff",
         "formula": "<<env,o>> Pmax=? [ F (\"replace\" & rounds<=k) ]"
       },
       {
-        "id": "d37b6599-e27e-453c-9648-2be71c4e321f",
+        "id": "bb708945-925d-44c8-b89e-09dedae7b12a",
         "name": "PRO6 Reliability, on-ground staff",
         "formula": "<<env,g>> Pmax=? [ F (\"manufacture\" & rounds<=k) ]"
       },
       {
-        "id": "3f1f8bf5-3082-49d2-bdf9-da5490dbd473",
+        "id": "f760e8e7-3daa-44a5-8aa5-0d41080ca24b",
         "name": "PRO7 Reliability, both teams",
         "formula": "<<env,o,g>> Pmax=? [ F ((\"replace\" | \"manufacture\") & rounds<=k) ]"
       },
       {
-        "id": "52239c7b-fdee-4184-b4d9-74a440d27bf1",
+        "id": "2dec8613-a2b1-40bf-bbf8-9d3d6d64f0d0",
         "name": "PRO8 Maintainability, on-orbit",
         "formula": "<<env,o>> R{\"replace\"}max=? [ F rounds=k ]"
       },
       {
-        "id": "1fe4da64-0307-48c8-9f3a-8284cb7a96ca",
+        "id": "a3766f5b-a104-45c5-b8b1-d513e1fa311f",
         "name": "PRO8b Maintainability, on-ground",
         "formula": "<<env,g>> R{\"manufacture\"}max=? [ F rounds=k ]"
       },
       {
-        "id": "79aacfef-853b-4ec7-8bb9-4d3cc6ec8072",
+        "id": "6c5465e3-2667-4f88-8142-947ced343587",
         "name": "PRO9 Maintainability, both teams",
         "formula": "<<env,o,g>> R{\"replaceOrManufacture\"}max=? [ F rounds=k ]"
       },
       {
-        "id": "416edd72-d55a-4109-b0e8-f96ac245a02e",
+        "id": "856a5e00-97f2-4035-8903-0ff60c2b38f5",
         "name": "Humans vs. environment",
         "formula": "<<o,g>> R{\"Loss_Continuity\"}min=? [ F rounds=k ]",
         "description": "outage the two teams can guarantee against a worst-case environment — the same zero-sum game as PRO2, hence the same value"

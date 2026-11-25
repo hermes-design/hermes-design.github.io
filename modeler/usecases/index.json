@@ -16,6 +16,22 @@
     {
       "id": "galileo-sar-jamming",
       "file": "galileo-sar-jamming.json"
+    },
+    {
+      "id": "ports-iot-pipeline-ctmc",
+      "file": "ports-iot-pipeline-ctmc.json"
+    },
+    {
+      "id": "ports-producer-consumer-csg",
+      "file": "ports-producer-consumer-csg.json"
+    },
+    {
+      "id": "rabbitmq-mitm",
+      "file": "rabbitmq-mitm.json"
+    },
+    {
+      "id": "cecebre-edge-energy",
+      "file": "cecebre-edge-energy.json"
     }
   ]
 }

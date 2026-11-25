@@ -1,0 +1,375 @@
+{
+  "id": "ports-iot-pipeline-ctmc",
+  "title": "Sync vs async ports: IoT pipeline",
+  "chapter": "Use case 5 — Synchronous vs asynchronous ports",
+  "chapterOrder": 5,
+  "formalism": "ctmc",
+  "tool": "PRISM 4.x (or PRISM-games)",
+  "summary": "Sensor → Gateway through a synchronous port (rendezvous), Gateway → Actuator through an asynchronous port (generated FIFO channel of capacity CAP_ch1, messages dropped when full).",
+  "description": [
+    "Synchronous connector Sensor.measure → Gateway.acquire: PRISM supports it directly — the two port actions are renamed to one shared label (sync_acquire_measure), so the sensor can only hand over a sample when the gateway is waiting.",
+    "Asynchronous connector Gateway.forward → Actuator.apply: PRISM has no buffered channel, so the generator inserts a module ch1 (counter of messages in transit, capacity CAP_ch1). forward synchronises with the push, apply with the pop. Overflow policy DROP: a message sent to a full channel is lost and counted in the reward ch1_lost.",
+    "Compare with the generated code (PRISM Code): the architecture is unchanged, only the connector semantics produces new modules, labels and rewards."
+  ],
+  "objectives": [
+    "See which communication patterns PRISM supports natively and which need a transformation.",
+    "Measure the effect of the buffer capacity on losses and throughput."
+  ],
+  "exercises": [
+    "Vary CAP_ch1 from 1 to 10: how do R{\"ch1_lost\"} and R{\"ch1_received\"} evolve? How many states?",
+    "Select the async connector and switch its overflow policy to BLOCK: what replaces the losses?",
+    "Make the Sensor → Gateway connector asynchronous too (both ports ASYNC): what changes for the sensor?"
+  ],
+  "parameters": [
+    {
+      "name": "CAP_ch1",
+      "label": "Channel capacity",
+      "value": "2",
+      "description": "Capacity of the FIFO generated for Gateway → Actuator"
+    },
+    {
+      "name": "lambda_s",
+      "label": "Sampling rate",
+      "value": "2",
+      "unit": "/s"
+    },
+    {
+      "name": "mu_proc",
+      "label": "Gateway processing rate",
+      "value": "5",
+      "unit": "/s"
+    },
+    {
+      "name": "mu_act",
+      "label": "Actuation rate",
+      "value": "1.5",
+      "unit": "/s"
+    },
+    {
+      "name": "mu_t",
+      "label": "Transfer rate",
+      "value": "100",
+      "unit": "/s"
+    },
+    {
+      "name": "T",
+      "label": "Time bound",
+      "value": "100",
+      "unit": "s"
+    }
+  ],
+  "model": {
+    "modelType": "ctmc",
+    "components": [
+      {
+        "id": "7d6b7e90-b2ee-431f-989a-b118b0dd426d",
+        "type": "SENSOR",
+        "name": "Sensor",
+        "x": 80,
+        "y": 100,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "9101e1a8-8687-4152-8934-2fc3fddfa3e2",
+            "name": "measure",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          }
+        ],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "5beb964d-97b1-4069-acbb-3ad703b9599a",
+              "name": "SAMPLING",
+              "variableName": "sen",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "ad457ebf-a827-4aab-af92-2fafbe7c8800",
+              "name": "READY",
+              "variableName": "sen",
+              "value": 1,
+              "x": 420,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "d3b300bf-70e9-454e-b2e4-244bf247eea7",
+              "sourceStateId": "5beb964d-97b1-4069-acbb-3ad703b9599a",
+              "targetStateId": "ad457ebf-a827-4aab-af92-2fafbe7c8800",
+              "updates": [
+                {
+                  "probability": "lambda_s",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "015c4686-9c75-48fc-a1b5-89f68e6aca2e",
+              "sourceStateId": "ad457ebf-a827-4aab-af92-2fafbe7c8800",
+              "targetStateId": "5beb964d-97b1-4069-acbb-3ad703b9599a",
+              "action": "measure",
+              "updates": [
+                {
+                  "probability": "mu_t",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "2b3f6960-a75a-4c58-a10e-f22e3c52c898",
+        "type": "GATEWAY",
+        "name": "Gateway",
+        "x": 360,
+        "y": 100,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "ee524a4b-3ead-4da8-9192-5aca4bc897fd",
+            "name": "acquire",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "SYNCHRONOUS"
+          },
+          {
+            "id": "32cd3728-d6d9-4d22-98d7-a2bd3e2730a6",
+            "name": "forward",
+            "type": "OUTPUT",
+            "side": "RIGHT",
+            "offset": 55,
+            "commMode": "ASYNCHRONOUS"
+          }
+        ],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "57023959-9aa4-4703-b190-9f7c0ee92fef",
+              "name": "WAIT",
+              "variableName": "gw",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "851a6228-e54d-4f44-9ec5-bc065335338a",
+              "name": "PROCESS",
+              "variableName": "gw",
+              "value": 1,
+              "x": 420,
+              "y": 120
+            },
+            {
+              "id": "2932014c-9a97-43aa-a305-ddd5fede9296",
+              "name": "SEND",
+              "variableName": "gw",
+              "value": 2,
+              "x": 420,
+              "y": 300
+            }
+          ],
+          "transitions": [
+            {
+              "id": "130ac620-53cb-49e4-8e52-b894149d11cb",
+              "sourceStateId": "57023959-9aa4-4703-b190-9f7c0ee92fef",
+              "targetStateId": "851a6228-e54d-4f44-9ec5-bc065335338a",
+              "action": "acquire",
+              "updates": [
+                {
+                  "probability": 1,
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "9dbf512b-aef5-4de8-8af3-57143e4bbde8",
+              "sourceStateId": "851a6228-e54d-4f44-9ec5-bc065335338a",
+              "targetStateId": "2932014c-9a97-43aa-a305-ddd5fede9296",
+              "updates": [
+                {
+                  "probability": "mu_proc",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "42f8a563-d289-4d3c-a1f7-a46fd0ac1261",
+              "sourceStateId": "2932014c-9a97-43aa-a305-ddd5fede9296",
+              "targetStateId": "57023959-9aa4-4703-b190-9f7c0ee92fef",
+              "action": "forward",
+              "updates": [
+                {
+                  "probability": "mu_t",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "2c0f327c-f302-42fc-8a77-0951c32c82ba",
+        "type": "ACTUATOR",
+        "name": "Actuator",
+        "x": 640,
+        "y": 100,
+        "width": 170,
+        "height": 110,
+        "ports": [
+          {
+            "id": "dd1ce716-4586-4360-bf3e-932a08d9d794",
+            "name": "apply",
+            "type": "INPUT",
+            "side": "LEFT",
+            "offset": 55,
+            "commMode": "ASYNCHRONOUS"
+          }
+        ],
+        "properties": {},
+        "stateMachine": {
+          "variables": [],
+          "states": [
+            {
+              "id": "30684442-84f9-4513-9ab7-c7925668d9a7",
+              "name": "IDLE",
+              "variableName": "act",
+              "value": 0,
+              "x": 150,
+              "y": 200
+            },
+            {
+              "id": "6086f28e-8a71-445f-a937-ef3e277e0fc1",
+              "name": "ACTING",
+              "variableName": "act",
+              "value": 1,
+              "x": 420,
+              "y": 200
+            }
+          ],
+          "transitions": [
+            {
+              "id": "d4b797ce-4aaa-46c0-baf8-e4eb5a0eba12",
+              "sourceStateId": "30684442-84f9-4513-9ab7-c7925668d9a7",
+              "targetStateId": "6086f28e-8a71-445f-a937-ef3e277e0fc1",
+              "action": "apply",
+              "updates": [
+                {
+                  "probability": "mu_t",
+                  "assignments": {}
+                }
+              ]
+            },
+            {
+              "id": "3c94b445-e570-4c9b-a2ff-1c6f4bc0b527",
+              "sourceStateId": "6086f28e-8a71-445f-a937-ef3e277e0fc1",
+              "targetStateId": "30684442-84f9-4513-9ab7-c7925668d9a7",
+              "updates": [
+                {
+                  "probability": "mu_act",
+                  "assignments": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "connectors": [
+      {
+        "id": "e684f736-a007-485a-b78e-475e839207e5",
+        "sourceComponentId": "7d6b7e90-b2ee-431f-989a-b118b0dd426d",
+        "sourcePortId": "9101e1a8-8687-4152-8934-2fc3fddfa3e2",
+        "targetComponentId": "2b3f6960-a75a-4c58-a10e-f22e3c52c898",
+        "targetPortId": "ee524a4b-3ead-4da8-9192-5aca4bc897fd",
+        "type": "PUSH"
+      },
+      {
+        "capacity": 2,
+        "overflow": "DROP",
+        "id": "6d7a9775-3676-4b8b-8c69-bdfefec89908",
+        "sourceComponentId": "2b3f6960-a75a-4c58-a10e-f22e3c52c898",
+        "sourcePortId": "32cd3728-d6d9-4d22-98d7-a2bd3e2730a6",
+        "targetComponentId": "2c0f327c-f302-42fc-8a77-0951c32c82ba",
+        "targetPortId": "dd1ce716-4586-4360-bf3e-932a08d9d794",
+        "type": "PUSH"
+      }
+    ],
+    "constants": [
+      {
+        "id": "d14b13f4-f368-41bb-97a6-a01aa7e30fbe",
+        "name": "CAP_ch1",
+        "type": "int",
+        "value": "2"
+      },
+      {
+        "id": "dbb00fa8-1063-4694-b94b-ee107ef8c9fb",
+        "name": "lambda_s",
+        "type": "double",
+        "value": "2"
+      },
+      {
+        "id": "00f2c49e-8089-45ee-92c7-da3e1cf9f5e4",
+        "name": "mu_proc",
+        "type": "double",
+        "value": "5"
+      },
+      {
+        "id": "ba3037c9-0440-474f-b99b-db914431f2e0",
+        "name": "mu_act",
+        "type": "double",
+        "value": "1.5"
+      },
+      {
+        "id": "36310bf4-4bba-46f1-9f96-1f723b478527",
+        "name": "mu_t",
+        "type": "double",
+        "value": "100"
+      },
+      {
+        "id": "058b14a7-38b1-44f2-a519-eec820f867fe",
+        "name": "T",
+        "type": "double",
+        "value": "100"
+      }
+    ],
+    "formulas": [],
+    "labels": [],
+    "rewards": [],
+    "properties": [
+      {
+        "id": "a708120d-ede5-48c6-8193-1f43254766f8",
+        "name": "Messages received",
+        "formula": "R{\"ch1_received\"}=? [ C<=T ]"
+      },
+      {
+        "id": "4d0b5c6e-0ed8-42fa-ab69-23486a39e0f7",
+        "name": "Messages lost",
+        "formula": "R{\"ch1_lost\"}=? [ C<=T ]"
+      },
+      {
+        "id": "8eae095f-12e9-49e7-8f02-19c1d4b90516",
+        "name": "Loss ratio",
+        "formula": "R{\"ch1_lost\"}=? [ C<=T ] / (R{\"ch1_lost\"}=? [ C<=T ] + R{\"ch1_received\"}=? [ C<=T ])"
+      },
+      {
+        "id": "f4fdaf25-8d71-426e-97dd-7576b931df1e",
+        "name": "Channel full within T",
+        "formula": "P=? [ F<=T \"ch1_full\" ]"
+      }
+    ]
+  }
+}

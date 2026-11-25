@@ -1,11 +1,10 @@
 {
   "id": "bus-write-access",
   "title": "Bus write access (shared resource)",
-  "chapter": "Part 3 — Foundations: concurrent stochastic games",
-  "chapterOrder": 3,
+  "chapter": "Use case 2 — Concurrent stochastic games: shared bus",
+  "chapterOrder": 2,
   "formalism": "csg",
   "tool": "PRISM-games 3.x",
-  "slides": "Slides 17, 18, 46",
   "summary": "Two players concurrently read or write a shared object (buffer of size 1). The writer who succeeds wins; same action at the same time: no winner.",
   "description": [
     "Each player chooses, at the same time and without knowing the other's choice, to write (w), read (r) or keep the bus unlocked (unlock). A non-player Monitor (CommunicationBus) records the outcome in win.",
@@ -34,7 +33,7 @@
     "modelType": "csg",
     "components": [
       {
-        "id": "9be3364e-88f3-43d3-a3e7-a77f9ecddb7b",
+        "id": "71026e8e-93d9-46b8-b279-957b0c42e7cb",
         "type": "BASIC",
         "name": "Player1",
         "x": 120,
@@ -43,7 +42,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "d8467f91-2312-4b97-822d-a5e5030f40d9",
+            "id": "1d6b8977-0308-4e68-8aa4-aafbba624b90",
             "name": "bus",
             "type": "OUTPUT",
             "side": "RIGHT",
@@ -58,7 +57,7 @@
           "variables": [],
           "states": [
             {
-              "id": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "id": "1ca96079-4568-4958-9565-8f39fb88959c",
               "name": "READY",
               "variableName": "ready1",
               "value": 0,
@@ -68,9 +67,9 @@
           ],
           "transitions": [
             {
-              "id": "5f534906-d02f-47e1-8f27-f7aebc95f165",
-              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
-              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "id": "4eed2d3b-2599-4e61-a806-60a78a288360",
+              "sourceStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
+              "targetStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
               "action": "w1",
               "guard": "s=0",
               "updates": [
@@ -81,9 +80,9 @@
               ]
             },
             {
-              "id": "10114601-6db4-4c36-b866-8f7e8c084cb4",
-              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
-              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "id": "5d2b8635-38df-4a81-bc88-747d057fd81d",
+              "sourceStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
+              "targetStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
               "action": "r1",
               "guard": "s=0",
               "updates": [
@@ -94,9 +93,9 @@
               ]
             },
             {
-              "id": "092b4f04-05c3-4840-a3da-27a003341016",
-              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
-              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "id": "6e16ed9b-87b4-49e2-8dee-ec659f15d479",
+              "sourceStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
+              "targetStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
               "action": "unlock_1",
               "guard": "s=0",
               "updates": [
@@ -107,9 +106,9 @@
               ]
             },
             {
-              "id": "73208449-23d5-4264-bcf3-e9dd2cac3af1",
-              "sourceStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
-              "targetStateId": "5cdc4127-97fe-49f0-91ba-f092d16d4478",
+              "id": "89804a11-7ded-41ac-ba3c-04cd1736c163",
+              "sourceStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
+              "targetStateId": "1ca96079-4568-4958-9565-8f39fb88959c",
               "action": "reset_1",
               "guard": "s>0",
               "updates": [
@@ -123,7 +122,7 @@
         }
       },
       {
-        "id": "5753d530-8c76-4b65-b10b-fc45a55aa5d7",
+        "id": "8b17843b-0df9-4211-af85-bf0c75c0916d",
         "type": "MONITOR",
         "name": "CommunicationBus",
         "x": 400,
@@ -132,7 +131,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "33cb4f0d-98d7-4759-8a71-7b3618ea91de",
+            "id": "354fc158-d38d-4ac9-b0ad-8ea638b42910",
             "name": "in1",
             "type": "INPUT",
             "side": "LEFT",
@@ -140,7 +139,7 @@
             "commMode": "SYNCHRONOUS"
           },
           {
-            "id": "c04b88b5-321d-44da-911a-53ff403bd014",
+            "id": "97e138f4-83ea-4287-98d3-ea4419c76bba",
             "name": "in2",
             "type": "INPUT",
             "side": "RIGHT",
@@ -154,14 +153,14 @@
         "monitorDefinition": {
           "variables": [
             {
-              "id": "251b6581-9be5-4d52-9f8d-2dab28490f8a",
+              "id": "11340e4f-51d7-4331-ad05-334e44d1f648",
               "name": "s",
               "min": 0,
               "max": 10,
               "init": 0
             },
             {
-              "id": "1337e4a7-e219-4209-b5d0-90afffbe30f5",
+              "id": "d1ce77fe-8c46-4a89-b580-50ed1cb0b837",
               "name": "win",
               "min": 0,
               "max": 2,
@@ -170,7 +169,7 @@
           ],
           "transitions": [
             {
-              "id": "ec81013c-15f3-4d2d-aa3e-1a1d96e75843",
+              "id": "b68b43a6-3493-46e8-9ae5-ed87d9edb070",
               "actions": [
                 "unlock_1",
                 "unlock_2"
@@ -187,7 +186,7 @@
               ]
             },
             {
-              "id": "32c35310-afdd-4553-9354-301a3ad3958b",
+              "id": "4b8cb801-1116-4186-835d-da215b64aab8",
               "actions": [
                 "w1",
                 "w2"
@@ -204,7 +203,7 @@
               ]
             },
             {
-              "id": "27492917-fe17-4c28-9554-86a44aaad129",
+              "id": "f3720cc0-10ff-4b20-89b5-2e4d72da7656",
               "actions": [
                 "r1",
                 "r2"
@@ -221,7 +220,7 @@
               ]
             },
             {
-              "id": "875b3b3a-31db-4541-840b-e780ddf05bff",
+              "id": "0863bfb2-a8cf-4fc4-bf52-a0e10d490f4e",
               "actions": [
                 "w1",
                 "r2"
@@ -238,7 +237,7 @@
               ]
             },
             {
-              "id": "adea11e3-9a50-404f-8a37-765cde31cb5f",
+              "id": "4812598b-5db2-48b2-8c4e-67373aafa6e9",
               "actions": [
                 "r1",
                 "w2"
@@ -255,7 +254,7 @@
               ]
             },
             {
-              "id": "6cb19294-e938-47a1-a5e2-ac9aab94e6f7",
+              "id": "96fe4835-5085-41b6-8fdb-1e105f817888",
               "actions": [
                 "reset_1",
                 "reset_2"
@@ -275,7 +274,7 @@
         }
       },
       {
-        "id": "1413c5ef-1be3-4586-ade1-fe5f3ab3bb4a",
+        "id": "6e654bfe-f7f7-4e84-bdd7-dcbf15a2f429",
         "type": "BASIC",
         "name": "Player2",
         "x": 700,
@@ -284,7 +283,7 @@
         "height": 110,
         "ports": [
           {
-            "id": "870ab47f-e8ea-4fce-92f4-fb2af6f33d2c",
+            "id": "93b051ec-9afd-47d3-a09d-c4d25839238f",
             "name": "bus",
             "type": "OUTPUT",
             "side": "LEFT",
@@ -299,7 +298,7 @@
           "variables": [],
           "states": [
             {
-              "id": "eace1281-8841-4b5a-b715-d9421760990a",
+              "id": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
               "name": "READY",
               "variableName": "ready2",
               "value": 0,
@@ -309,9 +308,9 @@
           ],
           "transitions": [
             {
-              "id": "48486b0e-febb-43d8-ab25-fa08320cf285",
-              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
-              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "id": "fafb0e5e-26f0-4b56-92f8-2ab54bbdcfb2",
+              "sourceStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
+              "targetStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
               "action": "w2",
               "guard": "s=0",
               "updates": [
@@ -322,9 +321,9 @@
               ]
             },
             {
-              "id": "feac11e4-6f7e-4bb4-b716-e07e248f7ed3",
-              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
-              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "id": "f0d30c70-7f95-4a87-86fa-790a8de360da",
+              "sourceStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
+              "targetStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
               "action": "r2",
               "guard": "s=0",
               "updates": [
@@ -335,9 +334,9 @@
               ]
             },
             {
-              "id": "90d3b68e-c2ee-4368-802c-0fbca22666cf",
-              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
-              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "id": "2839055f-e535-4d0b-b2b1-2748a4c4ace8",
+              "sourceStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
+              "targetStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
               "action": "unlock_2",
               "guard": "s=0",
               "updates": [
@@ -348,9 +347,9 @@
               ]
             },
             {
-              "id": "33ee2c93-8b50-4b14-b825-337c2e3686ae",
-              "sourceStateId": "eace1281-8841-4b5a-b715-d9421760990a",
-              "targetStateId": "eace1281-8841-4b5a-b715-d9421760990a",
+              "id": "95db1752-f149-40bd-b196-c8436d0e5181",
+              "sourceStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
+              "targetStateId": "8bcfd50a-3b82-466b-a2b5-b451fe07e794",
               "action": "reset_2",
               "guard": "s>0",
               "updates": [
@@ -366,25 +365,25 @@
     ],
     "connectors": [
       {
-        "id": "c0a0b1cb-5c2b-4a7d-ac4d-f35e1e373395",
-        "sourceComponentId": "9be3364e-88f3-43d3-a3e7-a77f9ecddb7b",
-        "sourcePortId": "d8467f91-2312-4b97-822d-a5e5030f40d9",
-        "targetComponentId": "5753d530-8c76-4b65-b10b-fc45a55aa5d7",
-        "targetPortId": "33cb4f0d-98d7-4759-8a71-7b3618ea91de",
+        "id": "775261b5-e592-4a35-8915-94ab821b59d3",
+        "sourceComponentId": "71026e8e-93d9-46b8-b279-957b0c42e7cb",
+        "sourcePortId": "1d6b8977-0308-4e68-8aa4-aafbba624b90",
+        "targetComponentId": "8b17843b-0df9-4211-af85-bf0c75c0916d",
+        "targetPortId": "354fc158-d38d-4ac9-b0ad-8ea638b42910",
         "type": "PUSH"
       },
       {
-        "id": "e8097394-75a6-48b0-9e01-ba307e3e3e0a",
-        "sourceComponentId": "1413c5ef-1be3-4586-ade1-fe5f3ab3bb4a",
-        "sourcePortId": "870ab47f-e8ea-4fce-92f4-fb2af6f33d2c",
-        "targetComponentId": "5753d530-8c76-4b65-b10b-fc45a55aa5d7",
-        "targetPortId": "c04b88b5-321d-44da-911a-53ff403bd014",
+        "id": "7fd3586e-fa31-45aa-be69-0ff2043e1106",
+        "sourceComponentId": "6e654bfe-f7f7-4e84-bdd7-dcbf15a2f429",
+        "sourcePortId": "93b051ec-9afd-47d3-a09d-c4d25839238f",
+        "targetComponentId": "8b17843b-0df9-4211-af85-bf0c75c0916d",
+        "targetPortId": "97e138f4-83ea-4287-98d3-ea4419c76bba",
         "type": "PUSH"
       }
     ],
     "constants": [
       {
-        "id": "1a633a0b-962f-44da-8550-c4ecf70f0b86",
+        "id": "2ee6c685-833d-4d45-a7a7-ebf5edfaf5df",
         "name": "k",
         "type": "int",
         "value": "10"
@@ -393,64 +392,64 @@
     "formulas": [],
     "labels": [
       {
-        "id": "c75ac05c-ec62-4bd1-b50e-c72504977c15",
+        "id": "3c42cbf3-be00-488e-8e96-f8bc46518399",
         "name": "win1",
         "expression": "win=1"
       },
       {
-        "id": "30f52bcd-ea76-4d49-9f95-a48ec2d0b822",
+        "id": "a29d8b83-4298-49f9-b9d8-df8afe0e71ae",
         "name": "win2",
         "expression": "win=2"
       }
     ],
     "rewards": [
       {
-        "id": "64a4d41e-a8d7-406e-9252-80c4508dabcb",
+        "id": "76577b1c-e323-425f-a0b5-342805af8a60",
         "name": "utility1",
         "items": [
           {
-            "id": "ae53f54f-5cf4-4466-85e7-aecc848f25eb",
+            "id": "39d2984b-2905-4398-9ba0-4c64e3674669",
             "action": "r1,w2",
             "reward": "-1"
           },
           {
-            "id": "b9304c96-6fa7-4b95-94d6-085700c554f4",
+            "id": "6704329f-a097-4b95-8fe7-15b0869b5ae5",
             "action": "r1,r2",
             "reward": "0"
           },
           {
-            "id": "db1e4558-4438-464e-891f-02e834fcd0b7",
+            "id": "d89e821f-b6de-4e97-b275-d7d67052c293",
             "action": "w1,r2",
             "reward": "1"
           },
           {
-            "id": "80f57fe3-22e8-43a6-ba02-1639daf67bf6",
+            "id": "02348e02-bb7a-42d1-be6d-5724cf2847e6",
             "action": "w1,w2",
             "reward": "0"
           }
         ]
       },
       {
-        "id": "e216a5db-9bfe-4306-9173-44f79ccfe7fe",
+        "id": "735246a9-3150-4a03-abde-837d3fc76e6f",
         "name": "utility2",
         "items": [
           {
-            "id": "3bf6d35a-33e7-440c-b1ed-1fc8dfcf381c",
+            "id": "d766db45-7cbf-4ec0-9771-f4c31a91f272",
             "action": "w1,r2",
             "reward": "-1"
           },
           {
-            "id": "85a1c94d-1b71-4345-b0db-64bf7f9b1912",
+            "id": "95d60752-76e1-476c-8cde-5b79bd0c31e5",
             "action": "r1,r2",
             "reward": "0"
           },
           {
-            "id": "b21eda56-78f2-4a70-bf14-0315dd0e6a99",
+            "id": "0c95bda1-7b0b-459f-afef-f5e51de95ff4",
             "action": "r1,w2",
             "reward": "1"
           },
           {
-            "id": "adddc943-a0e6-4976-a896-44f285c2c8cc",
+            "id": "93eaf2a8-7565-4242-9f4d-0a7ecfd58006",
             "action": "w1,w2",
             "reward": "0"
           }
@@ -459,37 +458,37 @@
     ],
     "properties": [
       {
-        "id": "1cc4f7d1-723b-43a5-a518-c1c4ff072ea5",
+        "id": "c49430c3-ee06-45bd-919e-06df327b3756",
         "name": "P1 alone",
         "formula": "<<p1>> Pmax=? [ F win=1 ]",
         "description": "can player 1 force a win on its own? (expected: 0)"
       },
       {
-        "id": "0289171e-0528-475a-8904-8bf56a40fd06",
+        "id": "dd1a8ac0-20ea-41d1-9aba-06e1a554d34f",
         "name": "Coalition",
         "formula": "<<p1,p2>> Pmax=? [ F win=1 ]",
         "description": "can the coalition make player 1 win? (expected: 1)"
       },
       {
-        "id": "ad7d1f77-86a1-432a-bb4b-03119c74a052",
+        "id": "28c4faca-0e7c-4830-90b1-8250d030e19b",
         "name": "P1 alone, bounded",
         "formula": "<<p1>> P>0.99 [ F win=1 ]",
-        "description": "slide 17 — Boolean query"
+        "description": "Boolean query"
       },
       {
-        "id": "aaf5a97d-e0a0-45b6-a822-cd6a10e3e3b1",
+        "id": "31f0b180-10f1-4b1c-a4b7-8966df678c91",
         "name": "Win within k rounds",
         "formula": "<<p1,p2>> Pmax=? [ F (win=1 & rounds<=k) ]",
         "description": ""
       },
       {
-        "id": "9880177a-46f2-4549-baab-89d89fdb90a8",
+        "id": "46a7f286-5136-4b59-9e71-fe2dbaf6451b",
         "name": "Guaranteed utility of P1",
         "formula": "<<p1>> R{\"utility1\"}max=? [ F rounds=k ]",
         "description": "what player 1 can guarantee within k rounds, whatever p2 does"
       },
       {
-        "id": "b386b5ec-e2c3-4b87-aa9f-b68e4ae54f2a",
+        "id": "a4fb3347-6c2b-4ee8-b549-d72c48512f34",
         "name": "Cooperative utility of P1",
         "formula": "<<p1,p2>> R{\"utility1\"}max=? [ F rounds=k ]",
         "description": ""
